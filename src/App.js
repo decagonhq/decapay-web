@@ -1,10 +1,15 @@
-
+// import { PersistGate } from 'redux-persist/integration/react'
+// import { Provider } from 'react-redux'
+import { Routes, Route } from "react-router-dom"
+import Home from "./components/Home";
 
 function App() {
   return (
     <div className="App">
-      hellow world
-    </div>
+    <Routes>
+      <Route path="/" element={ <Home/> } />
+    </Routes>
+  </div>
   );
 }
 
