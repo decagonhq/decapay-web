@@ -2,11 +2,11 @@ import React from 'react';
 import styled from "styled-components"
 import ClipLoader from "react-spinners/ClipLoader"
 
-const MyButton = ({children, white, href, min, max, full, className, type, transparent, green, onClick, loading}) => {
+const MyButton = ({width, children, white, href, min, max, full, className, type, transparent, green, onClick, loading}) => {
 
     return (
         <div className="btn-parent">
-           <StyledButton className={className || "btn btn-component"} white={white} green={green} min={min} full={full} type={type} max={max} onClick={onClick}>
+           <StyledButton width={width} className={className || "btn btn-component"} white={white} green={green} min={min} full={full} type={type} max={max} onClick={onClick}>
             {children}
             <div className="spin-parent">
               {loading && <ClipLoader color="white" size="40px" className="spinner" />}
@@ -25,7 +25,7 @@ const StyledButton = styled.button`
     align-items: center;
     border-radius: 0;
     width: 18.1rem;
-    width: ${({min, max, full}) => min ? '26.1rem' : max ? '40rem' : full ? '100%' : '18.1rem'};
+    width: ${({width}) => width ? width :"100%"};
     height: ${({height}) => height ? height : '3.2rem'};
     font-weight: 400;
     font-size: 16px;
