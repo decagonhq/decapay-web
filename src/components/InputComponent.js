@@ -47,6 +47,11 @@ const StyledFormInputComponent = styled.div`
         padding-left: 1rem;
         border: 1px solid rgba(33, 51, 79, 0.15) !important;
     }
+    /* style placeholder */
+    input::-webkit-input-placeholder {
+        color: rgba(33, 51, 79, 0.5);
+        font-size: 1rem;
+    }
     input[type=number]::-webkit-inner-spin-button, 
     input[type=number]::-webkit-outer-spin-button { 
     -webkit-appearance: none !important; 
