@@ -5,15 +5,12 @@ import ClipLoader from "react-spinners/ClipLoader"
 const MyButton = ({width, children, white, href, min, max, full, className, type, transparent, green, onClick, loading}) => {
 
     return (
-        <div className="btn-parent">
            <StyledButton width={width} className={className || "btn btn-component"} white={white} green={green} min={min} full={full} type={type} max={max} onClick={onClick}>
             {children}
             <div className="spin-parent">
               {loading && <ClipLoader color="white" size="40px" className="spinner" />}
             </div>
             </StyledButton> 
-            
-        </div>
     )
 }
 const StyledButton = styled.button`
@@ -24,8 +21,7 @@ const StyledButton = styled.button`
     justify-content: center;
     align-items: center;
     border-radius: 0;
-    width: 18.1rem;
-    width: ${({width}) => width ? width :"100%"};
+    width: 100%;
     height: ${({height}) => height ? height : '3.2rem'};
     font-weight: 400;
     font-size: 16px;
