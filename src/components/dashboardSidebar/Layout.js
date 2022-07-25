@@ -1,16 +1,13 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import { Container } from "react-bootstrap";
 import styled from "styled-components";
 import SideMenu from "./SideMenu";
-import { Burger } from "../components/atoms/Hamburger";
-import Notification from "../hospitalPages/notifications/Notification";
-import Logo from "./Logo"
+import { Burger } from "../Hamburger";
+import Logo from "../LogoComponent"
 
 const Layout = ({ children, hasBackground }) => {
   const [open, setOpen] = useState(false);
   const [setGroup] = useState("");
-  const state = useSelector((state) => state.notification);
 
   const handleShow = (group) => {
     setGroup(group);
@@ -33,10 +30,6 @@ const Layout = ({ children, hasBackground }) => {
         </Container>
       </div>
       <div className="dashboard-layout__contents">
-        <Container className="children--container">
-          {state.isOpen && <Notification />}
-          {!state.isOpen && children}
-        </Container>
       </div>
     </Wrapper>
   );

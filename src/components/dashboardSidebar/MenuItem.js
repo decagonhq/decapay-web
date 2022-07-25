@@ -8,7 +8,7 @@ const MenuItem = ({ label, onClick, Icon, active, to }) => {
       <div className="p-items">
         <NavLink
           exact={true}
-          className={(isActive) => "p-link" + (!isActive ? "" : " selected")}
+          className={(isActive) => "p-link" + (!isActive ? "" : " ")}
           to={to}
         >
           <Icon />
@@ -35,7 +35,7 @@ const MenuItemStyle = styled.div`
 
   .p-link {
     text-decoration: none;
-    color: #21334f;
+    /* color: #21334f; */
     font-size: 1.2rem;
     font-weight: bold;
     height: 22px;
@@ -49,11 +49,11 @@ const MenuItemStyle = styled.div`
 
     /* Normal text */
 
-    font-family: "Sofia Pro";
+    font-family: 'Inter';
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 16px;
-    line-height: 22px;
+    line-height: 19px;
     /* identical to box height */
 
     /* Label & subheading */

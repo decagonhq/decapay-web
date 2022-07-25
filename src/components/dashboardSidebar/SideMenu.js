@@ -1,40 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import MenuItem from "./MenuItem";
-import { AiOutlineHome } from "react-icons/ai";
-import { AiFillSchedule } from "react-icons/ai";
-import { FiVideo } from "react-icons/fi";
-import { FaMoneyBillWaveAlt } from "react-icons/fa";
-import { FiSettings } from "react-icons/fi";
-import { GiDoctorFace } from "react-icons/gi";
-import { BsPersonFill } from "react-icons/bs";
 import { MdOutlineLogout } from "react-icons/md";
-import { AiFillMedicineBox } from "react-icons/ai";
-import { ImLab } from "react-icons/im";
-import { RiCurrencyLine } from "react-icons/ri";
-import { useSelector } from "react-redux";
-import Logo from "./Logo";
+import {TbLayoutDashboard} from "react-icons/tb";
+import {AiOutlineDollar} from "react-icons/ai";
+import {MdListAlt} from "react-icons/md";
+import Logo from "../LogoComponent";
 
 const SidebarDemo = () => {
-  const [homeActive] = React.useState(true);
-  const [scheduleActive] = React.useState(false);
-  const [consultationActive] = React.useState(false);
-  const [billingActive] = React.useState(false);
-  const [settingsActive] = React.useState(false);
-  const [doctorActive] = React.useState(false);
-  // const [logoutActive] = React.useState(false);
-  const [PatientActive] = React.useState(false);
-  const [pharmacyActive] = React.useState(false);
-  const [diagnosticActive] = React.useState(false);
-  const [rentalActive] = React.useState(false);
-  const pageInfo = useSelector((state) => state.pageInfo);
-  const { userType } = pageInfo;
 
-  const logout = () => {
-    localStorage.clear();
-    window.location.href = `/login`;
-    return;
-  };
   return (
     <MenuStyle>
       <div className="menu--wrapper">
@@ -42,89 +16,27 @@ const SidebarDemo = () => {
           <Logo />
         </div>
         <MenuItem
-          label="Home"
-          Icon={AiOutlineHome}
-          to="/home"
-          active={homeActive}
+          label="Dashboard"
+          Icon={TbLayoutDashboard}
+          to="/register"
+          // active={}
         />
-
-        {userType !== "Accountant" ? (
-          <MenuItem
-            label="Doctors"
-            Icon={GiDoctorFace}
-            to={"/doctor-list"}
-            active={doctorActive}
-          />
-        ) : null}
         <MenuItem
-          label="Patients"
-          Icon={BsPersonFill}
-          to={"/patient"}
-          active={PatientActive}
+          // key={index}
+          label={"Budget"}
+          Icon={AiOutlineDollar}
+          // active={}
+          to={"/register"}
         />
-
-        {userType !== "Accountant" ? (
-          <MenuItem
-            label={"Schedule"}
-            Icon={AiFillSchedule}
-            to={"/schedule"}
-            active={scheduleActive}
-          />
-        ) : null}
-        {userType !== "Accountant" ? (
-          <MenuItem
-            label="Consulting Room"
-            Icon={FiVideo}
-            to="/consultation"
-            active={consultationActive}
-          />
-        ) : null}
-        {userType === "Pharmacist" || userType === "admin" ? (
-          <MenuItem
-            // key={index}
-            label={"Pharmacy"}
-            Icon={AiFillMedicineBox}
-            active={pharmacyActive}
-            to={"/pharmacy"}
-          />
-        ) : null}
-        {userType === "Diagnostic" || userType === "admin" ? (
-          <MenuItem
-            label={"Diagnostic/Lab"}
-            Icon={ImLab}
-            active={diagnosticActive}
-            to={"/diagnostic"}
-          />
-        ) : null}
-
-        {userType === "admin" || userType === "Accountant" ? (
-          <MenuItem
-            label="Billings"
-            Icon={FaMoneyBillWaveAlt}
-            to="/billings"
-            active={billingActive}
-          />
-        ) : null}
-        {userType === "admin" ? (
-          <MenuItem
-            label="Rentals"
-            Icon={RiCurrencyLine}
-            to="/rentals"
-            active={rentalActive}
-          />
-        ) : null}
-        {userType === "admin" ? (
-          <MenuItem
-            label="Settings"
-            Icon={FiSettings}
-            to="/settings"
-            active={settingsActive}
-          />
-        ) : null}
-
+        <MenuItem
+          label="Budget Category"
+          Icon={MdListAlt}
+          to="/register"
+          // active={}
+        />
         <div className="logout">
           <MdOutlineLogout />
-          <p onClick={() => logout()}>Logout</p>
+          <p>Logout</p>
         </div>
       </div>
     </MenuStyle>
@@ -140,15 +52,12 @@ const MenuStyle = styled.div`
   /* box-shadow: 0px 0px 10px #e6e6e6; */
   /* z-index: 1; */
   width: 200px;
-  background: url("https://res.cloudinary.com/dwbfq30yz/image/upload/v1650097185/DBbackground_down_slmy3x.png")
-      center bottom no-repeat,
-    url("https://res.cloudinary.com/dwbfq30yz/image/upload/v1650097185/DBbackground_down_slmy3x.png")
-      center top no-repeat;
+  background: #FFFFFF;
   background-size: contain;
-  overflow-y:auto;
+  overflow-y: auto;
   ::-webkit-scrollbar {
     display: none;
-}
+  }
   .menu--wrapper {
     margin-top: 20px;
     width: 100%;
@@ -183,7 +92,7 @@ const MenuStyle = styled.div`
     /* background:red ; */
     margin-bottom: 6rem;
   }
-  
+
   .logout {
     display: flex;
     gap: 10px;
