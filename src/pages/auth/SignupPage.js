@@ -1,13 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "../components/Button";
-import FormInputComponent from "../components/InputComponent";
-import LogoComponent from "../components/LogoComponent";
+import Button from "../../components/Button";
+import FormInputComponent from "../../components/InputComponent";
+import LogoComponent from "../../components/LogoComponent";
 import {Link} from "react-router-dom";
-
+import Layout from "../../components/dashboardSidebar/Layout";
 const Home = () => {
 
   return (
+    <Layout>
     <StyledHome>
       <LogoComponent />
       <div className="form__container">
@@ -39,6 +40,7 @@ const Home = () => {
         </div>
       </div>
     </StyledHome>
+    </Layout>
   );
 };
 export default Home;
