@@ -1,10 +1,14 @@
 // import { PersistGate } from 'redux-persist/integration/react'
 // import { Provider } from 'react-redux'
 import { Routes, Route } from "react-router-dom";
+<<<<<<< Updated upstream
 import ForgotPassword from "./pages/auth/forgetPassword";
 import LoginPage from "./pages/auth/login";
 import ResetPassword from "./pages/auth/resetPassword";
 import Login from "./pages/LoginPage";
+=======
+import Login from "./pages/SignupPage";
+>>>>>>> Stashed changes
 
 function App() {
   return (
