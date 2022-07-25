@@ -12,6 +12,7 @@ function LoginPage() {
       <LogoComponent />
       <div className="form__container">
         <p className="header">Login</p>
+        
         <div className="form__wrapper">
           <FormInputComponent placeholder="Enter your email" label="Email" />
         </div>
@@ -26,12 +27,12 @@ function LoginPage() {
           <Button type="submit">Login</Button>
         </div>
         <div>
-          <Link to="/">
+          <Link to="/forgotPassword">
           <p className="text-center"> Forgot Password</p>
           </Link>
         </div>
         <div>
-          <p className="bottom__text">Don't have an account ?<span ><Link to="/"
+          <p className="bottom__text">Don't have an account ?<span ><Link to="/register"
             className='to-register' 
           > Create An Account</Link> </span></p>
 
@@ -60,6 +61,7 @@ const StyledHome = styled.div`
     border: 1px solid #e6e6e6;
     @media (max-width: 768px) {
       width: 100%;
+      padding: 20px;
     }
   }
   .header {
@@ -81,12 +83,13 @@ const StyledHome = styled.div`
     font-weight: 400;
     font-size: 16px;
     line-height: 19px;
-
     color: #21334F;
     
   }
   .padding{
     margin-bottom:20px;
+    align-self : center;
+    align-items: center;
   }
   .text-center{
     text-align:center;
@@ -100,6 +103,12 @@ const StyledHome = styled.div`
     align-self:flex-start;
     margin-left:90px;
     align-items:center;
+    @media (max-width: 768px) {
+      margin-left:0px;
+      justify-content:center;
+      align-items:center;
+      align-self:center;
+    }
   }
   .remember-me input{
     width:30px;
