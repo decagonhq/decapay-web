@@ -97,6 +97,9 @@ const StyledFormInputComponent = styled.div`
       min-width: 100%;
     }
   }
+  /* @media only screen and (max-width: 540px) {
+    max-height: 3rem;
+  } */
 `;
 
 export default FormInputComponent;
