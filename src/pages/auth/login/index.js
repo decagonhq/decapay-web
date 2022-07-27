@@ -4,20 +4,58 @@ import Button from "../../../components/Button";
 import FormInputComponent from "../../../components/InputComponent";
 import LogoComponent from "../../../components/LogoComponent";
 import {Link} from "react-router-dom";
+import {Formik} from 'formik';
+import * as yup from 'yup';
 
 
 function LoginPage() {
+  const loginValidationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email('Please enter valid email')
+      .required('Email Address is Required'),
+    password: yup
+      .string()
+      .min(8, ({min}) => `Password must be at least ${min} characters`)
+      .required('Password is required'),
+  });
   return (
     <StyledHome>
       <LogoComponent />
+      <Formik
+          validationSchema={loginValidationSchema}
+          initialValues={{
+            email: '',
+            password: '',
+            
+          }}
+          onSubmit={values => console.log(values)}>
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            isValid,
+          }) => (
       <div className="form__container">
         <p className="header">Login</p>
         
         <div className="form__wrapper">
-          <FormInputComponent placeholder="Enter your email" label="Email" />
+          <FormInputComponent placeholder="Enter your email" label="Email"
+            type = "email"
+            value = {values.email}
+            onChange = {handleChange('email')}
+            error = {errors.email}
+           />
         </div>
         <div className="form__wrapper">
-          <FormInputComponent placeholder="Enter your Password" label="Password" />
+          <FormInputComponent placeholder="Enter your Password" label="Password"
+            type = "password"
+            value = {values.password}
+            onChange = {handleChange('password')}
+            error = {errors.password}
+          />
         </div>
         <div className='remember-me'>
           <input type="checkbox"  />
@@ -38,6 +76,8 @@ function LoginPage() {
 
         </div>
       </div>
+       )}
+       </Formik>
     </StyledHome>
   );
 };

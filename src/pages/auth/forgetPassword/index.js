@@ -4,27 +4,55 @@ import Button from "../../../components/Button";
 import FormInputComponent from "../../../components/InputComponent";
 import LogoComponent from "../../../components/LogoComponent";
 // import { Link } from "react-router-dom";
+import { Formik } from "formik";
+import * as yup from "yup";
 
 function ForgotPassword() {
+  const forgotPasswordValidationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email("Please enter valid email")
+      .required("Email Address is Required"),
+  });
   return (
     <StyledHome>
-        <LogoComponent />
-      <div className="form__container">
-        <p className="header">Forgot Password</p>
+      <LogoComponent />
+      <Formik
+        validationSchema={forgotPasswordValidationSchema}
+        initialValues={{
+          email: "",
+        }}
+        onSubmit={(values) => console.log(values)}
+      >
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          errors,
+          isValid,
+        }) => (
+          <div className="form__container">
+            <p className="header">Forgot Password</p>
 
-        <div className="form__wrapper">
-          <FormInputComponent placeholder="Enter your email" label="Email" />
-        </div>
-        
-        
-        <div className="form__wrapper padding">
-          <Button type="submit">Reset Password</Button>
-        </div>
-        <div>
-          
-        </div>
-        
-      </div>
+            <div className="form__wrapper">
+              <FormInputComponent
+                placeholder="Enter your email"
+                label="Email"
+                type="email"
+                value={values.email}
+                onChange={handleChange("email")}
+                error={errors.email}
+              />
+            </div>
+
+            <div className="form__wrapper padding">
+              <Button type="submit">Reset Password</Button>
+            </div>
+            <div></div>
+          </div>
+        )}
+      </Formik>
     </StyledHome>
   );
 }
@@ -40,14 +68,14 @@ const StyledHome = styled.div`
   box-sizing: border-box;
   overflow: auto;
   padding: 20px;
-  
+
   .form__container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     align-self: center;
-    margin-top : 70px;
+    margin-top: 70px;
     width: 600px;
     border: 1px solid #e6e6e6;
     @media (max-width: 768px) {

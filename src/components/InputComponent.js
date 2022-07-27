@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { format } from "date-fns";
 // import CurrencyInput from "react-currency-input";
 
-const FormInputComponent = ({ height, label, type, name, value, onChange, onBlur, error, placeholder, defaultValue, max, prefix, allowDecimals, disabled }) => {
+const FormInputComponent = ({ height, label, type, name, value, onChange, onBlur, error, placeholder, defaultValue, max, prefix, allowDecimals, disabled,  }) => {
   let maxDate = max && format(max, "yyyy-MM-dd");
   // const allowdecimals = allowDecimals;
   return (
@@ -59,6 +59,9 @@ const StyledFormInputComponent = styled.div`
     }
 input[type=number] {
   -moz-appearance: textfield;
+}
+.form-error {
+  color: red;
 }
 input:disabled{
 background: rgba(0,0,0,0.1);

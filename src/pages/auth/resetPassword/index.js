@@ -4,19 +4,57 @@ import Button from "../../../components/Button";
 import FormInputComponent from "../../../components/InputComponent";
 import LogoComponent from "../../../components/LogoComponent";
 // import { Link } from "react-router-dom";
+import {Formik} from 'formik';
+import * as yup from 'yup';
 
 function ResetPassword() {
+  const confirmEmailValidationSchema = yup.object().shape({
+    password: yup
+      .string()
+      .min(8, ({min}) => `Password must be at least ${min} characters`)
+      .required('Password is required'),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref('password'), null], 'Passwords must match')
+      .required('Confirm Password is required'),
+  });
   return (
     <StyledHome>
         <LogoComponent />
+        <Formik
+          validationSchema={confirmEmailValidationSchema}
+          initialValues={{
+            password: '',
+            confirmPassword: '',
+            
+          }}
+          onSubmit={values => console.log(values)}>
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            isValid,
+          }) => (
       <div className="form__container">
         <p className="header">Forgot Password</p>
 
         <div className="form__wrapper">
-          <FormInputComponent placeholder="Enter Your new password" label="Password" />
+          <FormInputComponent placeholder="Enter Your new password" label="Password" 
+            type = "password"
+            value = {values.password}
+            onChange = {handleChange('password')}
+            error = {errors.password}
+          />
         </div>
         <div className="form__wrapper">
-          <FormInputComponent placeholder="Confirm new passsword" label="Confirm Password" />
+          <FormInputComponent placeholder="Confirm new passsword" label="Confirm Password" 
+            type = "password"
+            value = {values.confirmPassword}
+            onChange = {handleChange('confirmPassword')}
+            error = {errors.confirmPassword}
+          />
         </div>
         
         
@@ -28,6 +66,8 @@ function ResetPassword() {
         </div>
         
       </div>
+      )}
+      </Formik>
     </StyledHome>
   );
 }
