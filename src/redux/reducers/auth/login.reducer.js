@@ -1,23 +1,24 @@
-import { SIGNUP_SUCCESS,SIGNUP_FAILED,SIGNUP } from "../../action.type";
+import {LOGIN, LOGIN_SUCCESS, LOGIN_FAILED} from '../../action.type';
+import {retrieveErrMessage} from '../../../utils/retrieveError';
 import {toast} from "react-toastify"
 
 
 const initialState = {
+    token: localStorage.getItem('token') || null,
     data: "", errors: "", loading: false, message: ""
 }
 
-const SignupReducer = (state = initialState, action) => {
-   
-    const { payload, type } = action
+
+const LoginReducer = (state = initialState, action) => {
+    const { payload, type } = action;
     switch (type) {
-        case SIGNUP:
+        case LOGIN:
             return {
                 ...state,
                 loading: true
             }
-
-        case SIGNUP_FAILED:
-            toast.error(payload?.error || "could not sign you up this moment")
+        case LOGIN_FAILED:
+            toast.error(payload?.error || "could not login this moment")
             return {
                 ...state,
                 errors: payload.error,
@@ -25,19 +26,18 @@ const SignupReducer = (state = initialState, action) => {
                 message: payload.message,
                 loading: false,
             }
-        case SIGNUP_SUCCESS:
-            window.location.href = `/login`;
-            toast.success(payload?.success || "Signup Successful,Login to continue")
+        case LOGIN_SUCCESS:
+            window.location.href = `/home`;
+            toast.success(payload?.success || "Login Successful")
+            localStorage.setItem('token', payload.data.token);
             return {
                 ...state,
                 data: payload.data.data,
                 loading: false,
                 message:payload.data.message
             }
-
         default:
             return state
     }
 }
-
-export default SignupReducer
+export default LoginReducer;

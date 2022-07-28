@@ -6,9 +6,11 @@ import LogoComponent from "../../../components/LogoComponent";
 import {Link} from "react-router-dom";
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import login from "../../../redux/actions/auth/login.action";
+import { useDispatch, useSelector } from "react-redux";
 
 
-function LoginPage() {
+const  LoginPage=()=> {
   const loginValidationSchema = yup.object().shape({
     email: yup
       .string()
@@ -19,6 +21,9 @@ function LoginPage() {
       .min(8, ({min}) => `Password must be at least ${min} characters`)
       .required('Password is required'),
   });
+  const {loading} = useSelector((state) => state.login);
+  const dispatch = useDispatch();
+
   return (
     <StyledHome>
       <LogoComponent />
@@ -29,7 +34,12 @@ function LoginPage() {
             password: '',
             
           }}
-          onSubmit={values => console.log(values)}>
+          onSubmit={
+            (values) => {
+              console.log(values);
+              dispatch(login(values));
+            }
+          }>
           {({
             handleChange,
             handleBlur,
@@ -44,16 +54,18 @@ function LoginPage() {
         <div className="form__wrapper">
           <FormInputComponent placeholder="Enter your email" label="Email"
             type = "email"
+            name="email"
             value = {values.email}
-            onChange = {handleChange('email')}
+            onChange = {handleChange}
             error = {errors.email}
            />
         </div>
         <div className="form__wrapper">
           <FormInputComponent placeholder="Enter your Password" label="Password"
             type = "password"
+            name = "password"
             value = {values.password}
-            onChange = {handleChange('password')}
+            onChange = {handleChange}
             error = {errors.password}
           />
         </div>
@@ -62,7 +74,11 @@ function LoginPage() {
           <span>Remember Login</span>
         </div>
         <div className="form__wrapper padding">
-          <Button type="submit">Login</Button>
+          <Button type="submit"
+            disabled={!isValid}
+            loading={loading}
+            onClick = {handleSubmit}
+          >Login</Button>
         </div>
         <div>
           <Link to="/forgotPassword">

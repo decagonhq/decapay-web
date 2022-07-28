@@ -5,9 +5,10 @@ export default axios.create({
 });
 
 export const headers = () => {
+  let token = localStorage.getItem("token");
   return {
     headers: {
-      // "Authorization": token ? `Bearer ${token}` : "",
+      "Authorization": token ? `Bearer ${token}` : "",
       'DVC_KY_HDR': '2'
      }
   }
