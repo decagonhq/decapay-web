@@ -9,6 +9,7 @@ import Signup from "./pages/auth/SignupPage";
 import Home from "./pages/home/Home";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PrivateRoute from "./utils/protectedRoute";
 
 function App() {
   return (
@@ -16,7 +17,15 @@ function App() {
       <ToastContainer limit={1} style={{ fontSize: "16px" }} />
       <Routes>
         <Route path="/login" element={<LoginPage/>} />
-        <Route path="/home" element={<Home />} />
+        
+        <Route
+          path="/home"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
         <Route path="/register" element={<Signup />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/resetPassword" element={<ResetPassword />} />

@@ -9,7 +9,7 @@ export const headers = () => {
   return {
     headers: {
       "Authorization": token ? `Bearer ${token}` : "",
-      'DVC_KY_HDR': '2'
+      'DVC_KY_HDR': 2
      }
   }
 }

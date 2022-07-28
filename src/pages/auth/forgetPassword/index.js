@@ -7,8 +7,9 @@ import LogoComponent from "../../../components/LogoComponent";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useSelector } from "react-redux";
-import request  from "../../../utils/apiHelper";
+import request,{headers}  from "../../../utils/apiHelper";
 // import forgotPassword from "../../../redux/actions/auth/forgotPassword.action";
+import {toast} from "react-toastify";
 
 function ForgotPassword() {
   const forgotPasswordValidationSchema = yup.object().shape({
@@ -31,12 +32,10 @@ function ForgotPassword() {
         onSubmit={async (values) => {
           console.log(values);
           try {
-            const res = await request.post("forgot-password", values, {
-              DVC_KY_HDR: "2",
-            });
-            console.log(res);
-            // toast.success("Password reset link sent to your email");
+            await request.post("forgot-password",values,headers);
+            toast.success("Password reset link sent to your email");
           } catch (error) {
+            toast.error(error.response.status);
             console.log(error);
           }
         }}
