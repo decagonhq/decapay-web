@@ -7,8 +7,6 @@ const Home = () => {
   return (
     <Layout>
       <StyledHome>
-        <Button type="submit">Submit Button</Button>
-        <FormInputComponent label="Name" />
         <h1>DECAPAY Home</h1>
       </StyledHome>
     </Layout>
