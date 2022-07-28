@@ -18,11 +18,12 @@ const signup = (payload) => async (dispatch) => {
   try {
     const res = await request.post("register", payload, headers);
       toast.success("Signup Successful and verifcation email sent");
-    
       return dispatch(signupSuccess(res.message));
   } catch (error) {
-    toast.error(retrieveErrMessage(error));
+    toast.error(retrieveErrMessage(error.response.data.status));
+    console.log(error.response.data.status);
     return dispatch(signupFailed(error));
+    
   }
 };
 

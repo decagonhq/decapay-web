@@ -7,12 +7,13 @@ import LoginPage from "./pages/auth/login";
 import ResetPassword from "./pages/auth/resetPassword";
 import Signup from "./pages/auth/SignupPage";
 import Home from "./pages/home/Home";
-
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <div className="App">
+      <ToastContainer limit={1} style={{ fontSize: "16px" }} />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/home" element={<Home />} />
