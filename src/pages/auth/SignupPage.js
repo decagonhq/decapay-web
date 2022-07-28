@@ -7,28 +7,32 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 // import Layout from "../../components/dashboardSidebar/Layout";
-import { useDispatch } from "react-redux";
-import registerUser  from "../../redux/actions/auth/signup.action";
+import { useDispatch, useSelector } from "react-redux";
+import registerUser from "../../redux/actions/auth/signup.action";
 
 const Home = () => {
+  const phoneRegExp = /^\d*(\+\d+)?$/;
   const validationSchema = Yup.object().shape({
-    email: Yup
-      .string()
+    email: Yup.string()
       .email("Please enter valid email")
       .required("Email Address is Required"),
-    password: Yup
-      .string()
+    password: Yup.string()
       .min(8, ({ min }) => `Password must be at least ${min} characters`)
       .required("Password is required"),
-    confirmPassword: Yup
-      .string()
+    confirmPassword: Yup.string()
       .oneOf([Yup.ref("password"), null], "Passwords must match")
       .required("Confirm Password is required"),
     lastName: Yup.string().required("Last Name is required"),
     firstName: Yup.string().required("First Name is required"),
-    phoneNumber: Yup.string().required("Phone Number is required"),
+    phoneNumber: Yup.string()
+      .required("Phone Number is required")
+      .matches(phoneRegExp, "Phone Number is not valid")
+      .min(11, "Phone Number cannot be less than 11 digits")
+      .max(14, "Phone Number must be more than digits"),
   });
-  
+
+  const loading = useSelector((state) => state.signup.loading);
+  console.log(loading);
   const dispatch = useDispatch();
   const initialValues = {
     email: "",
@@ -48,96 +52,102 @@ const Home = () => {
     initialValues,
     validationSchema,
     onSubmit,
-    });
-    
+  });
+
   return (
-      <StyledHome>
-        <LogoComponent />
+    <StyledHome>
+      <LogoComponent />
 
-        <div className="form__container">
-          <p className="header">Create an account</p>
-          <form onSubmit={formik.handleSubmit}>
-            <div className="form__wrapper">
-              <FormInputComponent
-                placeholder="Enter your first name"
-                label="First Name"
-                name="firstName"
-                type="text"
-                value={formik.values.firstName}
-                onChange={formik.handleChange}
-                error={formik.errors.firstName}
-              />
-            </div>
-            <div className="form__wrapper">
-              <FormInputComponent
-                placeholder="Enter your last name"
-                label="Last Name"
-                name="lastName"
-                type="text"
-                value={formik.values.lastName}
-                onChange={formik.handleChange}
-                error={formik.errors.lastName}
-              />
-            </div>
-            <div className="form__wrapper">
-              <FormInputComponent
-                placeholder="Enter your email"
-                label="Email"
-                type="email"
-                name="email"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                error={formik.errors.email}
-              />
-            </div>
-
-            <div className="form__wrapper">
-              <FormInputComponent
-                placeholder="Enter your phone number"
-                label="Phone Number"
-                type="text"
-                name="phoneNumber"
-                value={formik.values.phoneNumber}
-                onChange={formik.handleChange}
-                error={formik.errors.phoneNumber}
-              />
-            </div>
-            <div className="form__wrapper">
-              <FormInputComponent
-                type="password"
-                placeholder="password"
-                label="Password"
-                name="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                error={formik.errors.password}
-              />
-            </div>
-            <div className="form__wrapper">
-              <FormInputComponent
-                placeholder="Confirm password"
-                label="Confirm Password"
-                type="password"
-                name="confirmPassword"
-                value={formik.values.confirmPassword}
-                onChange={formik.handleChange}
-                error={formik.errors.confirmPassword}
-              />
-            </div>
-            <div className="form__wrapper padding">
-              <Button onClick={formik.handleSubmit} type="submit">Submit Button</Button>
-            </div>
-          </form>
-          <div>
-            <p className="bottom__text">
-              Already have an account?
-              <span>
-                <Link to="/login"> Login</Link>{" "}
-              </span>
-            </p>
+      <div className="form__container">
+        <p className="header">Create an account</p>
+        <form onSubmit={formik.handleSubmit}>
+          <div className="form__wrapper">
+            <FormInputComponent
+              placeholder="Enter your first name"
+              label="First Name"
+              name="firstName"
+              type="text"
+              value={formik.values.firstName}
+              onChange={formik.handleChange}
+              error={formik.errors.firstName}
+            />
           </div>
+          <div className="form__wrapper">
+            <FormInputComponent
+              placeholder="Enter your last name"
+              label="Last Name"
+              name="lastName"
+              type="text"
+              value={formik.values.lastName}
+              onChange={formik.handleChange}
+              error={formik.errors.lastName}
+            />
+          </div>
+          <div className="form__wrapper">
+            <FormInputComponent
+              placeholder="Enter your email"
+              label="Email"
+              type="email"
+              name="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.errors.email}
+            />
+          </div>
+
+          <div className="form__wrapper">
+            <FormInputComponent
+              placeholder="Enter your phone number"
+              label="Phone Number"
+              type="text"
+              name="phoneNumber"
+              value={formik.values.phoneNumber}
+              onChange={formik.handleChange}
+              error={formik.errors.phoneNumber}
+            />
+          </div>
+          <div className="form__wrapper">
+            <FormInputComponent
+              type="password"
+              placeholder="password"
+              label="Password"
+              name="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              error={formik.errors.password}
+            />
+          </div>
+          <div className="form__wrapper">
+            <FormInputComponent
+              placeholder="Confirm password"
+              label="Confirm Password"
+              type="password"
+              name="confirmPassword"
+              value={formik.values.confirmPassword}
+              onChange={formik.handleChange}
+              error={formik.errors.confirmPassword}
+            />
+          </div>
+          <div className="form__wrapper padding">
+            <Button
+              loading={loading}
+              onClick={formik.handleSubmit}
+              type="submit"
+            >
+              Submit Button
+            </Button>
+          </div>
+        </form>
+        <div>
+          <p className="bottom__text">
+            Already have an account?
+            <span>
+              <Link to="/login"> Login</Link>{" "}
+            </span>
+          </p>
         </div>
-      </StyledHome>
+      </div>
+    </StyledHome>
   );
 };
 export default Home;
@@ -197,6 +207,5 @@ const StyledHome = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
   }
 `;
