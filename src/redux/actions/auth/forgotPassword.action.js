@@ -1,6 +1,6 @@
 import { FORGOT_PASSWORD_SUCCESS, FORGOT_PASSWORD_FAILED, LOADING } from "../../action.type";
 import { retrieveErrMessage } from "../../../utils/retrieveError";
-import request, { headers } from "../../../utils/apiHelper";
+import request from "../../../utils/apiHelper";
 import { toast } from "react-toastify";
 
 
@@ -18,11 +18,18 @@ const forgotPasswordFailed = (payload) => ({
 );
 
 
+
 const forgotPassword = (payload) => async (dispatch) => {
     dispatch({ type: LOADING });
+
     try {
-        const res = await request.post("forgot-password", payload, headers);
-        console.log(res);
+        const res = await request.post("forgot-password", payload,{ headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            // "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            'DVC_KY_HDR': '2',
+        }});
+        
         toast.success("Password reset link sent to your email");
         return dispatch(forgotPasswordSuccess(res.data));
     } catch (error) {

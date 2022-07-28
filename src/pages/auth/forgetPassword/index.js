@@ -6,9 +6,8 @@ import LogoComponent from "../../../components/LogoComponent";
 // import { Link } from "react-router-dom";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { useSelector } from "react-redux";
-import request  from "../../../utils/apiHelper";
-// import forgotPassword from "../../../redux/actions/auth/forgotPassword.action";
+import { useDispatch, useSelector } from "react-redux";
+import forgotPassword from "../../../redux/actions/auth/forgotPassword.action";
 
 function ForgotPassword() {
   const forgotPasswordValidationSchema = yup.object().shape({
@@ -18,7 +17,7 @@ function ForgotPassword() {
       .required("Email Address is Required"),
   });
   const { loading } = useSelector((state) => state.forgotPassword);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   return (
     <StyledHome>
@@ -26,20 +25,14 @@ function ForgotPassword() {
       <Formik
         validationSchema={forgotPasswordValidationSchema}
         initialValues={{
-          "email": "",
+          email: "",
         }}
-        onSubmit={async (values) => {
-          console.log(values);
-          try {
-            const res = await request.post("forgot-password", values, {
-              DVC_KY_HDR: "2",
-            });
-            console.log(res);
-            // toast.success("Password reset link sent to your email");
-          } catch (error) {
-            console.log(error);
-          }
-        }}
+        onSubmit={
+          (values) => {
+            console.log(values);
+            dispatch(forgotPassword(values));
+          }   
+        }
       >
         {({
           handleChange,
@@ -59,20 +52,17 @@ function ForgotPassword() {
                 type="email"
                 name="email"
                 value={values.email}
-                onChange={handleChange("email")}
+                onChange={handleChange}
                 error={errors.email}
               />
             </div>
 
             <div className="form__wrapper padding">
-              <Button
-                type="submit"
-                disabled={!isValid}
+              <Button type="submit"
+                // disabled={!isValid}
                 loading={loading}
                 onClick={handleSubmit}
-              >
-                Reset Password
-              </Button>
+              >Reset Password</Button>
             </div>
             <div></div>
           </div>
