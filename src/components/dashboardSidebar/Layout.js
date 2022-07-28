@@ -3,7 +3,7 @@ import { Container } from "react-bootstrap";
 import styled from "styled-components";
 import SideMenu from "./SideMenu";
 import { Burger } from "../Hamburger";
-import Logo from "../LogoComponent"
+import Logo from "../LogoComponent";
 
 const Layout = ({ children, hasBackground }) => {
   const [open, setOpen] = useState(false);
@@ -24,12 +24,12 @@ const Layout = ({ children, hasBackground }) => {
       </div>
       <div className="top-nav">
         <Container className="d-flex align-items-center justify-content-between">
-          {/* <img src={Logo} className="logo" alt="THC logo" /> */}
           <Logo />
           <Burger open={open} setOpen={setOpen} />
         </Container>
       </div>
       <div className="dashboard-layout__contents">
+        <Container>{children}</Container>
       </div>
     </Wrapper>
   );
