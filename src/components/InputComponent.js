@@ -78,6 +78,7 @@ const StyledFormInputComponent = styled.div`
   }
   .form-error {
     color: red;
+    font-size: 0.8rem;
   }
   input:disabled {
     background: rgba(0, 0, 0, 0.1);
