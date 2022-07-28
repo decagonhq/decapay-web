@@ -132,7 +132,7 @@ const Home = () => {
             <p className="bottom__text">
               Already have an account?
               <span>
-                <Link to="/"> Login</Link>{" "}
+                <Link to="/login"> Login</Link>{" "}
               </span>
             </p>
           </div>
