@@ -1,23 +1,23 @@
-import {LOGIN, LOGIN_SUCCESS, LOGIN_FAILED} from '../../action.type';
-import {toast} from "react-toastify"
+import {FORGOT_PASSWORD, FORGOT_PASSWORD_SUCCESS, FORGOT_PASSWORD_FAILED} from "../../action.type";
+import {toast} from "react-toastify";
 
 
 const initialState = {
-    token: localStorage.getItem('token') || null,
+    token : localStorage.getItem('token') || null,
     data: "", errors: "", loading: false, message: ""
 }
 
 
-const LoginReducer = (state = initialState, action) => {
+const ForgotPasswordReducer = (state = initialState, action) => {
     const { payload, type } = action;
     switch (type) {
-        case LOGIN:
+        case FORGOT_PASSWORD:
             return {
                 ...state,
                 loading: true
             }
-        case LOGIN_FAILED:
-            toast.error(payload?.error || "could not login this moment")
+        case FORGOT_PASSWORD_FAILED:
+            toast.error(payload?.error || "could not reset password this moment")
             return {
                 ...state,
                 errors: payload.error,
@@ -25,11 +25,8 @@ const LoginReducer = (state = initialState, action) => {
                 message: payload.message,
                 loading: false,
             }
-        case LOGIN_SUCCESS:
-            
-            toast.success(payload?.success || "Login Successful")
-            localStorage.setItem('token', payload.data.token);
-            window.location.href = `/home`;
+        case FORGOT_PASSWORD_SUCCESS:
+            toast.success(payload?.success || "Password reset link sent to your email")
             return {
                 ...state,
                 data: payload.data.data,
@@ -40,4 +37,4 @@ const LoginReducer = (state = initialState, action) => {
             return state
     }
 }
-export default LoginReducer;
+export default ForgotPasswordReducer;
