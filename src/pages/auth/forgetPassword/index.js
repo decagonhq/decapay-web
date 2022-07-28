@@ -6,6 +6,9 @@ import LogoComponent from "../../../components/LogoComponent";
 // import { Link } from "react-router-dom";
 import { Formik } from "formik";
 import * as yup from "yup";
+import { useSelector } from "react-redux";
+import request  from "../../../utils/apiHelper";
+// import forgotPassword from "../../../redux/actions/auth/forgotPassword.action";
 
 function ForgotPassword() {
   const forgotPasswordValidationSchema = yup.object().shape({
@@ -14,15 +17,29 @@ function ForgotPassword() {
       .email("Please enter valid email")
       .required("Email Address is Required"),
   });
+  const { loading } = useSelector((state) => state.forgotPassword);
+  // const dispatch = useDispatch();
+
   return (
     <StyledHome>
       <LogoComponent />
       <Formik
         validationSchema={forgotPasswordValidationSchema}
         initialValues={{
-          email: "",
+          "email": "",
         }}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={async (values) => {
+          console.log(values);
+          try {
+            const res = await request.post("forgot-password", values, {
+              DVC_KY_HDR: "2",
+            });
+            console.log(res);
+            // toast.success("Password reset link sent to your email");
+          } catch (error) {
+            console.log(error);
+          }
+        }}
       >
         {({
           handleChange,
@@ -40,6 +57,7 @@ function ForgotPassword() {
                 placeholder="Enter your email"
                 label="Email"
                 type="email"
+                name="email"
                 value={values.email}
                 onChange={handleChange("email")}
                 error={errors.email}
@@ -47,7 +65,14 @@ function ForgotPassword() {
             </div>
 
             <div className="form__wrapper padding">
-              <Button type="submit">Reset Password</Button>
+              <Button
+                type="submit"
+                disabled={!isValid}
+                loading={loading}
+                onClick={handleSubmit}
+              >
+                Reset Password
+              </Button>
             </div>
             <div></div>
           </div>
