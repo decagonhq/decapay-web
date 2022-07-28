@@ -16,7 +16,7 @@ const signupFailed = (payload) => ({
 const signup = (payload) => async (dispatch) => {
 
   try {
-    const res = await request.post("register/", payload, headers);
+    const res = await request.post("register", payload, headers);
       toast.success("Signup Successful and verifcation email sent");
     
       return dispatch(signupSuccess(res.message));

@@ -40,6 +40,7 @@ const Home = () => {
   };
 
   const onSubmit = (values) => {
+    delete values.confirmPassword;
     dispatch(registerUser(values));
   };
 
@@ -196,6 +197,6 @@ const StyledHome = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    
+
   }
 `;
