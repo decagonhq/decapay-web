@@ -27,9 +27,10 @@ const LoginReducer = (state = initialState, action) => {
                 loading: false,
             }
         case LOGIN_SUCCESS:
-            window.location.href = `/home`;
+            
             toast.success(payload?.success || "Login Successful")
             localStorage.setItem('token', payload.data.token);
+            window.location.href = `/home`;
             return {
                 ...state,
                 data: payload.data.data,
