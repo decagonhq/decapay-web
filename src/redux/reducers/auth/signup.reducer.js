@@ -26,7 +26,7 @@ const SignupReducer = (state = initialState, action) => {
                 loading: false,
             }
         case SIGNUP_SUCCESS:
-            window.location.href = `/login`;
+            // window.location.href = `/login`;
             toast.success(payload?.success || "Signup Successful,Login to continue")
             return {
                 ...state,

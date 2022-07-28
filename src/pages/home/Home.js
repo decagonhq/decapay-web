@@ -1,7 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "../../components/Button";
-import FormInputComponent from "../../components/InputComponent";
 import Layout from "../../components/dashboardSidebar/Layout";
 const Home = () => {
   return (
