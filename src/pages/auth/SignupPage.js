@@ -31,8 +31,8 @@ const Home = () => {
       .max(14, "Phone Number must be more than digits"),
   });
 
-  const loading = useSelector((state) => state.signup.loading);
-  console.log(loading);
+  const signup = useSelector((state) => state.signup);
+  console.log(signup);
   const dispatch = useDispatch();
   const initialValues = {
     email: "",
@@ -130,11 +130,11 @@ const Home = () => {
           </div>
           <div className="form__wrapper padding">
             <Button
-              loading={loading}
+              loading={signup.loading}
               onClick={formik.handleSubmit}
               type="submit"
             >
-              Submit Button
+             {(!signup.loading && "Sign up") || ""}
             </Button>
           </div>
         </form>
