@@ -1,5 +1,4 @@
 import {LOGIN, LOGIN_SUCCESS, LOGIN_FAILED} from '../../action.type';
-import {retrieveErrMessage} from '../../../utils/retrieveError';
 import {toast} from "react-toastify"
 
 
