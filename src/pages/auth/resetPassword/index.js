@@ -3,70 +3,98 @@ import styled from "styled-components";
 import Button from "../../../components/Button";
 import FormInputComponent from "../../../components/InputComponent";
 import LogoComponent from "../../../components/LogoComponent";
+import request from "../../../utils/apiHelper";
 // import { Link } from "react-router-dom";
-import {Formik} from 'formik';
-import * as yup from 'yup';
+import { Formik } from "formik";
+import * as yup from "yup";
 
 function ResetPassword() {
   const confirmEmailValidationSchema = yup.object().shape({
     password: yup
       .string()
-      .min(8, ({min}) => `Password must be at least ${min} characters`)
-      .required('Password is required'),
+      .min(8, ({ min }) => `Password must be at least ${min} characters`)
+      .required("Password is required"),
     confirmPassword: yup
       .string()
-      .oneOf([yup.ref('password'), null], 'Passwords must match')
-      .required('Confirm Password is required'),
+      .oneOf([yup.ref("password"), null], "Passwords must match")
+      .required("Confirm Password is required"),
   });
+  // get token from last part of url
+  const token = window.location.pathname.split("/")[-1];
+  // const onSubmit = async (values) => {
+  //   let payload={
+  //     password: values.password,
+  //     confirmPassword: values.confirmPassword,
+  //     token: token
+  //   }
+  //   try {
+  //     await request.post(`create-password`, payload);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   return (
     <StyledHome>
-        <LogoComponent />
-        <Formik
-          validationSchema={confirmEmailValidationSchema}
-          initialValues={{
-            password: '',
-            confirmPassword: '',
-            
-          }}
-          onSubmit={values => console.log(values)}>
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            isValid,
-          }) => (
-      <div className="form__container">
-        <p className="header">Forgot Password</p>
+      <LogoComponent />
+      <Formik
+        validationSchema={confirmEmailValidationSchema}
+        initialValues={{
+          password: "",
+          confirmPassword: "",
+        }}
+        onSubmit={async (values) => {
+            let payload={
+              password: values.password,
+              confirmPassword: values.confirmPassword,
+              token: token
+            }
+            try {
+              await request.post(`create-password`, payload);
+            } catch (error) {
+              console.log(error);
+            }
+        }
+        }
+      >
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          errors,
+          isValid,
+        }) => (
+          <div className="form__container">
+            <p className="header">Forgot Password</p>
 
-        <div className="form__wrapper">
-          <FormInputComponent placeholder="Enter Your new password" label="Password" 
-            type = "password"
-            value = {values.password}
-            onChange = {handleChange('password')}
-            error = {errors.password}
-          />
-        </div>
-        <div className="form__wrapper">
-          <FormInputComponent placeholder="Confirm new passsword" label="Confirm Password" 
-            type = "password"
-            value = {values.confirmPassword}
-            onChange = {handleChange('confirmPassword')}
-            error = {errors.confirmPassword}
-          />
-        </div>
-        
-        
-        <div className="form__wrapper padding">
-          <Button type="submit">Confirm New Passoword</Button>
-        </div>
-        <div>
-          
-        </div>
-        
-      </div>
-      )}
+            <div className="form__wrapper">
+              <FormInputComponent
+                placeholder="Enter Your new password"
+                label="Password"
+                type="password"
+                value={values.password}
+                onChange={handleChange("password")}
+                error={errors.password}
+              />
+            </div>
+            <div className="form__wrapper">
+              <FormInputComponent
+                placeholder="Confirm new passsword"
+                label="Confirm Password"
+                type="password"
+                value={values.confirmPassword}
+                onChange={handleChange("confirmPassword")}
+                error={errors.confirmPassword}
+              />
+            </div>
+
+            <div className="form__wrapper padding">
+              <Button type="submit">Confirm New Passoword</Button>
+            </div>
+            <div></div>
+          </div>
+        )}
       </Formik>
     </StyledHome>
   );
@@ -83,14 +111,14 @@ const StyledHome = styled.div`
   box-sizing: border-box;
   overflow: auto;
   padding: 20px;
-  
+
   .form__container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     align-self: center;
-    margin-top : 70px;
+    margin-top: 70px;
     width: 600px;
     border: 1px solid #e6e6e6;
     @media (max-width: 768px) {
