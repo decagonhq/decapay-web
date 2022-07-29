@@ -8,8 +8,11 @@ export const headers = () => {
   let token = localStorage.getItem("token");
   return {
     headers: {
-      "Authorization": token ? `Bearer ${token}` : "",
-      'DVC_KY_HDR': 2
+      'Authorization': token ? `Bearer ${token}` : "",
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+            // "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      'DVC_KY_HDR': '2',
      }
   }
 }
