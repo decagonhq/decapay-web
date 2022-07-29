@@ -5,6 +5,12 @@ import {toast} from "react-toastify"
 const initialState = {
     data: "", errors: "", loading: false, message: ""
 }
+const timerBeforeRedirect= () => {
+    setTimeout(() => {
+        window.location.href = `/login`;
+    }, 4000);
+}
+
 
 const SignupReducer = (state = initialState, action) => {
    
@@ -26,8 +32,9 @@ const SignupReducer = (state = initialState, action) => {
                 loading: false,
             }
         case SIGNUP_SUCCESS:
-            window.location.href = `/login`;
+            
             toast.success(payload?.success || "Signup Successful,Login to continue")
+            timerBeforeRedirect()
             return {
                 ...state,
                 data: payload.data.data,
