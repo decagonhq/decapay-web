@@ -10,6 +10,13 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import {toast} from 'react-toastify'
 
+
+const timerBeforeRedirect = () => {
+  setTimeout(() => {
+    window.location.href = "/login";
+  }, 4000);
+}
+
 function ResetPassword() {
   const confirmEmailValidationSchema = yup.object().shape({
     password: yup
@@ -46,7 +53,7 @@ function ResetPassword() {
     }
     );
     toast.success("Password reset successful");
-    window.location.href = "/login";
+    timerBeforeRedirect()
   } catch (error) {
     toast.error(error.response.status);
     console.log(error);
@@ -156,7 +163,6 @@ const StyledHome = styled.div`
   .padding {
     margin-bottom: 20px;
     margin-top: 20px;
-    margin-left: 20px;
   }
   .text-center {
     text-align: center;
