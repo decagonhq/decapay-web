@@ -20,8 +20,8 @@ const login = (payload) => async (dispatch) => {
     toast.success("Login Successful");
     return dispatch(loginSuccess(res.data));
   } catch (error) {
-    toast.error(retrieveErrMessage(error.response.data.status));
-    console.log(error.response.data.status);
+    toast.error(retrieveErrMessage(error.response.data.message));
+    console.log(error.response.data.message);
     return dispatch(loginFailed(error));
   }
 };

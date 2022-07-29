@@ -20,7 +20,7 @@ const signup = (payload) => async (dispatch) => {
       toast.success("Signup Successful and verifcation email sent");
       return dispatch(signupSuccess(res.message));
   } catch (error) {
-    toast.error(retrieveErrMessage(error.response.data.status));
+    toast.error(retrieveErrMessage(error.response.data.message));
     console.log(error.response.data.status);
     return dispatch(signupFailed(error));
     
