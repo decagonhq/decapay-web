@@ -158,7 +158,9 @@ const StyledHome = styled.div`
     display:flex;
     align-self:flex-start;
     margin-left:90px;
+    gap : 5px;
     align-items:center;
+    padding: 10px;
     @media (max-width: 768px) {
       margin-left:0px;
       justify-content:center;
@@ -167,7 +169,7 @@ const StyledHome = styled.div`
     }
   }
   .remember-me input{
-    width:30px;
-    height:50px;
+    width:20px;
+    height:20px;
   }
 `;
