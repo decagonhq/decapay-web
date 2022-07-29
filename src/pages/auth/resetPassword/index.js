@@ -5,8 +5,10 @@ import FormInputComponent from "../../../components/InputComponent";
 import LogoComponent from "../../../components/LogoComponent";
 import request from "../../../utils/apiHelper";
 // import { Link } from "react-router-dom";
+// import {useParams} from "react-router-dom";
 import { Formik } from "formik";
 import * as yup from "yup";
+import {toast} from 'react-toastify'
 
 function ResetPassword() {
   const confirmEmailValidationSchema = yup.object().shape({
@@ -19,20 +21,37 @@ function ResetPassword() {
       .oneOf([yup.ref("password"), null], "Passwords must match")
       .required("Confirm Password is required"),
   });
-  // get token from last part of url
-  const token = window.location.pathname.split("/")[-1];
-  // const onSubmit = async (values) => {
-  //   let payload={
-  //     password: values.password,
-  //     confirmPassword: values.confirmPassword,
-  //     token: token
-  //   }
-  //   try {
-  //     await request.post(`create-password`, payload);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+
+  // let token = window.location.pathname.split("/");
+  // token = token[token.length - 1];
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get("token");
+
+
+  console.log(token);
+  const onSubmit = async (values) => {
+  let payload={
+    password: values.password,
+    confirmPassword: values.confirmPassword,
+    token: token
+  }
+  console.log(payload);
+  try {
+    await request.post(`reset-password`, payload, {
+      headers: {
+        "Content-Type": "application/json",
+        'DVC_KY_HDR': 2
+      },
+    }
+    );
+    toast.success("Password reset successful");
+    window.location.href = "/login";
+  } catch (error) {
+    toast.error(error.response.status);
+    console.log(error);
+  }
+};
 
   return (
     <StyledHome>
@@ -43,20 +62,7 @@ function ResetPassword() {
           password: "",
           confirmPassword: "",
         }}
-        onSubmit={async (values) => {
-            let payload={
-              password: values.password,
-              confirmPassword: values.confirmPassword,
-              token: token
-            }
-            try {
-              await request.post(`create-password`, payload);
-            } catch (error) {
-              console.log(error);
-            }
-        }
-        }
-      >
+        onSubmit={onSubmit}>
         {({
           handleChange,
           handleBlur,
@@ -90,7 +96,7 @@ function ResetPassword() {
             </div>
 
             <div className="form__wrapper padding">
-              <Button type="submit">Confirm New Passoword</Button>
+              <Button onClick={handleSubmit} type="submit">Confirm New Passoword</Button>
             </div>
             <div></div>
           </div>
