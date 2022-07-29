@@ -59,7 +59,7 @@ function ForgotPassword() {
 
             <div className="form__wrapper padding">
               <Button type="submit"
-                // disabled={!isValid}
+                disabled={!isValid}
                 loading={loading}
                 onClick={handleSubmit}
               >Reset Password</Button>
