@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import MenuItem from "./MenuItem";
-import { MdLogout, MdOutlineLogout } from "react-icons/md";
+import {  MdOutlineLogout } from "react-icons/md";
 import {TbLayoutDashboard} from "react-icons/tb";
 import {AiOutlineDollar} from "react-icons/ai";
 import {MdListAlt} from "react-icons/md";

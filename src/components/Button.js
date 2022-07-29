@@ -54,12 +54,13 @@ const StyledButton = styled.button`
   text-align: center;
   color: ${({ white, transparent }) =>
     white ? "#34A853" : transparent ? "#34A853" : "white"};
-  background: linear-gradient(96.67deg, #34a853 0%, #b8d344 100%);
+  /* background: linear-gradient(96.67deg, #34a853 0%, #b8d344 100%); */
   background: #14a800;
   white-space: nowrap;
   border: ${({ transparent }) => (transparent ? "1px solid #34A853" : "none")};
   :hover {
     cursor: pointer;
+    background: #14a800;
   }
 
   .spin-parent {
