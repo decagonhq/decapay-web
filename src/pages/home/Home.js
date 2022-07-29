@@ -1,15 +1,16 @@
-import React from 'react'
-import styled from 'styled-components'
-
+import React from "react";
+import styled from "styled-components";
+import Layout from "../../components/dashboardSidebar/Layout";
 const Home = () => {
   return (
-    <StyledHome>
-      <h1>DECAPAY Home</h1>
-    </StyledHome>
-  )
-}
-export default Home
-
+    <Layout>
+      <StyledHome>
+        <h1>DECAPAY Home</h1>
+      </StyledHome>
+    </Layout>
+  );
+};
+export default Home;
 const StyledHome = styled.div`
   display: flex;
   flex-direction: column;
