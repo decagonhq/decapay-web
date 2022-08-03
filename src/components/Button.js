@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import ClipLoader from "react-spinners/ClipLoader";
+// import ClipLoader from "react-spinners/ClipLoader";
 
 const MyButton = ({
   width,
@@ -30,11 +30,11 @@ const MyButton = ({
       onClick={onClick}
     >
       {children}
-      <div className="spin-parent">
-        {loading && (
+      {/* <div className="spin-parent"> */}
+        {/* {loading && (
           <ClipLoader color="white" size="40px" className="spinner" />
-        )}
-      </div>
+        )} */}
+      {/* </div> */}
     </StyledButton>
   );
 };
