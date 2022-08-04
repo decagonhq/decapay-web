@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import FormInputComponent from "../../../components/InputComponent";
@@ -7,10 +7,11 @@ import {Link} from "react-router-dom";
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import login from "../../../redux/actions/auth/login.action";
-import { useDispatch, useSelector } from "react-redux";
-
+import { useDispatch } from "react-redux";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const  LoginPage=()=> {
+  const [loading, setLoading] = useState(false);
   const loginValidationSchema = yup.object().shape({
     email: yup
       .string()
@@ -21,7 +22,7 @@ const  LoginPage=()=> {
       .min(8, ({min}) => `Password must be at least ${min} characters`)
       .required('Password is required'),
   });
-  const {loading} = useSelector((state) => state.login);
+  // const {loading} = useSelector((state) => state.login);
   const dispatch = useDispatch();
   
   return (
@@ -36,8 +37,10 @@ const  LoginPage=()=> {
           }}
           onSubmit={
             (values) => {
-              console.log(values);
+              setLoading(true);
+              // console.log(values);
               dispatch(login(values));
+              setLoading(false);
             }
           }>
           {({
@@ -70,7 +73,7 @@ const  LoginPage=()=> {
           />
         </div>
         <div className='remember-me'>
-          <input type="checkbox"  />
+          <input clasName="checkbox" type="checkbox"  />
           <span>Remember Login</span>
         </div>
         <div className="form__wrapper padding">
@@ -78,7 +81,7 @@ const  LoginPage=()=> {
             disabled={!isValid}
             loading={loading}
             onClick = {handleSubmit}
-          >Login</Button>
+          >{loading? <ClipLoader color="white" size="40px" />:"Login"}</Button>
         </div>
         <div>
           <Link to="/forgotPassword">
@@ -157,6 +160,7 @@ const StyledHome = styled.div`
   .remember-me{
     display:flex;
     align-self:flex-start;
+    gap:5px;
     margin-left:90px;
     gap : 5px;
     align-items:center;
@@ -170,6 +174,9 @@ const StyledHome = styled.div`
   }
   .remember-me input{
     width:20px;
-    height:20px;
+    height:20px
+  }
+  input[type="checkbox"] {
+    border-radius: 10px;
   }
 `;

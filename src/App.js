@@ -6,10 +6,13 @@ import ForgotPassword from "./pages/auth/forgetPassword";
 import LoginPage from "./pages/auth/login";
 import ResetPassword from "./pages/auth/resetPassword";
 import Signup from "./pages/auth/SignupPage";
-import Home from "./pages/home/Home";
+// import Home from "./pages/home/Home";
+import Test from "./pages/home/Test"
+
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./utils/protectedRoute";
+import Budget from "./pages/listBudget/Index";
 
 function App() {
   return (
@@ -22,10 +25,11 @@ function App() {
           path="/home"
           element={
             <PrivateRoute>
-              <Home />
+              <Budget />
             </PrivateRoute>
           }
         />
+        <Route path="/pagination" element={<Test/>} />
         <Route path="/register" element={<Signup />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
