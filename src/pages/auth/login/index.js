@@ -174,9 +174,7 @@ const StyledHome = styled.div`
     width:20px;
     height:20px;
   }
-  /* style checkbox */
   input[type="checkbox"] {
     border-radius: 10px;
   }
-
 `;
