@@ -1,4 +1,4 @@
-export const Data = [
+export const data = [
   {
     title: "Budget 1 - Monthly",
     amount: "#100",

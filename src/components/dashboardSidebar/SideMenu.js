@@ -21,7 +21,7 @@ const SidebarDemo = () => {
       await request.post("signout", payload, {
         headers: {
           'DVC_KY_HDR': 2,
-          'token': token
+          'Authorization':`Bearer ${token}`,
         }
       });
       localStorage.clear();

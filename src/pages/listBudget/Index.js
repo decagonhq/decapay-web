@@ -1,11 +1,22 @@
-import React from "react";
+import React,{useState, useMemo} from "react";
 import styled from "styled-components";
 import BudgetCard from "./BudgetCard";
 import GoBack from "../../components/Goback";
 import Layout from "../../components/dashboardSidebar/Layout";
-import {Data} from "./Data"
+import { data } from "./Data";
+import Pagination from "../../utils/pagination";
 
+
+let PageSize = 5;
 const Index = () => {
+   const [currentPage, setCurrentPage] = useState(1);
+
+  const currentTableData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return data.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage]);
+
   return (
     <Layout>
       <BudgetSyle>
@@ -16,26 +27,22 @@ const Index = () => {
           </div>
           <div className="header page">
             <p>Most recent</p>
-            <p>Showing 1 of 16</p>
+            <p>Showing {currentPage} of {PageSize-2}</p>
           </div>
           <div className="list-container">
-            {Data.map((item, index) => {
+            {currentTableData.map((item, index) => {
               return <BudgetCard key={index} {...item} />;
-            }
-            )}
+            })}
           </div>
-          {/* <BudgetCard
-            title="Budget 2 - Annually"
-            amount="#100"
-            totalAmount="#300"
-            percentage="60%"
-          />
-          <BudgetCard
-            title="Budget 3 - Weekly"
-            amount="#100"
-            totalAmount="#300"
-            percentage="90%"
-          /> */}
+          <div className="pagination-container">
+          <Pagination
+        className="pagination-bar"
+        currentPage={currentPage}
+        totalCount={data.length}
+        pageSize={PageSize}
+        onPageChange={page => setCurrentPage(page)}
+      />
+      </div>
         </div>
       </BudgetSyle>
     </Layout>
@@ -82,5 +89,18 @@ const BudgetSyle = styled.div`
     flex-direction: column;
     box-sizing: border-box;
     gap: 15px;
+  }
+  .pagination-container{
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+
+  }
+  .pagination-bar {
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
   }
 `;
