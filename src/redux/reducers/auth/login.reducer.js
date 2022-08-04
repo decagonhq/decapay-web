@@ -7,6 +7,11 @@ const initialState = {
     data: "", errors: "", loading: false, message: ""
 }
 
+const timerBeforeRedirect= () => {
+    setTimeout(() => {
+        window.location.href = `/home`;
+    }, 4000);
+}
 
 const LoginReducer = (state = initialState, action) => {
     const { payload, type } = action;
@@ -29,7 +34,8 @@ const LoginReducer = (state = initialState, action) => {
             
             toast.success(payload?.success || "Login Successful")
             localStorage.setItem('token', payload.data.token);
-            window.location.href = `/home`;
+
+            timerBeforeRedirect()
             return {
                 ...state,
                 data: payload.data.data,

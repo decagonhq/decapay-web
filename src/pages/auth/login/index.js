@@ -162,7 +162,9 @@ const StyledHome = styled.div`
     align-self:flex-start;
     gap:5px;
     margin-left:90px;
+    gap : 5px;
     align-items:center;
+    padding: 10px;
     @media (max-width: 768px) {
       margin-left:0px;
       justify-content:center;
@@ -172,7 +174,7 @@ const StyledHome = styled.div`
   }
   .remember-me input{
     width:20px;
-    height:20px;
+    height:20px
   }
   input[type="checkbox"] {
     border-radius: 10px;

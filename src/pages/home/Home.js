@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <Layout>
       <StyledHome>
-        <h1>DECAPAY Dashboard
+        <h1>Budget Listing 
         </h1>
         <h2>Work in Progress </h2>
       </StyledHome>
