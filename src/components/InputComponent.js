@@ -49,7 +49,7 @@ const FormInputComponent = ({
 };
 
 const StyledFormInputComponent = styled.div`
-  margin-bottom: 2.4rem;
+  margin-bottom: 2rem;
   input {
     display: inline-block;
     font-size: 1.6rem;

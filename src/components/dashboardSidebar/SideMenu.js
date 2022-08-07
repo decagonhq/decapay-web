@@ -31,7 +31,7 @@ const SidebarDemo = () => {
           label={"Budget"}
           Icon={AiOutlineDollar}
           // active={}
-          to={"/register"}
+          to={"/createBudget"}
         />
         <MenuItem
           label="Budget Category"
