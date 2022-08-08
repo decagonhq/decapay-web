@@ -8,7 +8,7 @@ import ResetPassword from "./pages/auth/resetPassword";
 import Signup from "./pages/auth/SignupPage";
 // import Home from "./pages/home/Home";
 import Test from "./pages/home/Test"
-
+import Index from "./pages/budgetDetail/Index"
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./utils/protectedRoute";
@@ -30,6 +30,7 @@ function App() {
           }
         />
         <Route path="/pagination" element={<Test/>} />
+        <Route path="/budget" element={<Index/>} />
         <Route path="/register" element={<Signup />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
