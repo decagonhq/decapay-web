@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import FormInputComponent from "../../components/InputComponent";
@@ -7,8 +7,9 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 // import Layout from "../../components/dashboardSidebar/Layout";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import registerUser from "../../redux/actions/auth/signup.action";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Home = () => {
   const phoneRegExp = /^\d*(\+\d+)?$/;
@@ -30,9 +31,9 @@ const Home = () => {
       .min(11, "Phone Number cannot be less than 11 digits")
       .max(14, "Phone Number must be more than digits"),
   });
-
-  const loading = useSelector((state) => state.signup.loading);
-  console.log(loading);
+  const [loading, setLoading] = useState(false);
+  // const loading = useSelector((state) => state.signup.loading);
+  // console.log(loading);
   const dispatch = useDispatch();
   const initialValues = {
     email: "",
@@ -44,8 +45,10 @@ const Home = () => {
   };
 
   const onSubmit = (values) => {
+    setLoading(true);
     delete values.confirmPassword;
     dispatch(registerUser(values));
+    setLoading(false);
   };
 
   const formik = useFormik({
@@ -130,11 +133,15 @@ const Home = () => {
           </div>
           <div className="form__wrapper padding">
             <Button
-              loading={loading}
+              // loading={loading}
               onClick={formik.handleSubmit}
               type="submit"
             >
-              Submit Button
+              {loading ? (
+                <ClipLoader color="white" size="40px"  />
+              ) : (
+                "Sign Up"
+              )}
             </Button>
           </div>
         </form>

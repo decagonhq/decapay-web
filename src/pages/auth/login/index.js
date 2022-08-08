@@ -1,4 +1,6 @@
-import React from "react";
+
+import React,{useState} from 'react'
+
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import FormInputComponent from "../../../components/InputComponent";
@@ -7,9 +9,12 @@ import { Link } from "react-router-dom";
 import { Formik } from "formik";
 import * as yup from "yup";
 import login from "../../../redux/actions/auth/login.action";
-import { useDispatch, useSelector } from "react-redux";
 
-const LoginPage = () => {
+import { useDispatch } from "react-redux";
+import ClipLoader from "react-spinners/ClipLoader";
+
+const  LoginPage=()=> {
+  const [loading, setLoading] = useState(false);
   const loginValidationSchema = yup.object().shape({
     email: yup
       .string()
@@ -20,89 +25,83 @@ const LoginPage = () => {
       .min(8, ({ min }) => `Password must be at least ${min} characters`)
       .required("Password is required"),
   });
-  const { loading } = useSelector((state) => state.login);
+  // const {loading} = useSelector((state) => state.login);
   const dispatch = useDispatch();
 
   return (
     <StyledHome>
       <LogoComponent />
       <Formik
-        validationSchema={loginValidationSchema}
-        initialValues={{
-          email: "",
-          password: "",
-        }}
-        onSubmit={(values) => {
-          console.log(values);
-          dispatch(login(values));
-        }}
-      >
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          values,
-          errors,
-          isValid,
-        }) => (
-          <div className="form__container">
-            <p className="header">Login</p>
-
-            <div className="form__wrapper">
-              <FormInputComponent
-                placeholder="Enter your email"
-                label="Email"
-                type="email"
-                name="email"
-                value={values.email}
-                onChange={handleChange}
-                error={errors.email}
-              />
-            </div>
-            <div className="form__wrapper">
-              <FormInputComponent
-                placeholder="Enter your Password"
-                label="Password"
-                type="password"
-                name="password"
-                value={values.password}
-                onChange={handleChange}
-                error={errors.password}
-              />
-            </div>
-            <div className="remember-me">
-              <input type="checkbox" />
-              <span>Remember Login</span>
-            </div>
-            <div className="form__wrapper padding">
-              <Button
-                type="submit"
-                disabled={!isValid}
-                loading={loading}
-                onClick={handleSubmit}
-              >
-                Login
-              </Button>
-            </div>
-            <div>
-              <Link to="/forgotPassword">
-                <p className="text-center"> Forgot Password</p>
-              </Link>
-            </div>
-            <div>
-              <p className="bottom__text">
-                Don't have an account ?
-                <span>
-                  <Link to="/register" className="to-register">
-                    {" "}
-                    Create An Account
-                  </Link>{" "}
-                </span>
-              </p>
-            </div>
+          validationSchema={loginValidationSchema}
+          initialValues={{
+            email: '',
+            password: '',
+            
+          }}
+          onSubmit={
+            (values) => {
+              setLoading(true);
+              // console.log(values);
+              dispatch(login(values));
+              setLoading(false);
+            }
+          }>
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            isValid,
+          }) => (
+      <div className="form__container">
+        <p className="header">Login</p>
+        
+        <div className="form__wrapper">
+          <FormInputComponent placeholder="Enter your email" label="Email"
+            type = "email"
+            name="email"
+            value = {values.email}
+            onChange = {handleChange}
+            error = {errors.email}
+           />
+        </div>
+        <div className="form__wrapper">
+          <FormInputComponent placeholder="Enter your Password" label="Password"
+            type = "password"
+            name = "password"
+            value = {values.password}
+            onChange = {handleChange}
+            error = {errors.password}
+          />
+        </div>
+        <div className='remember-me'>
+          <input clasName="checkbox" type="checkbox"  />
+          <span>Remember Login</span>
+        </div>
+        <div className="form__wrapper padding">
+          <Button type="submit"
+            disabled={!isValid}
+            loading={loading}
+            onClick = {handleSubmit}
+          >{loading? <ClipLoader color="white" size="40px" />:"Login"}</Button>
+        </div>
+        <div>
+          <Link to="/forgotPassword">
+          <p className="text-center"> Forgot Password</p>
+          </Link>
+        </div>
+        <div>
+          <p className="bottom__text">Don't have an account ?<span ><Link to="/register"
+            className='to-register' 
+          > Create An Account</Link> </span></p>
+          </div>
           </div>
         )}
+
+        
       </Formik>
+    
     </StyledHome>
   );
 };
@@ -112,6 +111,7 @@ const StyledHome = styled.div`
   font-family: "Inter";
   display: flex;
   flex-direction: column;
+  background-color: #f5f5f5;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
@@ -162,12 +162,22 @@ const StyledHome = styled.div`
   .to-register {
     color: rgba(20, 168, 0, 1);
   }
+<<<<<<< HEAD
   .remember-me {
     display: flex;
     align-self: flex-start;
     margin-left: 90px;
     gap: 5px;
     align-items: center;
+=======
+  .remember-me{
+    display:flex;
+    align-self:flex-start;
+    gap:5px;
+    margin-left:90px;
+    gap : 5px;
+    align-items:center;
+>>>>>>> 518a1ca766eedd4a1b47608fa59c0199e973c8fe
     padding: 10px;
     @media (max-width: 768px) {
       margin-left: 0px;
@@ -176,8 +186,17 @@ const StyledHome = styled.div`
       align-self: center;
     }
   }
+<<<<<<< HEAD
   .remember-me input {
     width: 20px;
     height: 20px;
+=======
+  .remember-me input{
+    width:20px;
+    height:20px
+  }
+  input[type="checkbox"] {
+    border-radius: 10px;
+>>>>>>> 518a1ca766eedd4a1b47608fa59c0199e973c8fe
   }
 `;
