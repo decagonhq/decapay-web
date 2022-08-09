@@ -3,9 +3,74 @@ import styled from "styled-components";
 import Layout from "../../components/dashboardSidebar/Layout";
 import FormInputComponent from "../../components/InputComponent";
 import Select from "react-dropdown-select";
-import Calendar from "react-calendar";
+import GoBack from "../../components/Goback";
+import { Formik } from "formik";
+import * as yup from "yup";
+import MyButton from "../../components/Button";
+import ClipLoader from "react-spinners/ClipLoader";
+import { toast } from "react-toastify";
+import request from "../../utils/apiHelper";
 
 const CreateBudget = () => {
+  const timerBeforeRedirect = () => {
+    setTimeout(() => {
+      window.location.href = "/home";
+
+    }, 2000);
+  }
+  const createBudgetValidationSchema = yup.object().shape({
+    title: yup
+      .string()
+      .required("Title is required"),
+    amount: yup
+      .number()
+      .required("Amount is required"),
+    period: yup 
+      .string()
+      .required("Period is required"),
+  });
+  const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem("token");
+
+  const changeDateFormat = (date) => {
+    const splitDate = date.split("-");
+    return `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
+  }
+
+  const onSubmit = async (values) => {
+    
+    values.budgetStartDate = changeDateFormat(values.budgetStartDate);
+    values.budgetEndDate = changeDateFormat(values.budgetEndDate);
+    values.amount = parseInt(values.amount);
+    if (values.period ==="DAILY"){
+ /* eslint-disable */
+      values.budgetEndDate = values.budgetStartDate;
+    }
+    else if (values.period ==="CUSTOM"){
+      values.budgetEndDate = values.budgetEndDate;
+    }
+    else{
+      values.budgetEndDate = ""
+    }
+    try {
+      await request.post(`budgets`, values, {
+        headers: {
+          "Content-Type": "application/json",
+          'DVC_KY_HDR': 2,
+          'Authorization': `Bearer ${token}`
+        },
+      }
+      );
+      toast.success("Budget created successfully");
+      setLoading(false);
+      timerBeforeRedirect()
+    } catch (error) {
+      toast.error(error.response.status);
+      setLoading(false);
+      console.log(error);
+    }
+    
+  };
   const options = [
     { value: "1", label: "Annual" },
     { value: "2", label: "Monthly" },
@@ -14,15 +79,13 @@ const CreateBudget = () => {
     { value: "5", label: "custom" },
   ];
   const years = [
-    { value: "1", label: "2020" },
-    { value: "2", label: "2021" },
-    { value: "3", label: "2022" },
-    { value: "4", label: "2023" },
-    { value: "5", label: "2024" },
-    { value: "6", label: "2025" },
-    { value: "7", label: "2026" },
-    { value: "8", label: "2027" },
-    { value: "9", label: "2028" },
+    { value: "1", label: "2022" },
+    { value: "2", label: "2023" },
+    { value: "3", label: "2024" },
+    { value: "4", label: "2025" },
+    { value: "5", label: "2026" },
+    { value: "6", label: "2027" },
+    { value: "7", label: "2028" },
   ];
   const months = [
     { value: "1", label: "January" },
@@ -38,19 +101,14 @@ const CreateBudget = () => {
     { value: "11", label: "November" },
     { value: "12", label: "December" },
   ];
-  const weeks = [
-    { value: "1", label: "Week 1" },
-    { value: "2", label: "Week 2" },
-    { value: "3", label: "Week 3" },
-    { value: "4", label: "Week 4" },
-  ];
+  
+  // const dispatch = useDispatch();
   const [annual, setAnnual] = React.useState(false);
   const [monthly, setMonthly] = React.useState(false);
   const [weekly, setWeekly] = React.useState(false);
   const [daily, setDaily] = React.useState(false);
   const [custom, setCustom] = React.useState(false);
-  const [date, setDate] = useState(new Date());
-  const handleChange = (e) => {
+  const handleChange2 = (e) => {
     // if(!e.value || !e.label) return;
     let valueOfE = e.map((item) => item.value);
     console.log(valueOfE);
@@ -60,6 +118,7 @@ const CreateBudget = () => {
       setWeekly(false);
       setDaily(false);
       setCustom(false);
+
     } else if (valueOfE[0] === "2") {
       setAnnual(false);
       setMonthly(true);
@@ -94,136 +153,208 @@ const CreateBudget = () => {
   return (
     <Layout>
       <StyledHome>
-        <div className="form_wrap">
-          <div className="form__container">
-            <div className="header_wrapper">
-              <button className="btn_wrapper">
-                <img
-                  src={require("../../assets/icons/backButton.png")}
-                  alt="back"
+        <Formik
+          validationSchema={createBudgetValidationSchema}
+          initialValues={{
+            title: "",
+            amount: "",
+            period: "",
+            budgetStartDate: "",
+            budgetEndDate: "",
+            description: "",
+            year: 0,
+            month: 0,
+            duration: 0,
+          }}
+          onSubmit={(values) => {
+            setLoading(true);
+            onSubmit(values);
+            console.log(values);
+
+          }}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            isValid,
+          }) => (
+            <div className="form_wrap">
+              <div className="form__container">
+                <div className="header_wrapper">
+                  <GoBack 
+                  />
+                  <h4 className="header_style">Create Budget</h4>
+                </div>
+              </div>
+
+              <div className="form__wrapper">
+                <FormInputComponent
+                  placeholder="Enter Title"
+                  label="Title"
+                  type="text"
+                  name="title"
+                  value={values.title}
+                  onChange={handleChange}
+                  error = {errors.title}
                 />
-                Back
-              </button>
-              <h3 className="header_style">Create Budget</h3>
-            </div>
-          </div>
-          <div className="form__wrapper">
-            <FormInputComponent
-              placeholder="Enter Title"
-              label="Title"
-              type="password"
-              name="password"
-            />
-          </div>
-          <div className="form__wrapper">
-            <FormInputComponent
-              placeholder="Enter Amount"
-              label="Amount"
-              type="password"
-              name="password"
-            />
-          </div>
-          <div>
-            <h5>Period</h5>
-            <Select
-              options={options}
-              name="period"
-              className="fommy2"
-              placeholder="Select Frequency"
-              onChange={(e) => handleChange(e)}
-              // onChange={(e) => {
-              //
-              // }}
-            />
-          </div>
-          {annual && (
-            <div className="fommy">
-              <Select
-                options={years}
-                className="fommy2"
-                placeholder="Select Year"
-                onChange={(e) => {
-                  console.log(e.value);
-                }}
-              />
-            </div>
-          )}
-          {monthly && (
-            <div className="fommy">
-              <Select
-                options={years}
-                className="fommy2"
-                placeholder="Select Year"
-                onChange={(e) => {
-                  console.log(e.value);
-                }}
-              />
-              <Select options={months} placeholder="Select Month" 
-                className="fommy2"
-              />
-            </div>
-          )}
-          {weekly && (
-            <div className="fommy">
-              <Select
-                options={years}
-                placeholder="Select Year"
-                onChange={(e) => {
-                  console.log(e.value);
-                }}
-                className="fommy2"
-              />
-              <Select options={months} placeholder="Select Month" 
-                className="fommy2"
-                
-              />
-              <Select options={weeks} placeholder="Select Week"
-              className="fommy2" />
-            </div>
-          )}
-          {daily && (
-            <div className="fommy">
-              <div className="calendar-container">
-                <Calendar onChange={setDate} value={date} />
+              </div>
+              <div className="form__wrapper">
+                <FormInputComponent
+                  placeholder="Enter Amount"
+                  label="Amount"
+                  type="text"
+                  name="amount"
+                  value={values.amount}
+                  onChange={handleChange}
+                  error = {errors.amount}
+                />
+              </div>
+              <div>
+                <h5>Period</h5>
+                <Select
+                  options={options}
+                  name="period"
+                  className="fommy2"
+                  placeholder="Select Frequency"
+                  error = {errors.period}
+                  value={values.period}
+                  onChange={(e) => {handleChange2(e)
+                    values.period = e[0].label.toUpperCase();
+                  }}
+
+                  // onChange={(e) => {
+                  //
+                  // }}
+                />
+              </div>
+              {annual && (
+                <div className="fommy">
+                  <Select
+                    options={years}
+                    name="years"
+                    className="fommy2"
+                    placeholder="Select Year"
+                    value={values.year}
+                    onChange={(e) => {
+                      console.log(e[0].label);
+                      values.year = parseInt(e[0].label);
+                    }}
+                  />
+                </div>
+              )}
+              {monthly && (
+                <div className="fommy">
+                  <Select
+                    options={years}
+                    name="year"
+                    className="fommy2"
+                    placeholder="Select Year"
+                    value={values.year}
+                    onChange={(e) => {
+                      console.log(e.value);
+                      values.year = parseInt(e[0].label);
+                    }}
+                  />
+                  <Select
+                    options={months}
+                    name="month"
+                    value={values.month}
+                    placeholder="Select Month"
+                    className="fommy2"
+                    onChange={(e) => {
+                      console.log(e[0].label);
+                      values.month = parseInt(e[0].value);
+                    }}
+                  />
+                </div>
+              )}
+              {weekly && (
+                <div className="fommy3">
+                  <FormInputComponent
+                    placeholder="Start Date"
+                    label="Start Date"
+                    type="date"
+                    value={values.budgetStartDate}
+                    name="budgetStartDate"
+                    onChange={handleChange}
+                  />
+                  <FormInputComponent
+                    placeholder="Duration"
+                    label="duration"
+                    type="number"
+                    value={values.duration}
+                    name="duration"
+                    onChange={handleChange}
+                  />
+                </div>
+              )}
+              {daily && (
+                <div className="fommy3">
+                  <FormInputComponent
+                    placeholder="Start Date"
+                    label="Start Date"
+                    type="date"
+                    value={values.budgetStartDate}
+                    name="budgetStartDate"
+                    onChange={
+                      handleChange
+                    }
+                    
+                  />
+                </div>
+              )}
+              {custom && (
+                <div className="fommy3">
+                  <FormInputComponent
+                    placeholder="Start Date"
+                    label="Start Date"
+                    type="date"
+                    value={values.budgetStartDate}
+                    name="budgetStartDate"
+                    onChange={handleChange}
+                  />
+                  <FormInputComponent
+                    placeholder="End Date"
+                    label="End Date"
+                    type="date"
+                    value={values.budgetEndDate}
+                    name="budgetEndDate"
+                    onChange={handleChange}
+                  />
+                </div>
+              )}
+
+              <div className="form__wrapper2">
+                <FormInputComponent
+                  placeholder="Enter Description here..."
+                  label="Description"
+                  type="text"
+                  value={values.description}
+                  onChange={handleChange}
+                  name="description"
+                />
+              </div>
+              <div className="form__wrapper2">
+                <MyButton
+                  type="submit"
+                  value="Create Budget"
+                  disabled={!isValid}
+                  className="form__button"
+                  onClick={handleSubmit}
+                >
+                  {loading ? (
+                    <ClipLoader color="white" size="40px" />
+                  ) : (
+                    "Create Budget"
+                  )}
+                </MyButton>
               </div>
             </div>
           )}
-          {custom && (
-            <div className="fommy3">
-              <FormInputComponent
-              placeholder="Start Date"
-              label="Start Date"
-              type="date"
-              name="date"
-              onChange={(e) => {
-                console.log(e.target.value);
-                
-              }}
-            />
-            <FormInputComponent
-              placeholder="End Date"
-              label="End Date"
-              type="date"
-              name="date"
-              onChange={(e) => {
-                console.log(e.target.value);
-                
-              }}
-            />
-            </div>
-            
-          )}
-
-          <div className="form__wrapper2">
-            <FormInputComponent
-              placeholder="Enter Description here..."
-              label="Description"
-              type="password"
-              name="password"
-              
-            />
-          </div>
-        </div>
+        </Formik>
       </StyledHome>
     </Layout>
   );
@@ -236,7 +367,7 @@ const StyledHome = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  background-color: #fafafa;
+  background-color: "white";
   h1 {
     font-size: 2rem;
     font-weight: bold;
@@ -278,10 +409,10 @@ const StyledHome = styled.div`
   .fommy {
     margin-top: 20px;
   }
-  .fommy2{
-    height : 50px
+  .fommy2 {
+    height: 50px;
   }
-  .fommy3{
+  .fommy3 {
     margin-top: 40px;
   }
 `;

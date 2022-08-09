@@ -44,7 +44,7 @@ const SidebarDemo = () => {
         <MenuItem
           label="Dashboard"
           Icon={TbLayoutDashboard}
-          to="/register"
+          to="/home"
           // active={}
         />
         <MenuItem
@@ -57,7 +57,7 @@ const SidebarDemo = () => {
         <MenuItem
           label="Budget Category"
           Icon={MdListAlt}
-          to="/register"
+          to="/home"
           // active={}
         />
         <div  className="logout">

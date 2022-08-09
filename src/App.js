@@ -7,7 +7,7 @@ import LoginPage from "./pages/auth/login";
 import ResetPassword from "./pages/auth/resetPassword";
 import Signup from "./pages/auth/SignupPage";
 // import Home from "./pages/home/Home";
-import Test from "./pages/home/Test"
+import Test from "./pages/home/Test";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,15 +15,21 @@ import PrivateRoute from "./utils/protectedRoute";
 import Budget from "./pages/listBudget/Index";
 import CreateBudget from "./pages/budget";
 
-
 function App() {
   return (
     <div className="App">
       <ToastContainer limit={1} style={{ fontSize: "16px" }} />
       <Routes>
-        <Route path="/login" element={<LoginPage/>} />
-        <Route path="/createBudget" element={<CreateBudget/>} />
-        
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/createBudget"
+          element={
+            <PrivateRoute>
+              <CreateBudget />
+            </PrivateRoute>
+          }
+        />
+
         <Route
           path="/home"
           element={
@@ -32,7 +38,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route path="/pagination" element={<Test/>} />
+        <Route path="/pagination" element={<Test />} />
         <Route path="/register" element={<Signup />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
