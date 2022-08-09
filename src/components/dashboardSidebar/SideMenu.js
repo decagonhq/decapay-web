@@ -6,12 +6,33 @@ import {TbLayoutDashboard} from "react-icons/tb";
 import {AiOutlineDollar} from "react-icons/ai";
 import {MdListAlt} from "react-icons/md";
 import Logo from "../LogoComponent";
+import request from "../../utils/apiHelper"
+import {toast} from "react-toastify"
 
 const SidebarDemo = () => {
-  const logout = () => {
-    localStorage.clear();
-    window.location.href = `/login`;
-    return;
+
+
+  const logout = async() => {
+    let token = localStorage.getItem("token");
+    let payload={
+      token: token
+    }
+    try{
+      await request.post("signout", payload, {
+        headers: {
+          'DVC_KY_HDR': 2,
+          'Authorization':`Bearer ${token}`,
+        }
+      });
+      localStorage.clear();
+      window.location.href = `/login`;
+      toast.success("Logout successful");
+      return;
+    }
+    catch(err){
+      console.log(err);
+      toast.error(err.message);
+    }
   };
 
   return (
@@ -23,7 +44,7 @@ const SidebarDemo = () => {
         <MenuItem
           label="Dashboard"
           Icon={TbLayoutDashboard}
-          to="/register"
+          to="/home"
           // active={}
         />
         <MenuItem
@@ -31,12 +52,12 @@ const SidebarDemo = () => {
           label={"Budget"}
           Icon={AiOutlineDollar}
           // active={}
-          to={"/register"}
+          to={"/createBudget"}
         />
         <MenuItem
           label="Budget Category"
           Icon={MdListAlt}
-          to="/register"
+          to="/home"
           // active={}
         />
         <div  className="logout">

@@ -40,9 +40,11 @@ const Wrapper = styled.div`
   font-family: "Sofia Pro";
   .dashboard-layout__sidebar {
     background: #f3f4f8;
+    box-shadow: 4px 0px 16px rgba(0, 0, 0, 0.16);
   }
   .dashboard-layout__contents {
     position: relative;
+    
   }
   .top-nav {
     display: none;
