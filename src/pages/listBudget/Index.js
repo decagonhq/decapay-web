@@ -4,14 +4,13 @@ import GoBack from "../../components/Goback";
 import Layout from "../../components/dashboardSidebar/Layout";
 import { data } from "./Data";
 import Pagination from "../../utils/pagination";
+import { useNavigate } from "react-router-dom";
 
 let PageSize = 5;
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [idOfBudget, setIdOfBudget] = useState(-1);
   const ref = useRef(null);
-
-  console.log(idOfBudget);
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
@@ -24,7 +23,7 @@ const Index = () => {
       setIdOfBudget(-1);
     }
   };
-
+   const navigate = useNavigate();
   // const handleShowModal = (idx) => {
   //   setIdOfBudget(idx);
   //   setShowPopup(!showPopup);
@@ -64,7 +63,7 @@ const Index = () => {
                       {idOfBudget === index ? (
                         <Fragment>
                           <span ref={ref} className="popup">
-                            <p>Edit</p>
+                            <p onClick={()=>navigate(`../budgetDetail/${item.id}`)} >Edit</p>
                             <p>View details</p>
                             <p style={{color:"red"}}>Delete</p>
                           </span>
