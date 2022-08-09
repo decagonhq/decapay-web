@@ -3,42 +3,50 @@ import styled from "styled-components";
 import TitleCard from "./TitleCard";
 import SubTitleCard from "./SubTitleCard";
 import BudgetItem from "./BudgetItem";
-import Button from "../../components/Button"
+import Button from "../../components/Button";
+import Calendar from "./Dateing";
+import Layout from "../../components/dashboardSidebar/Layout";
 
 const Index = ({ title }) => {
   return (
-    <DetailStyle>
-      <TitleCard />
-      <div className="sub_container general mt-4 mb-4">
-        <SubTitleCard
-          title="Total Amount spent"
-          alt="amount"
-          amount="N30,0000"
-          src="images/money.svg"
-        />
-        <SubTitleCard
-          title="Percent"
-          alt="percent"
-          amount="35%"
-          src="images/percent.svg"
-        />
-      </div>
-      <div>
-        <div className="general mb-2">
-          <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
+    <Layout>
+      <DetailStyle>
+        <TitleCard />
+
+        <div className="sub_container general mt-2 mb-2">
+          <SubTitleCard
+            title="Total Amount spent"
+            alt="amount"
+            amount="N30,0000"
+            src="images/money.svg"
+          />
+          <SubTitleCard
+            title="Percent"
+            alt="percent"
+            amount="35%"
+            src="images/percent.svg"
+          />
         </div>
-        <div className="mb-2">
-          <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
+        <div className="calender">
+          <Calendar />
         </div>
-        <div className="mb-2">
-          <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
+        <div>
+          <div className="general mb-2">
+            <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
+          </div>
+          <div className="mb-2">
+            <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
+          </div>
+          <div className="mb-2">
+            <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
+          </div>
+          <div className="mb-2">
+            <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
+          </div>
         </div>
-        <div className="mb-2">
-          <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
-        </div>
-      </div>
-     <Button>+ Create Budget</Button>
-    </DetailStyle>
+        <Button>+ Create Budget</Button>
+      </DetailStyle>
+    </Layout>
   );
 };
 
