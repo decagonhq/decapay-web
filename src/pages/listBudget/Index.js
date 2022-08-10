@@ -2,29 +2,61 @@ import React, { useState, useMemo, useRef, useEffect, Fragment } from "react";
 import styled from "styled-components";
 import GoBack from "../../components/Goback";
 import Layout from "../../components/dashboardSidebar/Layout";
-import { data } from "./Data";
+// import { data } from "./Data";
 import Pagination from "../../utils/pagination";
+import { useNavigate } from "react-router-dom";
+import request from "../../utils/apiHelper";
+import { toast } from "react-toastify";
 
-let PageSize = 5;
+let PageSize = 10;
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [idOfBudget, setIdOfBudget] = useState(-1);
+  const [data, setData] = useState([]);
+  
+  // eslint-disable-next-line
+  const [dataInfo, setDataInfo] = useState([]);
   const ref = useRef(null);
 
-  console.log(idOfBudget);
+  const headers = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+  };
 
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await request.get(`budgets?pageNumber=${1}`, headers);
+      setData(response.data.data.content);
+      setDataInfo(response.data.data.pageable);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
+  
+  // dataInfo?.pageSize ||
+  // console.log(data);
+  // console.log(dataInfo);
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
     return data.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
+    // eslint-disable-next-line
+  }, [currentPage, data]);
 
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
       setIdOfBudget(-1);
     }
   };
-
+  const navigate = useNavigate();
   // const handleShowModal = (idx) => {
   //   setIdOfBudget(idx);
   //   setShowPopup(!showPopup);
@@ -53,40 +85,57 @@ const Index = () => {
             </p>
           </div>
           <div className="list-container">
-            {currentTableData.map((item, index) => (
-              <ul className="item-wrapper">
-                {/* Budget 1 - Monthly */}
-                <div className="list--wrapper">
-                  <div className="list-item-row title">
-                    <p>{item.title}</p>
-                    <p style={{cursor:"pointer"}} onClick={() => setIdOfBudget(index)}>
-                      ...
-                      {idOfBudget === index ? (
-                        <Fragment>
-                          <span ref={ref} className="popup">
-                            <p>Edit</p>
-                            <p>View details</p>
-                            <p style={{color:"red"}}>Delete</p>
-                          </span>
-                        </Fragment>
-                      ) : null}
-                    </p>
+            {currentTableData !== null && currentTableData?.length > 0 ? (
+              currentTableData.map((item, index) => (
+                <ul className="item-wrapper">
+                  {/* Budget 1 - Monthly */}
+                  <div className="list--wrapper">
+                    <div className="list-item-row title">
+                      <p>{item.title}</p>
+                      <p
+                        style={{ cursor: "pointer" }}
+                        onClick={() => setIdOfBudget(index)}
+                      >
+                        ...
+                        {idOfBudget === index ? (
+                          <Fragment>
+                            <span ref={ref} className="popup">
+                              <p>Edit</p>
+                              <p
+                                onClick={() =>
+                                  navigate(`../budgetDetail/${item.id}`, {
+                                    replace: true,
+                                  })
+                                }
+                              >
+                                View details
+                              </p>
+                              <p style={{ color: "red" }}>Delete</p>
+                            </span>
+                          </Fragment>
+                        ) : null}
+                      </p>
+                    </div>
+                    <div className="list-item-row">
+                      <p>Budget amount</p>
+                      <p>{item.displayProjectedAmount}</p>
+                    </div>
+                    <div className="list-item-row">
+                      <p>Total amount spent</p>
+                      <p>{item.displayTotalAmountSpentSoFar}</p>
+                    </div>
+                    <div className="list-item-row">
+                      <p>Percentage</p>
+                      <p style={{ color: "#14A800" }}>
+                        {item.displayPercentageSpentSoFar}
+                      </p>
+                    </div>
                   </div>
-                  <div className="list-item-row">
-                    <p>Budget amount</p>
-                    <p>{item.amount}</p>
-                  </div>
-                  <div className="list-item-row">
-                    <p>Total amount spent</p>
-                    <p>{item.totalAmount}</p>
-                  </div>
-                  <div className="list-item-row">
-                    <p>Percentage</p>
-                    <p style={{ color: "#14A800" }}>{item.percentage}</p>
-                  </div>
-                </div>
-              </ul>
-            ))}
+                </ul>
+              ))
+            ) : (
+              <p>No budget to display</p>
+            )}
           </div>
           <div className="pagination-container">
             <Pagination
