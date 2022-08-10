@@ -34,8 +34,8 @@ const Index = () => {
     setDataInfo(response.data.data.pageable);
   };
   let PageSize = dataInfo?.pageSize || 5;
-  console.log(data);
-  console.log(dataInfo);
+  // console.log(data);
+  // console.log(dataInfo);
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
@@ -92,15 +92,15 @@ const Index = () => {
                         <Fragment>
                           <span ref={ref} className="popup">
                             <p
-                              onClick={() =>
-                                navigate(`../budgetDetail/${item.id}`, {
-                                  replace: true,
-                                })
-                              }
+                              
                             >
                               Edit
                             </p>
-                            <p>View details</p>
+                            <p onClick={() =>
+                                navigate(`../budgetDetail/${item.id}`, {
+                                  replace: true,
+                                })
+                              }>View details</p>
                             <p style={{ color: "red" }}>Delete</p>
                           </span>
                         </Fragment>
@@ -109,15 +109,15 @@ const Index = () => {
                   </div>
                   <div className="list-item-row">
                     <p>Budget amount</p>
-                    <p>{item.amount}</p>
+                    <p>{item.displayProjectedAmount}</p>
                   </div>
                   <div className="list-item-row">
                     <p>Total amount spent</p>
-                    <p>{item.totalAmount}</p>
+                    <p>{item.displayTotalAmountSpentSoFar}</p>
                   </div>
                   <div className="list-item-row">
                     <p>Percentage</p>
-                    <p style={{ color: "#14A800" }}>{item.percentage}</p>
+                    <p style={{ color: "#14A800" }}>{item.displayPercentageSpentSoFar}</p>
                   </div>
                 </div>
               </ul>
