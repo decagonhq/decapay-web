@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import styled from "styled-components";
 import TitleCard from "./TitleCard";
 import SubTitleCard from "./SubTitleCard";
@@ -6,8 +6,36 @@ import BudgetItem from "./BudgetItem";
 import Button from "../../components/Button";
 import Calendar from "./Dateing";
 import Layout from "../../components/dashboardSidebar/Layout";
+import request from "../../utils/apiHelper";
+import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
 const Index = ({ title }) => {
+  const[data,setData] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line
+  }, []);
+
+  const {id} = useParams();
+  const headers = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await request.get(`budgets/${id}`, headers);
+      setData(response.data.data);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
+  console.log(data);
   return (
     <Layout>
       <DetailStyle>

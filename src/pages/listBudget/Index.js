@@ -6,20 +6,23 @@ import Layout from "../../components/dashboardSidebar/Layout";
 import Pagination from "../../utils/pagination";
 import { useNavigate } from "react-router-dom";
 import request from "../../utils/apiHelper";
+import { toast } from "react-toastify";
 
-
+let PageSize = 10;
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [idOfBudget, setIdOfBudget] = useState(-1);
   const [data, setData] = useState([]);
+  
+  // eslint-disable-next-line
   const [dataInfo, setDataInfo] = useState([]);
   const ref = useRef(null);
 
   const headers = {
-    headers: { 
+    headers: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer " + localStorage.getItem("token")
-   },
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
   };
 
   useEffect(() => {
@@ -28,12 +31,17 @@ const Index = () => {
   }, []);
 
   const fetchData = async () => {
-    const response = await request.get(`budgets?pageNumber=${1}`, headers);
-    setData(response.data.data.content);
-
-    setDataInfo(response.data.data.pageable);
+    try {
+      const response = await request.get(`budgets?pageNumber=${1}`, headers);
+      setData(response.data.data.content);
+      setDataInfo(response.data.data.pageable);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
   };
-  let PageSize = dataInfo?.pageSize || 5;
+  
+  // dataInfo?.pageSize ||
   // console.log(data);
   // console.log(dataInfo);
   const currentTableData = useMemo(() => {
@@ -77,51 +85,57 @@ const Index = () => {
             </p>
           </div>
           <div className="list-container">
-            {currentTableData !== null && currentTableData?.length > 0 ? currentTableData.map((item, index) => (
-              <ul className="item-wrapper">
-                {/* Budget 1 - Monthly */}
-                <div className="list--wrapper">
-                  <div className="list-item-row title">
-                    <p>{item.title}</p>
-                    <p
-                      style={{ cursor: "pointer" }}
-                      onClick={() => setIdOfBudget(index)}
-                    >
-                      ...
-                      {idOfBudget === index ? (
-                        <Fragment>
-                          <span ref={ref} className="popup">
-                            <p
-                              
-                            >
-                              Edit
-                            </p>
-                            <p onClick={() =>
-                                navigate(`../budgetDetail/${item.id}`, {
-                                  replace: true,
-                                })
-                              }>View details</p>
-                            <p style={{ color: "red" }}>Delete</p>
-                          </span>
-                        </Fragment>
-                      ) : null}
-                    </p>
+            {currentTableData !== null && currentTableData?.length > 0 ? (
+              currentTableData.map((item, index) => (
+                <ul className="item-wrapper">
+                  {/* Budget 1 - Monthly */}
+                  <div className="list--wrapper">
+                    <div className="list-item-row title">
+                      <p>{item.title}</p>
+                      <p
+                        style={{ cursor: "pointer" }}
+                        onClick={() => setIdOfBudget(index)}
+                      >
+                        ...
+                        {idOfBudget === index ? (
+                          <Fragment>
+                            <span ref={ref} className="popup">
+                              <p>Edit</p>
+                              <p
+                                onClick={() =>
+                                  navigate(`../budgetDetail/${item.id}`, {
+                                    replace: true,
+                                  })
+                                }
+                              >
+                                View details
+                              </p>
+                              <p style={{ color: "red" }}>Delete</p>
+                            </span>
+                          </Fragment>
+                        ) : null}
+                      </p>
+                    </div>
+                    <div className="list-item-row">
+                      <p>Budget amount</p>
+                      <p>{item.displayProjectedAmount}</p>
+                    </div>
+                    <div className="list-item-row">
+                      <p>Total amount spent</p>
+                      <p>{item.displayTotalAmountSpentSoFar}</p>
+                    </div>
+                    <div className="list-item-row">
+                      <p>Percentage</p>
+                      <p style={{ color: "#14A800" }}>
+                        {item.displayPercentageSpentSoFar}
+                      </p>
+                    </div>
                   </div>
-                  <div className="list-item-row">
-                    <p>Budget amount</p>
-                    <p>{item.displayProjectedAmount}</p>
-                  </div>
-                  <div className="list-item-row">
-                    <p>Total amount spent</p>
-                    <p>{item.displayTotalAmountSpentSoFar}</p>
-                  </div>
-                  <div className="list-item-row">
-                    <p>Percentage</p>
-                    <p style={{ color: "#14A800" }}>{item.displayPercentageSpentSoFar}</p>
-                  </div>
-                </div>
-              </ul>
-            )):<p>No budget to display</p>}
+                </ul>
+              ))
+            ) : (
+              <p>No budget to display</p>
+            )}
           </div>
           <div className="pagination-container">
             <Pagination
