@@ -8,6 +8,31 @@ import format from "date-fns/format";
 import "../../styles/styles.css";
 import styled from "styled-components"
 
+// custom styles for the calendar
+const CalendarWrapper = styled.div`
+  width: 100%;
+  font-family: "Inter";
+  font-style: normal;
+  line-height: 19px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  .calenderElement {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    font-family: "Inter";
+    font-style: normal;
+    line-height: 19px;
+    margin:0 auto;
+    @media only screen and (max-width: 379px) {
+      height: 180px;
+    }
+  }
+
+  `;
+
 const Datething = () => {
 
   // eslint-disable-next-line
@@ -38,23 +63,3 @@ const Datething = () => {
 };
 
 export default Datething;
-
-const CalendarWrapper = styled.div`
-  display:flex;
-  flex-direction:column;
-  justify-content: center;
-  align-items:center;
-  width:100%;
-  input.inputBox {
-  font-size: 22px;
-  padding: 5px 8px 4px 8px;
-  border-radius: 3px;
-  border: 1px solid #666;
-}
-
-.calendarElement {
-  width:600px;
-  border: 2px solid black;
-  font-size: 22px;
-}
-`;

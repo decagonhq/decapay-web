@@ -2,28 +2,53 @@ import React, { useState, useMemo, useRef, useEffect, Fragment } from "react";
 import styled from "styled-components";
 import GoBack from "../../components/Goback";
 import Layout from "../../components/dashboardSidebar/Layout";
-import { data } from "./Data";
+// import { data } from "./Data";
 import Pagination from "../../utils/pagination";
 import { useNavigate } from "react-router-dom";
+import request from "../../utils/apiHelper";
 
-let PageSize = 5;
+
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [idOfBudget, setIdOfBudget] = useState(-1);
+  const [data, setData] = useState([]);
+  const [dataInfo, setDataInfo] = useState([]);
   const ref = useRef(null);
 
+  const headers = {
+    headers: { 
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + localStorage.getItem("token")
+   },
+  };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line
+  }, []);
+
+  const fetchData = async () => {
+    const response = await request.get(`budgets?pageNumber=${1}`, headers);
+    setData(response.data.data.content);
+
+    setDataInfo(response.data.data.pageable);
+  };
+  let PageSize = dataInfo?.pageSize || 5;
+  console.log(data);
+  console.log(dataInfo);
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
     return data.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
+    // eslint-disable-next-line
+  }, [currentPage, data]);
 
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
       setIdOfBudget(-1);
     }
   };
-   const navigate = useNavigate();
+  const navigate = useNavigate();
   // const handleShowModal = (idx) => {
   //   setIdOfBudget(idx);
   //   setShowPopup(!showPopup);
@@ -52,20 +77,31 @@ const Index = () => {
             </p>
           </div>
           <div className="list-container">
-            {currentTableData.map((item, index) => (
+            {currentTableData !== null && currentTableData?.length > 0 ? currentTableData.map((item, index) => (
               <ul className="item-wrapper">
                 {/* Budget 1 - Monthly */}
                 <div className="list--wrapper">
                   <div className="list-item-row title">
                     <p>{item.title}</p>
-                    <p style={{cursor:"pointer"}} onClick={() => setIdOfBudget(index)}>
+                    <p
+                      style={{ cursor: "pointer" }}
+                      onClick={() => setIdOfBudget(index)}
+                    >
                       ...
                       {idOfBudget === index ? (
                         <Fragment>
                           <span ref={ref} className="popup">
-                            <p onClick={()=>navigate(`../budgetDetail/${item.id}`)} >Edit</p>
+                            <p
+                              onClick={() =>
+                                navigate(`../budgetDetail/${item.id}`, {
+                                  replace: true,
+                                })
+                              }
+                            >
+                              Edit
+                            </p>
                             <p>View details</p>
-                            <p style={{color:"red"}}>Delete</p>
+                            <p style={{ color: "red" }}>Delete</p>
                           </span>
                         </Fragment>
                       ) : null}
@@ -85,7 +121,7 @@ const Index = () => {
                   </div>
                 </div>
               </ul>
-            ))}
+            )):<p>No budget to display</p>}
           </div>
           <div className="pagination-container">
             <Pagination
