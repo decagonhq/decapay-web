@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import TitleCard from "./TitleCard";
 import SubTitleCard from "./SubTitleCard";
@@ -10,15 +10,16 @@ import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
+
 const Index = ({ title }) => {
-  const[data,setData] = useState([]);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line
   }, []);
 
-  const {id} = useParams();
+  const { id } = useParams();
   const headers = {
     headers: {
       "Content-Type": "application/json",
@@ -36,6 +37,19 @@ const Index = ({ title }) => {
     }
   };
   console.log(data);
+  //   budgetPeriod: "MONTHLY"
+  // displayEndDate: "Jan 31,2022"
+  // displayPercentageSpentSoFar: "0.0%"
+  // displayProjectedAmount: "₦700,000.00"
+  // displayStartDate: "Jan 01,2022"
+  // displayTotalAmountSpentSoFar: "₦0.00"
+  // endDate: "2022-01-31"
+  // id: 65
+  // lineItems: []
+  // percentageSpentSoFar: 0
+  // projectedAmount: 700000
+  // startDate: "2022-01-01"
+  // title: "Buy GLK 2022"
   return (
     <Layout>
       <DetailStyle>
@@ -44,34 +58,34 @@ const Index = ({ title }) => {
         <div className="sub_container general mt-2 mb-2">
           <SubTitleCard
             title="Total Amount spent"
-            alt="amount"
-            amount="N30,0000"
-            src="images/money.svg"
+            alt=""
+            amount={data?.displayTotalAmountSpentSoFar}
+            src="/images/money-2.svg"
           />
           <SubTitleCard
             title="Percent"
-            alt="percent"
-            amount="35%"
-            src="images/percent.svg"
+            alt=""
+            amount={data?.displayPercentageSpentSoFar}
+            src="/images/percent.svg"
           />
         </div>
         <div className="calender">
           <Calendar />
         </div>
-        <div>
-          <div className="general mb-2">
-            <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
+
+        {data && data?.length > 0 ? (
+          data?.lineItems.map((item, index) => (
+              <div key={index} className="mb-2">
+                <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
+              </div>
+          ))
+        ) : (
+          <div className="empty">
+            <img className="empty-img" src="/images/empty-img.svg" alt="empty" />
+            <p>No line item found in the budget</p>
           </div>
-          <div className="mb-2">
-            <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
-          </div>
-          <div className="mb-2">
-            <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
-          </div>
-          <div className="mb-2">
-            <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
-          </div>
-        </div>
+        )}
+
         <Button>+ Create Budget</Button>
       </DetailStyle>
     </Layout>
@@ -106,5 +120,15 @@ const DetailStyle = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+  }
+  .empty{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .empty-img{
+    width:40px;
+    height:35px;
   }
 `;
