@@ -50,7 +50,7 @@ const Datething = () => {
 
   return (
     <CalendarWrapper>
-      {/* <input value={calendar} readOnly className="inputBox" /> */}
+      <input value={calendar} readOnly className="inputBox" />
       <Calendar
         date={new Date()}
         onChange={handleSelect}
