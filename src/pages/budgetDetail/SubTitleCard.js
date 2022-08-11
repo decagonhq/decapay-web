@@ -20,7 +20,7 @@ const ListStyle = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px;
-  gap: 2px;
+  gap: 10px;
   width: 100%;
   height: 113px;
   background: rgba(20, 168, 0, 0.03);
