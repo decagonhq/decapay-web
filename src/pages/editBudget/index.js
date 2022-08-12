@@ -33,7 +33,7 @@ const EditBudget = () => {
   const { id } = useParams();
   useEffect(() => {
     fetchData();
-
+    initialPeriod();
     
   }, [period]);
   const initialValues = {
@@ -152,6 +152,44 @@ const EditBudget = () => {
   console.log("this is monthly", monthly);
   console.log("this isannual", annual);
   console.log("this is custom", custom);
+
+  const initialPeriod = () => {
+    if (period === "ANNUAL") {
+      setAnnual(true);
+      setMonthly(false);
+      setWeekly(false);
+      setDaily(false);
+      setCustom(false);
+    } else if (period === "MONTHLY") {
+      setAnnual(false);
+      setMonthly(true);
+      console.log(monthly);
+      setWeekly(false);
+      setDaily(false);
+      setCustom(false);
+    } else if (period === "WEEKLY") {
+      setAnnual(false);
+      setMonthly(false);
+      setWeekly(true);
+      console.log(weekly);
+      setDaily(false);
+      setCustom(false);
+    } else if (period === "DAILY") {
+      setAnnual(false);
+      setMonthly(false);
+      setWeekly(false);
+      setDaily(true);
+      setCustom(false);
+    } else if (period === "CUSTOM") {
+      setAnnual(false);
+      setMonthly(false);
+      setWeekly(false);
+      setDaily(false);
+      setCustom(true);
+    }
+  };
+
+
   const handleChange2 = (e) => {
     setPeriod(e.target.value);
     if (period === "ANNUAL") {
