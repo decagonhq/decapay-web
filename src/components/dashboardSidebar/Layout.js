@@ -44,7 +44,7 @@ const Wrapper = styled.div`
   }
   .dashboard-layout__contents {
     position: relative;
-    
+    padding: 0 10px;
   }
   .top-nav {
     display: none;
@@ -60,6 +60,7 @@ const Wrapper = styled.div`
   }
   .container {
     background-color: white;
+   
     /* box-shadow: 0px 0px 15px #00000029; */
   }
   /* .form-modal {
