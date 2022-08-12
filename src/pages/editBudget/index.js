@@ -2,10 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Layout from "../../components/dashboardSidebar/Layout";
 import FormInputComponent from "../../components/InputComponent";
-// import Select from "react-dropdown-select";
-import Select from "react-select";
 import GoBack from "../../components/Goback";
-// import { Formik } from "formik";
 import * as yup from "yup";
 import MyButton from "../../components/Button";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -17,12 +14,24 @@ import FormSelectComponent from "../../components/selectComponent";
 
 const EditBudget = () => {
   const [data, setData] = useState([]);
-   const [annual, setAnnual] = React.useState(false);
-  const [monthly, setMonthly] = React.useState(false);
-  const [weekly, setWeekly] = React.useState(false);
-  const [daily, setDaily] = React.useState(false);
-  const [custom, setCustom] = React.useState(false);
+  const [year, setYear] = React.useState("");
+  const [title, setTitle] = React.useState("");
+  const [description, setDescription] = React.useState("");
+  const [amount, setAmount] = React.useState("");
+  const [month, setMonth] = React.useState("");
+  const [startDate, setStartDate] = React.useState("");
+  const [duration, setDuration] = React.useState("");
+  const [endDate, setEndDate] = React.useState("");
   const [period, setPeriod] = React.useState("");
+
+  const formatDate = (date) => {
+    let splitDate = date.split("/");
+    let joinDateFromBehind = splitDate.reverse().join("-");
+    return joinDateFromBehind;
+  };
+  
+  
+  
   const options = [
     { value: "ANNUAL", label: "ANNUAL" },
     { value: "MONTHLY", label: "MONTHLY" },
@@ -31,12 +40,15 @@ const EditBudget = () => {
     { value: "CUSTOM", label: "CUSTOM" },
   ];
   const { id } = useParams();
+
   useEffect(() => {
-    fetchData(); 
+    fetchData();
+    // eslint-disable-next-line
   }, []);
+  
   const initialValues = {
-    title: "",
-    amount: "",
+    title: data?.title,
+    amount: data?.amount,
     period: "",
     budgetStartDate: "",
     budgetEndDate: "",
@@ -54,9 +66,31 @@ const EditBudget = () => {
   };
   const fetchData = async () => {
     try {
-      const response = await request.get(`budgets/${id}`, headers);
+      const response = await request.get(`budgets/edit/${id}`, headers);
       setData(response.data.data);
-      setPeriod(response.data.data.budgetPeriod);
+      setPeriod(response.data.data.period);
+      setTitle(response.data.data.title);
+      setDescription(response?.data.data.description);
+      setAmount(response.data.data.amount);
+      if (response.data.data.period === "ANNUAL") {
+        setYear(response.data.data.year);
+        console.log(response.data.data.year);
+      } else if (response.data.data.period === "MONTHLY") {
+        setMonth(response.data.data.month);
+        setYear(response.data.data.year);
+        console.log(month);
+      } else if (response.data.data.period === "WEEKLY") {
+        setDuration(response.data.data.duration);
+        setStartDate(formatDate(response.data.data.budgetStartDate));
+        console.log(duration);
+      } else if (response.data.data.period === "DAILY") {
+        setStartDate(formatDate(response.data.data.budgetStartDate));
+        setEndDate(formatDate(response.data.data.budgetEndDate));
+        console.log(duration);
+      } else if (response.data.data.period === "CUSTOM") {
+        setStartDate(formatDate(response.data.data.budgetStartDate));
+        setEndDate(formatDate(response.data.data.budgetEndDate));
+      }
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
@@ -81,29 +115,29 @@ const EditBudget = () => {
     return `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
   };
 
-  const onSubmit = async (values) => {
-    formik.values.budgetStartDate = changeDateFormat(
-      formik.values.budgetStartDate
-    );
-    formik.values.budgetEndDate = changeDateFormat(formik.values.budgetEndDate);
-    formik.values.amount = parseInt(formik.values.amount);
-    if (formik.values.period === "DAILY") {
-      /* eslint-disable */
-      formik.values.budgetEndDate = formik.values.budgetStartDate;
-    } else if (formik.values.period === "CUSTOM") {
-      formik.values.budgetEndDate = values.budgetEndDate;
-    } else {
-      formik.values.budgetEndDate = "";
-    }
+  const onSubmit = async () => {
+    let payload = {
+      title: title,
+      description: description,
+      amount: amount,
+      year: year,
+      duration: duration,
+      month: month,
+      period: period,
+      budgetStartDate: changeDateFormat(startDate),
+      budgetEndDate: period==="DAILY"?changeDateFormat(startDate):changeDateFormat(endDate),
+      
+    };
+    console.log("this is payload", payload);
     try {
-      await request.post(`budgets`, formik.values, {
+      await request.put(`budgets/${id}`, payload, {
         headers: {
           "Content-Type": "application/json",
           DVC_KY_HDR: 2,
           Authorization: `Bearer ${token}`,
         },
       });
-      toast.success("Budget created successfully");
+      toast.success("Budget Editted successfully");
       setLoading(false);
       timerBeforeRedirect();
     } catch (error) {
@@ -119,13 +153,13 @@ const EditBudget = () => {
   });
 
   const years = [
-    { value: "1", label: "2022" },
-    { value: "2", label: "2023" },
-    { value: "3", label: "2024" },
-    { value: "4", label: "2025" },
-    { value: "5", label: "2026" },
-    { value: "6", label: "2027" },
-    { value: "7", label: "2028" },
+    { value: "2022", label: "2022" },
+    { value: "2023", label: "2023" },
+    { value: "2024", label: "2024" },
+    { value: "2025", label: "2025" },
+    { value: "2026", label: "2026" },
+    { value: "2027", label: "2027" },
+    { value: "2028", label: "2028" },
   ];
   const months = [
     { value: "1", label: "January" },
@@ -142,52 +176,33 @@ const EditBudget = () => {
     { value: "12", label: "December" },
   ];
 
-  // const dispatch = useDispatch();
- 
-  console.log("this is Period", period);
-  console.log("this is weekly", weekly);
-  console.log("this is daily", daily);
-  console.log("this is monthly", monthly);
-  console.log("this isannual", annual);
-  console.log("this is custom", custom);
-  
   const handleChange2 = (e) => {
     setPeriod(e.target.value);
-    if (period === "ANNUAL") {
-      setAnnual(true);
-      setMonthly(false);
-      setWeekly(false);
-      setDaily(false);
-      setCustom(false);
-    } else if (period === "MONTHLY") {
-      setAnnual(false);
-      setMonthly(true);
-      console.log(monthly);
-      setWeekly(false);
-      setDaily(false);
-      setCustom(false);
-    } else if (period === "WEEKLY") {
-      setAnnual(false);
-      setMonthly(false);
-      setWeekly(true);
-      console.log(weekly);
-      setDaily(false);
-      setCustom(false);
-    } else if (period === "DAILY") {
-      setAnnual(false);
-      setMonthly(false);
-      setWeekly(false);
-      setDaily(true);
-      setCustom(false);
-    } else if (period === "CUSTOM") {
-      setAnnual(false);
-      setMonthly(false);
-      setWeekly(false);
-      setDaily(false);
-      setCustom(true);
-    }
   };
-  console.log(period);
+  const handleChangeYear = (e) => {
+    setYear(e.target.value);
+  };
+  const handleChangeMonth = (e) => {
+    setMonth(e.target.value);
+  };
+  const handleChangeDuration = (e) => {
+    setDuration(e.target.value);
+  };
+  const handleChangeStartDate = (e) => {
+    setStartDate(e.target.value);
+  };
+  const handleChangeEndDate = (e) => {
+    setEndDate(e.target.value);
+  };
+  const handleChangeTitle = (e) => {
+    setTitle(e.target.value);
+  };
+  const handleChangeDescription = (e) => {
+    setDescription(e.target.value);
+  };
+  const handleChangeAmount = (e) => {
+    setAmount(e.target.value);
+  };
 
   return (
     <Layout>
@@ -206,9 +221,8 @@ const EditBudget = () => {
               label="Title"
               type="text"
               name="title"
-              value={formik.values.title}
-              defaultValue={data?.title}
-              onChange={formik.handleChange}
+              value={title}
+              onChange={(e) => handleChangeTitle(e)}
               error={formik.errors.title}
             />
           </div>
@@ -218,150 +232,106 @@ const EditBudget = () => {
               label="Amount"
               type="text"
               name="amount"
-              value={formik.values.amount}
-              defaultValue={data?.projectedAmount}
-              onChange={formik.handleChange}
+              value={amount}
+              onChange={(e) => 
+                handleChangeAmount(e)}
               error={formik.errors.amount}
             />
           </div>
           <div>
             <h5>Period</h5>
-            {/* <Select
-              options={options}
-              name="period"
-              className="fommy2"
-              // {{ label: "Select Dept", value: 0 }}
-              // {data.budgetPeriod}
-              defaultValue={
-                data.budgetPeriod === "ANNUAL"
-                  ? { label: "Annual", value: "1" }
-                  : data.budgetPeriod === "MONTHLY"
-                  ? { label: "Monthly", value: "2" }
-                  : data.budgetPeriod === "WEEKLY"
-                  ? { label: "Weekly", value: "3" }
-                  : data.budgetPeriod === "DAILY"
-                  ? { label: "Daily", value: "4" }
-                  : data.budgetPeriod === "CUSTOM"
-                  ? { label: "Custom", value: "5" }
-                  : { label: "Select Period", value: 0 }
-              }
-              placeholder={"Select Frequency"}
-              error={formik.errors.period}
-              value={formik.values.period}
-              onChange={(e) => {
-                handleChange2(e);
-                // console.log(e);
 
-                // formik.values.period = e[0].value.toUpperCase();
-                formik.values.period = e.value.toUpperCase();
-              }}
-
-              // onChange={(e) => {
-              //
-              // }}
-            /> */}
             <FormSelectComponent
               name="period"
-              // label="Period"
               options={options}
-              //  defaultValue={
-              //   options.find((item) => item.value === data.budgetPeriod)
-              //  }
 
               value={period}
-              // defaultValue={period}
               onChange={(e) => handleChange2(e)}
               placeholder={"Select Frequency"}
             />
           </div>
-          {period==="ANNUAL" && (
+          {period === "ANNUAL" && (
             <div className="fommy">
-              <Select
-                options={years}
-                name="years"
-                className="fommy2"
-                placeholder="Select Year"
-                value={formik.values.year}
-                onChange={(e) => {
-                  formik.values.year = parseInt(e.value);
-                }}
-              />
-            </div>
-          )}
-          {period==="MONTHLY" && (
-            <div className="fommy">
-              <Select
-                options={years}
+              <FormSelectComponent
                 name="year"
-                className="fommy2"
-                placeholder="Select Year"
-                value={formik.values.year}
-                onChange={(e) => {
-                  console.log(e.value);
-                  formik.values.year = parseInt(e.value);
-                }}
-              />
-              <Select
-                options={months}
-                name="month"
-                value={formik.values.month}
-                placeholder="Select Month"
-                className="fommy2"
-                onChange={(e) => {
-                  formik.values.month = parseInt(e.value);
-                }}
+                options={years}
+                value={year}
+                onChange={(e) => handleChangeYear(e)}
+                placeholder={"Select Frequency"}
               />
             </div>
           )}
-          {period==="WEEKLY" && (
+          {period === "MONTHLY" && (
+            <div className="fommy">
+              <FormSelectComponent
+                name="year"
+                options={years}
+                value={year}
+                onChange={(e) => handleChangeYear(e)}
+                placeholder={"Select Frequency"}
+              />
+              <FormSelectComponent
+                name="month"
+                options={months}
+                value={month}
+                onChange={(e) => handleChangeMonth(e)}
+                placeholder={"Select Frequency"}
+              />
+            </div>
+          )}
+          {period === "WEEKLY" && (
             <div className="fommy3">
               <FormInputComponent
                 placeholder="Start Date"
                 label="Start Date"
                 type="date"
-                value={formik.values.budgetStartDate}
+                value={formatDate(startDate)}
                 name="budgetStartDate"
-                onChange={formik.handleChange}
+                onChange={(e)=>handleChangeStartDate(e)}
               />
               <FormInputComponent
                 placeholder="Duration"
                 label="duration"
                 type="number"
-                value={formik.values.duration}
+                value={duration}
                 name="duration"
-                onChange={formik.handleChange}
+                onChange={(e)=>handleChangeDuration(e)}
               />
             </div>
           )}
-          {period==="DAILY" && (
+          {period === "DAILY" && (
             <div className="fommy3">
               <FormInputComponent
                 placeholder="Start Date"
                 label="Start Date"
                 type="date"
-                value={formik.values.budgetStartDate}
+                value={formatDate(startDate)}
                 name="budgetStartDate"
-                onChange={formik.handleChange}
+                onChange={(e) =>
+                  handleChangeStartDate(e)}
               />
             </div>
           )}
-          {period==="CUSTOM" && (
+          {period === "CUSTOM" && (
             <div className="fommy3">
               <FormInputComponent
                 placeholder="Start Date"
                 label="Start Date"
                 type="date"
-                value={formik.values.budgetStartDate}
+                value={formatDate(startDate)}
                 name="budgetStartDate"
-                onChange={formik.handleChange}
+                onChange={(e) =>
+                  handleChangeStartDate(e)}
               />
               <FormInputComponent
                 placeholder="End Date"
                 label="End Date"
                 type="date"
-                value={formik.values.budgetEndDate}
+                value={formatDate(endDate)}
                 name="budgetEndDate"
-                onChange={formik.handleChange}
+                onChange={(e)=>
+                  handleChangeEndDate(e)}
+                
               />
             </div>
           )}
@@ -371,9 +341,9 @@ const EditBudget = () => {
               placeholder="Enter Description here..."
               label="Description"
               type="text"
-              value={formik.values.description}
-              defaultValue={data?.budgetPeriod}
-              onChange={formik.handleChange}
+              value={description}
+              defaultValue={data?.description}
+              onChange={handleChangeDescription}
               name="description"
             />
           </div>
@@ -388,7 +358,7 @@ const EditBudget = () => {
               {loading ? (
                 <ClipLoader color="white" size="40px" />
               ) : (
-                "Create Budget"
+                "Edit Budget"
               )}
             </MyButton>
           </div>
