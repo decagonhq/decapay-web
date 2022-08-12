@@ -52,7 +52,9 @@ const Index = ({ title }) => {
   return (
     <Layout>
       <DetailStyle>
-        <TitleCard />
+        <TitleCard 
+        amount = {data?.displayProjectedAmount}
+        />
 
         <div className="sub_container general mt-2 mb-2">
           <SubTitleCard
