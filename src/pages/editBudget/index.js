@@ -18,11 +18,11 @@ import FormSelectComponent from "../../components/selectComponent";
 const EditBudget = () => {
   const [data, setData] = useState([]);
   const options = [
-    { value: "1", label: "ANNUAL" },
+    { value: "ANNUAL", label: "ANNUAL" },
     { value: "MONTHLY", label: "MONTHLY" },
-    { value: "3", label: "WEEKLY" },
-    { value: "4", label: "DAILY" },
-    { value: "5", label: "CUSTOM" },
+    { value: "WEEKLY", label: "WEEKLY" },
+    { value: "DAILY", label: "DAILY" },
+    { value: "CUSTOM", label: "CUSTOM" },
   ];
   const { id } = useParams();
   useEffect(() => {
@@ -58,6 +58,7 @@ const EditBudget = () => {
     try {
       const response = await request.get(`budgets/${id}`, headers);
       setData(response.data.data);
+      setPeriod(response.data.data.budgetPeriod);
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
@@ -149,6 +150,7 @@ const EditBudget = () => {
   const [weekly, setWeekly] = React.useState(false);
   const [daily, setDaily] = React.useState(false);
   const [custom, setCustom] = React.useState(false);
+  const [period, setPeriod] = React.useState("");
   const handleChange2 = (e) => {
     // if(!e.value || !e.label) return;
     // let valueOfE = e.map((item) => item.value);
@@ -186,7 +188,7 @@ const EditBudget = () => {
       setCustom(true);
     }
   };
-  console.log(data.budgetPeriod);
+  console.log(period);
 
   return (
     <Layout>
@@ -259,7 +261,9 @@ const EditBudget = () => {
             name="period"
             label="Period"
             options={options}
-            defaultValue = {data.budgetPeriod}
+            value={period}
+            defaultValue={period}  
+            onChange={(e) => setPeriod(e.value)} 
             placeholder={"Select Frequency"}
           />
           </div>
