@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-const TitleCard = ({ title }) => {
+const TitleCard = ({ amount }) => {
   return (
     <ListStyle>
         <p className="bg-title">My Budget</p>
-        <p className="bg-title-amount">N30,000.00</p>
+        <p className="bg-title-amount">{
+          amount
+        }</p>
     
     </ListStyle>
   );
