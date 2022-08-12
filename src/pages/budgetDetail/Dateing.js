@@ -57,6 +57,8 @@ const Datething = () => {
         className="calenderElement"
         color="green"
         showSelectionPreview={true}
+        minDate={new Date()}
+        // maxDate={new Date(2022, 09, 31)}
       />
     </CalendarWrapper>
   );
