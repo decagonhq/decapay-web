@@ -17,7 +17,7 @@ import FormSelectComponent from "../../components/selectComponent";
 
 const EditBudget = () => {
   const [data, setData] = useState([]);
-   const [annual, setAnnual] = React.useState(false);
+  const [annual, setAnnual] = React.useState(false);
   const [monthly, setMonthly] = React.useState(false);
   const [weekly, setWeekly] = React.useState(false);
   const [daily, setDaily] = React.useState(false);
@@ -33,9 +33,8 @@ const EditBudget = () => {
   const { id } = useParams();
   useEffect(() => {
     fetchData();
-    initialPeriod();
-    
-  }, [period]);
+    // initialPeriod();
+  }, []);
   const initialValues = {
     title: "",
     amount: "",
@@ -59,6 +58,21 @@ const EditBudget = () => {
       const response = await request.get(`budgets/${id}`, headers);
       setData(response.data.data);
       setPeriod(response.data.data.budgetPeriod);
+      if (response.data.data.budgetPeriod === "ANNUAL") {
+        setAnnual(true);
+      }
+      if (response.data.data.budgetPeriod === "MONTHLY") {
+        setMonthly(true);
+      }
+      if (response.data.data.budgetPeriod === "WEEKLY") {
+        setWeekly(true);
+      }
+      if (response.data.data.budgetPeriod === "DAILY") {
+        setDaily(true);
+      }
+      if (response.data.data.budgetPeriod === "CUSTOM") {
+        setCustom(true);
+      }
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
@@ -98,7 +112,7 @@ const EditBudget = () => {
       formik.values.budgetEndDate = "";
     }
     try {
-      await request.post(`budgets`, formik.values, {
+      await request.put(`budgets/${id}`, formik.values, {
         headers: {
           "Content-Type": "application/json",
           DVC_KY_HDR: 2,
@@ -145,7 +159,7 @@ const EditBudget = () => {
   ];
 
   // const dispatch = useDispatch();
- 
+
   console.log("this is Period", period);
   console.log("this is weekly", weekly);
   console.log("this is daily", daily);
@@ -188,7 +202,6 @@ const EditBudget = () => {
       setCustom(true);
     }
   };
-
 
   const handleChange2 = (e) => {
     setPeriod(e.target.value);
@@ -427,7 +440,7 @@ const EditBudget = () => {
               {loading ? (
                 <ClipLoader color="white" size="40px" />
               ) : (
-                "Create Budget"
+                "Edit Budget"
               )}
             </MyButton>
           </div>
