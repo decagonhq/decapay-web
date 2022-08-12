@@ -32,8 +32,9 @@ const EditBudget = () => {
   ];
   const { id } = useParams();
   useEffect(() => {
-    fetchData();
-    // initialPeriod();
+
+    fetchData(); 
+
   }, []);
   const initialValues = {
     title: "",
@@ -167,6 +168,7 @@ const EditBudget = () => {
   console.log("this isannual", annual);
   console.log("this is custom", custom);
 
+
   const initialPeriod = () => {
     if (period === "ANNUAL") {
       setAnnual(true);
@@ -202,6 +204,7 @@ const EditBudget = () => {
       setCustom(true);
     }
   };
+
 
   const handleChange2 = (e) => {
     setPeriod(e.target.value);
@@ -326,7 +329,7 @@ const EditBudget = () => {
               placeholder={"Select Frequency"}
             />
           </div>
-          {annual && (
+          {period==="ANNUAL" && (
             <div className="fommy">
               <Select
                 options={years}
@@ -340,7 +343,7 @@ const EditBudget = () => {
               />
             </div>
           )}
-          {monthly && (
+          {period==="MONTHLY" && (
             <div className="fommy">
               <Select
                 options={years}
@@ -365,7 +368,7 @@ const EditBudget = () => {
               />
             </div>
           )}
-          {weekly && (
+          {period==="WEEKLY" && (
             <div className="fommy3">
               <FormInputComponent
                 placeholder="Start Date"
@@ -385,7 +388,7 @@ const EditBudget = () => {
               />
             </div>
           )}
-          {daily && (
+          {period==="DAILY" && (
             <div className="fommy3">
               <FormInputComponent
                 placeholder="Start Date"
@@ -397,7 +400,7 @@ const EditBudget = () => {
               />
             </div>
           )}
-          {custom && (
+          {period==="CUSTOM" && (
             <div className="fommy3">
               <FormInputComponent
                 placeholder="Start Date"
