@@ -12,6 +12,8 @@ import { useParams } from "react-router-dom";
 
 const Index = ({ title }) => {
   const [data, setData] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -30,11 +32,17 @@ const Index = ({ title }) => {
     try {
       const response = await request.get(`budgets/${id}`, headers);
       setData(response.data.data);
+      setStartDate(response.data.data.startDate);
+      setEndDate(response.data.data.endDate);
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
     }
   };
+  console.log(startDate);
+  console.log(endDate);
+  // let startDate = (data?.startDate).toString();
+  // let endDate = (data?.endDate).toString();
   // console.log(data);
   //   budgetPeriod: "MONTHLY"
   // displayEndDate: "Jan 31,2022"
@@ -68,9 +76,10 @@ const Index = ({ title }) => {
             src="/images/percent.svg"
           />
         </div>
-        <div className="calender">
-          <Calendar />
-        </div>
+        {startDate && endDate ? <div className="calender">
+          <Calendar  startDate={startDate} endDate={endDate} />
+        </div>:null}
+        
 
         {data && data?.length > 0 ? (
           data?.lineItems.map((item, index) => (

@@ -33,7 +33,7 @@ const CalendarWrapper = styled.div`
 
   `;
 
-const Datething = () => {
+const Datething = ({startDate, endDate}) => {
 
   // eslint-disable-next-line
   const [calendar, setCalendar] = useState("");
@@ -52,13 +52,15 @@ const Datething = () => {
     <CalendarWrapper>
       <input value={calendar} readOnly className="inputBox" />
       <Calendar
-        date={new Date()}
+        // date={new Date()}
         onChange={handleSelect}
         className="calenderElement"
         color="green"
         showSelectionPreview={true}
-        minDate={new Date()}
-        // maxDate={new Date(2022, 09, 31)}
+        minDate={new Date(startDate)}
+        maxDate={new Date(endDate)}
+        moveRangeOnFirstSelection={true}
+        shownDate={new Date(startDate)}
       />
     </CalendarWrapper>
   );
