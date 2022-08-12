@@ -17,7 +17,7 @@ import FormSelectComponent from "../../components/selectComponent";
 
 const EditBudget = () => {
   const [data, setData] = useState([]);
-  const [annual, setAnnual] = React.useState(false);
+   const [annual, setAnnual] = React.useState(false);
   const [monthly, setMonthly] = React.useState(false);
   const [weekly, setWeekly] = React.useState(false);
   const [daily, setDaily] = React.useState(false);
