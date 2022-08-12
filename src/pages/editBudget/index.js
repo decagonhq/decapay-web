@@ -13,10 +13,16 @@ import { toast } from "react-toastify";
 import request from "../../utils/apiHelper";
 import { useParams } from "react-router-dom";
 import { useFormik } from "formik";
-// import FormSelectComponent from "../../components/selectComponent";
+import FormSelectComponent from "../../components/selectComponent";
 
 const EditBudget = () => {
   const [data, setData] = useState([]);
+  const [annual, setAnnual] = React.useState(false);
+  const [monthly, setMonthly] = React.useState(false);
+  const [weekly, setWeekly] = React.useState(false);
+  const [daily, setDaily] = React.useState(false);
+  const [custom, setCustom] = React.useState(false);
+  const [period, setPeriod] = React.useState("");
   const options = [
     { value: "ANNUAL", label: "ANNUAL" },
     { value: "MONTHLY", label: "MONTHLY" },
@@ -27,19 +33,13 @@ const EditBudget = () => {
   const { id } = useParams();
   useEffect(() => {
     fetchData();
-    let response = data;
 
-    formik.setValues({
-      // title: response.title,
-      //   amount: response.projectedAmount,
-      // period: response.budgetPeriod,
-    });
-    // eslint-disable-next-line
-  }, []);
+    
+  }, [period]);
   const initialValues = {
     title: "",
     amount: "",
-    period: data.budgetPeriod,
+    period: "",
     budgetStartDate: "",
     budgetEndDate: "",
     description: "",
@@ -64,7 +64,7 @@ const EditBudget = () => {
       toast.error(error.response.data.message);
     }
   };
-  console.log(typeof(initialValues.period));
+  console.log(typeof initialValues.period);
   const timerBeforeRedirect = () => {
     setTimeout(() => {
       window.location.href = "/home";
@@ -145,42 +145,42 @@ const EditBudget = () => {
   ];
 
   // const dispatch = useDispatch();
-  const [annual, setAnnual] = React.useState(false);
-  const [monthly, setMonthly] = React.useState(false);
-  const [weekly, setWeekly] = React.useState(false);
-  const [daily, setDaily] = React.useState(false);
-  const [custom, setCustom] = React.useState(false);
-  const [period, setPeriod] = React.useState("");
+ 
+  console.log("this is Period", period);
+  console.log("this is weekly", weekly);
+  console.log("this is daily", daily);
+  console.log("this is monthly", monthly);
+  console.log("this isannual", annual);
+  console.log("this is custom", custom);
   const handleChange2 = (e) => {
-    // if(!e.value || !e.label) return;
-    // let valueOfE = e.map((item) => item.value);
-    let valueOfE = e;
-    console.log(valueOfE);
-    if (valueOfE[0] === "1") {
+    setPeriod(e.target.value);
+    if (period === "ANNUAL") {
       setAnnual(true);
       setMonthly(false);
       setWeekly(false);
       setDaily(false);
       setCustom(false);
-    } else if (valueOfE.value === "MONTHLY") {
+    } else if (period === "MONTHLY") {
       setAnnual(false);
       setMonthly(true);
+      console.log(monthly);
       setWeekly(false);
       setDaily(false);
       setCustom(false);
-    } else if (valueOfE[0] === "3") {
+    } else if (period === "WEEKLY") {
       setAnnual(false);
       setMonthly(false);
       setWeekly(true);
+      console.log(weekly);
       setDaily(false);
       setCustom(false);
-    } else if (valueOfE[0] === "4") {
+    } else if (period === "DAILY") {
       setAnnual(false);
       setMonthly(false);
       setWeekly(false);
       setDaily(true);
       setCustom(false);
-    } else if (valueOfE[0] === "5") {
+    } else if (period === "CUSTOM") {
       setAnnual(false);
       setMonthly(false);
       setWeekly(false);
@@ -197,7 +197,7 @@ const EditBudget = () => {
           <div className="form__container">
             <div className="header_wrapper">
               <GoBack />
-              <h4 className="header_style">Create Budget</h4>
+              <h4 className="header_style">Edit Budget</h4>
             </div>
           </div>
 
@@ -262,20 +262,18 @@ const EditBudget = () => {
               // }}
             /> */}
             <FormSelectComponent
-            name="period"
-            label="Period"
-            options={options}
+              name="period"
+              // label="Period"
+              options={options}
+              //  defaultValue={
+              //   options.find((item) => item.value === data.budgetPeriod)
+              //  }
 
-           defaultValue={
-            options.find((item) => item.value === data.budgetPeriod)
-           }
-
-            value={period}
-            defaultValue={period}  
-            onChange={(e) => setPeriod(e.value)} 
-
-            placeholder={"Select Frequency"}
-          />
+              value={period}
+              // defaultValue={period}
+              onChange={(e) => handleChange2(e)}
+              placeholder={"Select Frequency"}
+            />
           </div>
           {annual && (
             <div className="fommy">
@@ -286,8 +284,7 @@ const EditBudget = () => {
                 placeholder="Select Year"
                 value={formik.values.year}
                 onChange={(e) => {
-                  console.log(e[0].label);
-                  formik.values.year = parseInt(e[0].label);
+                  formik.values.year = parseInt(e.value);
                 }}
               />
             </div>
@@ -302,7 +299,7 @@ const EditBudget = () => {
                 value={formik.values.year}
                 onChange={(e) => {
                   console.log(e.value);
-                  formik.values.year = parseInt(e[0].label);
+                  formik.values.year = parseInt(e.value);
                 }}
               />
               <Select
@@ -312,8 +309,7 @@ const EditBudget = () => {
                 placeholder="Select Month"
                 className="fommy2"
                 onChange={(e) => {
-                  console.log(e[0].label);
-                  formik.values.month = parseInt(e[0].value);
+                  formik.values.month = parseInt(e.value);
                 }}
               />
             </div>
@@ -385,7 +381,7 @@ const EditBudget = () => {
           <div className="form__wrapper2">
             <MyButton
               type="submit"
-              value="Create Budget"
+              value="Edit Budget"
               disabled={!formik.isValid}
               className="form__button"
               onClick={formik.handleSubmit}
