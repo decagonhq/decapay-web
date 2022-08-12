@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import request from "../../utils/apiHelper";
 import { useParams } from "react-router-dom";
 import { useFormik } from "formik";
-import FormSelectComponent from "../../components/selectComponent";
+// import FormSelectComponent from "../../components/selectComponent";
 
 const EditBudget = () => {
   const [data, setData] = useState([]);
@@ -30,16 +30,16 @@ const EditBudget = () => {
     let response = data;
 
     formik.setValues({
-      title: response.title,
+      // title: response.title,
       //   amount: response.projectedAmount,
-      period: response.budgetPeriod,
+      // period: response.budgetPeriod,
     });
     // eslint-disable-next-line
   }, []);
   const initialValues = {
     title: "",
     amount: "",
-    period: options.find((item) => item.value === data.budgetPeriod),
+    period: data.budgetPeriod,
     budgetStartDate: "",
     budgetEndDate: "",
     description: "",
@@ -63,7 +63,7 @@ const EditBudget = () => {
       toast.error(error.response.data.message);
     }
   };
-  console.log(data);
+  console.log(typeof(initialValues.period));
   const timerBeforeRedirect = () => {
     setTimeout(() => {
       window.location.href = "/home";
@@ -160,7 +160,7 @@ const EditBudget = () => {
       setWeekly(false);
       setDaily(false);
       setCustom(false);
-    } else if (valueOfE[0] === "2") {
+    } else if (valueOfE.value === "MONTHLY") {
       setAnnual(false);
       setMonthly(true);
       setWeekly(false);
@@ -225,28 +225,32 @@ const EditBudget = () => {
           </div>
           <div>
             <h5>Period</h5>
-            {/* <Select
+            <Select
               options={options}
               name="period"
               className="fommy2"
               // {{ label: "Select Dept", value: 0 }}
               // {data.budgetPeriod}
-              // defaultValue={
-              //     data.budgetPeriod === "ANNUAL" ? { label: "Annual", value: "1" } : 
-              //     data.budgetPeriod === "MONTHLY" ? { label: "Monthly", value: "2" } :
-              //     data.budgetPeriod === "WEEKLY" ? { label: "Weekly", value: "3" } :
-              //     data.budgetPeriod === "DAILY" ? { label: "Daily", value: "4" } :
-              //     data.budgetPeriod === "CUSTOM" ? { label: "Custom", value: "5" } :
-              //     { label: "Select Period", value: 0 }
-              // }
+              defaultValue={
+                data.budgetPeriod === "ANNUAL"
+                  ? { label: "Annual", value: "1" }
+                  : data.budgetPeriod === "MONTHLY"
+                  ? { label: "Monthly", value: "2" }
+                  : data.budgetPeriod === "WEEKLY"
+                  ? { label: "Weekly", value: "3" }
+                  : data.budgetPeriod === "DAILY"
+                  ? { label: "Daily", value: "4" }
+                  : data.budgetPeriod === "CUSTOM"
+                  ? { label: "Custom", value: "5" }
+                  : { label: "Select Period", value: 0 }
+              }
               placeholder={"Select Frequency"}
               error={formik.errors.period}
               value={formik.values.period}
-              
               onChange={(e) => {
                 handleChange2(e);
                 // console.log(e);
-                
+
                 // formik.values.period = e[0].value.toUpperCase();
                 formik.values.period = e.value.toUpperCase();
               }}
@@ -254,14 +258,16 @@ const EditBudget = () => {
               // onChange={(e) => {
               //
               // }}
-            /> */}
-          <FormSelectComponent
+            />
+            {/* <FormSelectComponent
             name="period"
             label="Period"
             options={options}
-            defaultValue = {data.budgetPeriod}
+           defaultValue={
+            options.find((item) => item.value === data.budgetPeriod)
+           }
             placeholder={"Select Frequency"}
-          />
+          /> */}
           </div>
           {annual && (
             <div className="fommy">
