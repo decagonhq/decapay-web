@@ -10,7 +10,6 @@ import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
-
 const Index = ({ title }) => {
   const [data, setData] = useState([]);
 
@@ -36,7 +35,7 @@ const Index = ({ title }) => {
       toast.error(error.response.data.message);
     }
   };
-  console.log(data);
+  // console.log(data);
   //   budgetPeriod: "MONTHLY"
   // displayEndDate: "Jan 31,2022"
   // displayPercentageSpentSoFar: "0.0%"
@@ -75,13 +74,17 @@ const Index = ({ title }) => {
 
         {data && data?.length > 0 ? (
           data?.lineItems.map((item, index) => (
-              <div key={index} className="mb-2">
-                <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
-              </div>
+            <div key={index} className="mb-2">
+              <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
+            </div>
           ))
         ) : (
           <div className="empty">
-            <img className="empty-img" src="/images/empty-img.svg" alt="empty" />
+            <img
+              className="empty-img"
+              src="/images/empty-img.svg"
+              alt="empty"
+            />
             <p>No line item found in the budget</p>
           </div>
         )}
@@ -121,14 +124,14 @@ const DetailStyle = styled.div`
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
-  .empty{
+  .empty {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
   }
-  .empty-img{
-    width:40px;
-    height:35px;
+  .empty-img {
+    width: 40px;
+    height: 35px;
   }
 `;
