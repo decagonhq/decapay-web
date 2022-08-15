@@ -13,6 +13,7 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.4.0",
     "react-calendar": "^3.7.0",
+    "react-currency-format": "^1.1.0",
     "react-date-range": "^1.4.0",
     "react-dater": "^1.6.0",
     "react-dom": "^18.2.0",
