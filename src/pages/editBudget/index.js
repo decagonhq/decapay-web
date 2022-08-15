@@ -47,9 +47,13 @@ const EditBudget = () => {
 
   const { id } = useParams();
   const stripCommaAndConvertToNumber = (amount) => {
-    if (amount === "" || amount === null || amount === undefined) {
+    if (amount === "" || amount === null || amount === undefined ) {
       return "";
-    } else {
+    }
+    else if(typeof(amount) === "number"){
+      return amount;
+    }
+    else {
       let splitAmount = amount.split(",");
       let joinBackAmount = splitAmount.join("");
       return parseInt(joinBackAmount);
@@ -85,8 +89,8 @@ const EditBudget = () => {
         description: response.data.data.description,
         amount: response.data.data.amount,
         period: response.data.data.period,
-        startDate: formatDate(response.data.data.budgetStartDate),
-        endDate: formatDate(response.data.data.budgetEndDate),
+        budgetStartDate: formatDate(response.data.data.budgetStartDate),
+        budgetEndDate: formatDate(response.data.data.budgetEndDate),
         year: response.data.data.year,
         month: response.data.data.month,
         duration: response.data.data.duration,
@@ -205,8 +209,9 @@ const EditBudget = () => {
               displayType={'input'}
               style = {{width: '100%',
               height: '100%',
+              padding: '10px',
               }}
-
+              prefix={'#'}
               name="amount"
               thousandSeparator={true}
               value={collectData.amount}
@@ -273,7 +278,7 @@ const EditBudget = () => {
                 placeholder="Start Date"
                 label="Start Date"
                 type="date"
-                value={collectData.startDate}
+                value={collectData.budgetStartDate}
                 name="budgetStartDate"
                 onChange={(e) => handleChange(e)}
               />
@@ -293,7 +298,7 @@ const EditBudget = () => {
                 placeholder="Start Date"
                 label="Start Date"
                 type="date"
-                value={collectData.startDate}
+                value={collectData.budgetStartDate}
                 name="budgetStartDate"
                 onChange={(e) => handleChange(e)}
               />
@@ -305,7 +310,7 @@ const EditBudget = () => {
                 placeholder="Start Date"
                 label="Start Date"
                 type="date"
-                value={collectData.startDate}
+                value={collectData.budgetStartDate}
                 name="budgetStartDate"
                 onChange={(e) => handleChange(e)}
               />
@@ -313,7 +318,7 @@ const EditBudget = () => {
                 placeholder="End Date"
                 label="End Date"
                 type="date"
-                value={collectData.endDate}
+                value={collectData.budgetEndDate}
                 name="budgetEndDate"
                 onChange={(e) => handleChange(e)}
               />
