@@ -61,7 +61,10 @@ function ResetPassword() {
     });
     timerBeforeRedirect()
   } catch (error) {
-    toast.error(error.response.status);
+    toast.error(error.response.status,{
+      autoClose: 3000,
+      onClose: dismissToast,
+    });
     console.log(error);
   }
 };
