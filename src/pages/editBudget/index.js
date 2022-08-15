@@ -124,11 +124,11 @@ const EditBudget = () => {
     let payload = {
       ...collectData,
       amount: stripCommaAndConvertToNumber(collectData.amount),
-      budgetStartDate: changeDateFormat(collectData.startDate),
+      budgetStartDate: changeDateFormat(collectData.budgetStartDate),
       budgetEndDate:
         collectData.period === "DAILY"
-          ? changeDateFormat(collectData.startDate)
-          : changeDateFormat(collectData.endDate),
+          ? changeDateFormat(collectData.budgetStartDate)
+          : changeDateFormat(collectData.budgetEndDate),
     };
     try {
       const response = await request.put(`budgets/${id}`, payload, {
