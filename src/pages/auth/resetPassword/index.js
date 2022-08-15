@@ -35,7 +35,9 @@ function ResetPassword() {
   const urlParams = new URLSearchParams(window.location.search);
   const token = urlParams.get("token");
 
-
+  const dismissToast = () => {
+    toast.dismiss();
+  };
   console.log(token);
   const onSubmit = async (values) => {
   let payload={
@@ -52,7 +54,11 @@ function ResetPassword() {
       },
     }
     );
-    toast.success("Password reset successful");
+    toast.success("Password reset successful", {
+      autoClose: 3000,
+      onClose: dismissToast,
+
+    });
     timerBeforeRedirect()
   } catch (error) {
     toast.error(error.response.status);
