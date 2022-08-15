@@ -7,7 +7,6 @@ import Button from "../../components/Button";
 import Calendar from "./DateComponent";
 import Layout from "../../components/dashboardSidebar/Layout";
 import request from "../../utils/apiHelper";
-import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
 const Index = () => {
@@ -36,7 +35,6 @@ const Index = () => {
       setEndDate(response.data.data.endDate);
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.message);
     }
   };
   return (
