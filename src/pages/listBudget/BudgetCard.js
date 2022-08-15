@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-const Budget = ({ title, amount, totalAmount, percentage, onClick,children,showModal }) => {
+const Budget = ({ title, amount, totalAmount, percentage, onClick }) => {
   return (
     <ListStyle>
-      {/* Budget 1 - Monthly */}
       <div className="list--wrapper">
         <div className="list-item-row title">
           <p>{title}</p>
@@ -33,8 +32,6 @@ const ListStyle = styled.div`
   width: 100%;
   height: 150px;
   background: rgba(0, 0, 0, 0.04);
-
-  /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.08); */
   padding: 10px;
   font-family: "Inter";
   font-style: normal;

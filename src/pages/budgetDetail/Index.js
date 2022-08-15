@@ -4,13 +4,13 @@ import TitleCard from "./TitleCard";
 import SubTitleCard from "./SubTitleCard";
 import BudgetItem from "./BudgetItem";
 import Button from "../../components/Button";
-import Calendar from "./Dateing";
+import Calendar from "./DateComponent";
 import Layout from "../../components/dashboardSidebar/Layout";
 import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
-const Index = ({ title }) => {
+const Index = () => {
   const [data, setData] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -39,24 +39,6 @@ const Index = ({ title }) => {
       toast.error(error.response.data.message);
     }
   };
-  console.log(startDate);
-  console.log(endDate);
-  // let startDate = (data?.startDate).toString();
-  // let endDate = (data?.endDate).toString();
-  // console.log(data);
-  //   budgetPeriod: "MONTHLY"
-  // displayEndDate: "Jan 31,2022"
-  // displayPercentageSpentSoFar: "0.0%"
-  // displayProjectedAmount: "₦700,000.00"
-  // displayStartDate: "Jan 01,2022"
-  // displayTotalAmountSpentSoFar: "₦0.00"
-  // endDate: "2022-01-31"
-  // id: 65
-  // lineItems: []
-  // percentageSpentSoFar: 0
-  // projectedAmount: 700000
-  // startDate: "2022-01-01"
-  // title: "Buy GLK 2022"
   return (
     <Layout>
       <DetailStyle>
@@ -109,10 +91,6 @@ const Index = ({ title }) => {
 export default Index;
 
 const DetailStyle = styled.div`
-  /* justify-content: center; */
-  /* align-items: center; */
-  /* margin: 0 auto; */
-
   padding: 10px;
   display: flex;
   flex-direction: column;
