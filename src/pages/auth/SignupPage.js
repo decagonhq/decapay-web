@@ -73,6 +73,7 @@ const Home = () => {
               value={formik.values.firstName}
               onChange={formik.handleChange}
               error={formik.errors.firstName}
+              
             />
           </div>
           <div className="form__wrapper">

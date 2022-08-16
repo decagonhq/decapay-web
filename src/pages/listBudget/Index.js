@@ -1,35 +1,59 @@
 import React, { useState, useMemo, useRef, useEffect, Fragment } from "react";
 import styled from "styled-components";
-import GoBack from "../../components/Goback";
-import Layout from "../../components/dashboardSidebar/Layout";
-import { data } from "./Data";
-import Pagination from "../../utils/pagination";
 
-let PageSize = 5;
+// import GoBack from "../../components/Goback";
+
+import Layout from "../../components/dashboardSidebar/Layout";
+import Pagination from "../../utils/pagination";
+import { useNavigate } from "react-router-dom";
+import request from "../../utils/apiHelper";
+import { toast } from "react-toastify";
+
+let PageSize = 10;
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [idOfBudget, setIdOfBudget] = useState(-1);
+  const [data, setData] = useState([]);
+
+  // eslint-disable-next-line
+  const [dataInfo, setDataInfo] = useState([]);
   const ref = useRef(null);
 
-  console.log(idOfBudget);
+  const headers = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+  };
 
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await request.get(`budgets?pageNumber=${1}`, headers);
+      setData(response.data.data.content);
+      setDataInfo(response.data.data.pageable);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
     return data.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
+    // eslint-disable-next-line
+  }, [currentPage, data]);
 
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
       setIdOfBudget(-1);
     }
   };
-
-  // const handleShowModal = (idx) => {
-  //   setIdOfBudget(idx);
-  //   setShowPopup(!showPopup);
-  // };
-
+  const navigate = useNavigate();
   useEffect(() => {
     document.addEventListener("click", handleClickOutside, true);
 
@@ -41,62 +65,81 @@ const Index = () => {
   return (
     <Layout>
       <BudgetSyle>
-        <div className="budget-container">
-          <div className="header">
-            <GoBack />
-            <p>Budget List</p>
-          </div>
+        <div className="header">
+          <p style={{fontWeight:"bold", fontSize:"20px"}}>Budget List</p>
+        </div>
+
+        <div className="table-container">
           <div className="header page">
             <p>Most recent</p>
             <p>
               Showing {currentPage} of {PageSize - 2}
             </p>
           </div>
-          <div className="list-container">
-            {currentTableData.map((item, index) => (
-              <ul className="item-wrapper">
-                {/* Budget 1 - Monthly */}
-                <div className="list--wrapper">
-                  <div className="list-item-row title">
-                    <p>{item.title}</p>
-                    <p style={{cursor:"pointer"}} onClick={() => setIdOfBudget(index)}>
-                      ...
-                      {idOfBudget === index ? (
-                        <Fragment>
-                          <span ref={ref} className="popup">
-                            <p>Edit</p>
-                            <p>View details</p>
-                            <p style={{color:"red"}}>Delete</p>
-                          </span>
-                        </Fragment>
-                      ) : null}
-                    </p>
-                  </div>
-                  <div className="list-item-row">
-                    <p>Budget amount</p>
-                    <p>{item.amount}</p>
-                  </div>
-                  <div className="list-item-row">
-                    <p>Total amount spent</p>
-                    <p>{item.totalAmount}</p>
-                  </div>
-                  <div className="list-item-row">
-                    <p>Percentage</p>
-                    <p style={{ color: "#14A800" }}>{item.percentage}</p>
-                  </div>
-                </div>
-              </ul>
-            ))}
-          </div>
-          <div className="pagination-container">
-            <Pagination
-              className="pagination-bar"
-              currentPage={currentPage}
-              totalCount={data.length}
-              pageSize={PageSize}
-              onPageChange={(page) => setCurrentPage(page)}
-            />
-          </div>
+          <table>
+            <tr>
+              <th>Budget title</th>
+              <th>Period</th>
+              <th>Amount</th>
+              <th>Amount spent</th>
+              <th>Percentage spent</th>
+              <th>Action</th>
+            </tr>
+
+            {currentTableData !== null && currentTableData?.length > 0 ? (
+              currentTableData.map((item, index) => (
+                <tr>
+                  <td>{item.title}</td>
+                  <td>{item.period}</td>
+                  <td>{item.displayProjectedAmount}</td>
+                  <td>{item.displayTotalAmountSpentSoFar}</td>
+                  <td>{item.displayPercentageSpentSoFar}</td>
+                  <td 
+                  style={{ cursor: "pointer" }}
+                 onClick={() => setIdOfBudget(index)}>
+                    ...
+                    {idOfBudget === index ? (
+                      <Fragment>
+                        <span ref={ref} className="popup">
+                          <p
+                            onClick={() =>
+                              navigate(`../edithBudget/${item.id}`, {
+                                replace: true,
+                              })
+                            }
+                          >
+                            Edit
+                          </p>
+                          <p
+                            onClick={() =>
+                              navigate(`../budgetDetail/${item.id}`, {
+                                replace: true,
+                              })
+                            }
+                          >
+                            View details
+                          </p>
+                          <p style={{ color: "red" }}>Delete</p>
+                        </span>
+                      </Fragment>
+                    ) : null}
+                  </td>
+                </tr>
+               
+              ))
+            ) : (
+              <p>No budget to display</p>
+            )}
+          </table>
+        </div>
+        <div className="pagination-container">
+          <Pagination
+            className="pagination-bar"
+            currentPage={currentPage}
+            totalCount={data.length}
+            pageSize={PageSize}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
         </div>
       </BudgetSyle>
     </Layout>
@@ -110,10 +153,14 @@ const BudgetSyle = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 1rem;
+  
+  background: rgba(0, 0, 0, 0.04);
   .header {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    padding: 10px;
   }
   .page {
     font-family: "Inter";
@@ -130,7 +177,6 @@ const BudgetSyle = styled.div`
     flex-direction: column;
     margin: 0 auto;
     box-sizing: border-box;
-    width: 563px;
     padding: 40px;
     background: #ffffff;
     border: 1px solid #d6d6d6;
@@ -160,8 +206,6 @@ const BudgetSyle = styled.div`
     width: 100%;
     height: 150px;
     background: rgba(0, 0, 0, 0.04);
-
-    /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.08); */
     padding: 10px;
     font-family: "Inter";
     font-style: normal;
@@ -203,8 +247,8 @@ const BudgetSyle = styled.div`
   }
   .popup {
     position: absolute;
-    min-width: 200px;
-    right: 370px;
+    min-width: 150px;
+    right: 20px;
     /* top: 40px; */
     display: flex;
     flex-direction: column;
@@ -216,7 +260,7 @@ const BudgetSyle = styled.div`
     z-index: 3;
     border-radius: 10px;
     z-index: 100;
-    font-family: "Sofia Pro";
+    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -235,5 +279,56 @@ const BudgetSyle = styled.div`
         margin-bottom: 0;
       }
     }
+  }
+  .table-container {
+    box-sizing: border-box;
+    padding: 0px 27px;
+    display: flex;
+    flex-direction: column;
+    overflow-x: auto;
+    font-family: "Inter";
+    border-radius: 15px;
+    height: 100vh;
+    width: 100%;
+  }
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    grid-area: a;
+  }
+  tr {
+    cursor: pointer;
+  }
+
+  th {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #8e919c;
+  }
+
+  td {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    color: #2254d3 !important;
+  }
+
+  th,
+  td {
+    text-align: left;
+    padding: 20px 8px;
+    border-bottom: 1px solid #dfe8fc;
+  }
+  .table-image {
+    height: 40px;
+    width: 40px;
+    margin-right: 10px;
+    border-radius: 60px;
   }
 `;

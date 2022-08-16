@@ -18,7 +18,7 @@ function ForgotPassword() {
   });
   const { loading } = useSelector((state) => state.forgotPassword);
   const dispatch = useDispatch();
-
+  
   return (
     <StyledHome>
       <LogoComponent />
