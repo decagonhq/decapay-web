@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useRef, useEffect, Fragment } from "react";
 import styled from "styled-components";
+
 // import GoBack from "../../components/Goback";
+
 import Layout from "../../components/dashboardSidebar/Layout";
-// import { data } from "./Data";
 import Pagination from "../../utils/pagination";
 import { useNavigate } from "react-router-dom";
 import request from "../../utils/apiHelper";
@@ -40,10 +41,6 @@ const Index = () => {
       toast.error(error.response.data.message);
     }
   };
-
-  // dataInfo?.pageSize ||
-  // console.log(data);
-  // console.log(dataInfo);
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
@@ -57,11 +54,6 @@ const Index = () => {
     }
   };
   const navigate = useNavigate();
-  // const handleShowModal = (idx) => {
-  //   setIdOfBudget(idx);
-  //   setShowPopup(!showPopup);
-  // };
-console.log(data);
   useEffect(() => {
     document.addEventListener("click", handleClickOutside, true);
 
@@ -74,7 +66,6 @@ console.log(data);
     <Layout>
       <BudgetSyle>
         <div className="header">
-          {/* <GoBack /> */}
           <p style={{fontWeight:"bold", fontSize:"20px"}}>Budget List</p>
         </div>
 
@@ -134,57 +125,7 @@ console.log(data);
                     ) : null}
                   </td>
                 </tr>
-                // <ul className="item-wrapper">
-                //   {/* Budget 1 - Monthly */}
-                //   <div className="list--wrapper">
-                //     <div className="list-item-row title">
-                //       <p>{item.title}</p>
-                //       <p
-                //         style={{ cursor: "pointer" }}
-                //         onClick={() => setIdOfBudget(index)}
-                //       >
-                //         ...
-                //         {idOfBudget === index ? (
-                //           <Fragment>
-                //             <span ref={ref} className="popup">
-                //               <p
-                //               onClick={() =>
-                //                 navigate(`../edithBudget/${item.id}`, {
-                //                   replace: true,
-                //                 })
-                //               }
-                //               >Edit</p>
-                //               <p
-                //                 onClick={() =>
-                //                   navigate(`../budgetDetail/${item.id}`, {
-                //                     replace: true,
-                //                   })
-                //                 }
-                //               >
-                //                 View details
-                //               </p>
-                //               <p style={{ color: "red" }}>Delete</p>
-                //             </span>
-                //           </Fragment>
-                //         ) : null}
-                //       </p>
-                //     </div>
-                //     <div className="list-item-row">
-                //       <p>Budget amount</p>
-                //       <p>{item.displayProjectedAmount}</p>
-                //     </div>
-                //     <div className="list-item-row">
-                //       <p>Total amount spent</p>
-                //       <p>{item.displayTotalAmountSpentSoFar}</p>
-                //     </div>
-                //     <div className="list-item-row">
-                //       <p>Percentage</p>
-                //       <p style={{ color: "#14A800" }}>
-                //         {item.displayPercentageSpentSoFar}
-                //       </p>
-                //     </div>
-                //   </div>
-                // </ul>
+               
               ))
             ) : (
               <p>No budget to display</p>
@@ -236,7 +177,6 @@ const BudgetSyle = styled.div`
     flex-direction: column;
     margin: 0 auto;
     box-sizing: border-box;
-    /* width: 563px; */
     padding: 40px;
     background: #ffffff;
     border: 1px solid #d6d6d6;
@@ -266,8 +206,6 @@ const BudgetSyle = styled.div`
     width: 100%;
     height: 150px;
     background: rgba(0, 0, 0, 0.04);
-
-    /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.08); */
     padding: 10px;
     font-family: "Inter";
     font-style: normal;
@@ -342,15 +280,11 @@ const BudgetSyle = styled.div`
       }
     }
   }
-
-  /* Budget table */
   .table-container {
     box-sizing: border-box;
     padding: 0px 27px;
     display: flex;
     flex-direction: column;
-    /* gap: 50px; */
-    /* background: rgba(0, 0, 0, 0.04); */
     overflow-x: auto;
     font-family: "Inter";
     border-radius: 15px;

@@ -43,16 +43,13 @@ const Datething = ({startDate, endDate}) => {
   }, []);
 
   function handleSelect(date) {
-    // console.log(date); // native Date object
     setCalendar(format(date, "MM/dd/yyyy"));
   }
-  // const [open, setOpen] = useState(true);
 
   return (
     <CalendarWrapper>
       <input value={calendar} readOnly className="inputBox" />
       <Calendar
-        // date={new Date()}
         onChange={handleSelect}
         className="calenderElement"
         color="green"
