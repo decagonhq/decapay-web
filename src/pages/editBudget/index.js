@@ -9,46 +9,60 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import request from "../../utils/apiHelper";
 import { useParams } from "react-router-dom";
+import CurrencyFormat from 'react-currency-format';
 import { useFormik } from "formik";
+import {
+  ANNUAL,
+  MONTHLY,
+  DAILY,
+  WEEKLY,
+  CUSTOM,
+  Options,
+  Months,
+} from "../../constants";
 import FormSelectComponent from "../../components/selectComponent";
 
 const EditBudget = () => {
-  const [data, setData] = useState([]);
-  const [year, setYear] = React.useState("");
-  const [title, setTitle] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [amount, setAmount] = React.useState("");
-  const [month, setMonth] = React.useState("");
-  const [startDate, setStartDate] = React.useState("");
-  const [duration, setDuration] = React.useState("");
-  const [endDate, setEndDate] = React.useState("");
-  const [period, setPeriod] = React.useState("");
+  const [collectData, setCollectData] = React.useState({
+    year: "",
+    title: "",
+    description: "",
+    amount: "",
+    month: "",
+    budgetStartDate: "",
+    duration: "",
+    budgetEndDate: "",
+    period: "",
+  });
 
   const formatDate = (date) => {
-    let splitDate = date.split("/");
-    let joinDateFromBehind = splitDate.reverse().join("-");
-    return joinDateFromBehind;
+    if (date === "" || date === null || date === undefined) {
+      return "";
+    } else {
+      let splitDate = date.split("/");
+      let joinDateFromBehind = splitDate.reverse().join("-");
+      return joinDateFromBehind;
+    }
   };
-  
-  
-  
-  const options = [
-    { value: "ANNUAL", label: "ANNUAL" },
-    { value: "MONTHLY", label: "MONTHLY" },
-    { value: "WEEKLY", label: "WEEKLY" },
-    { value: "DAILY", label: "DAILY" },
-    { value: "CUSTOM", label: "CUSTOM" },
-  ];
-  const { id } = useParams();
 
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line
-  }, []);
-  
+  const { id } = useParams();
+  const stripCommaAndConvertToNumber = (amount) => {
+    if (amount === "" || amount === null || amount === undefined ) {
+      return "";
+    }
+    else if(typeof(amount) === "number"){
+      return amount;
+    }
+    else {
+      let splitAmount = amount.split(",");
+      let joinBackAmount = splitAmount.join("");
+      return parseInt(joinBackAmount);
+    }
+  }
+
   const initialValues = {
-    title: data?.title,
-    amount: data?.amount,
+    title: "",
+    amount: "",
     period: "",
     budgetStartDate: "",
     budgetEndDate: "",
@@ -57,7 +71,9 @@ const EditBudget = () => {
     month: 0,
     duration: 0,
   };
-
+  const dismissToast = () => {
+    toast.dismiss();
+  };
   const headers = {
     headers: {
       "Content-Type": "application/json",
@@ -67,36 +83,29 @@ const EditBudget = () => {
   const fetchData = async () => {
     try {
       const response = await request.get(`budgets/edit/${id}`, headers);
-      setData(response.data.data);
-      setPeriod(response.data.data.period);
-      setTitle(response.data.data.title);
-      setDescription(response?.data.data.description);
-      setAmount(response.data.data.amount);
-      if (response.data.data.period === "ANNUAL") {
-        setYear(response.data.data.year);
-        console.log(response.data.data.year);
-      } else if (response.data.data.period === "MONTHLY") {
-        setMonth(response.data.data.month);
-        setYear(response.data.data.year);
-        console.log(month);
-      } else if (response.data.data.period === "WEEKLY") {
-        setDuration(response.data.data.duration);
-        setStartDate(formatDate(response.data.data.budgetStartDate));
-        console.log(duration);
-      } else if (response.data.data.period === "DAILY") {
-        setStartDate(formatDate(response.data.data.budgetStartDate));
-        setEndDate(formatDate(response.data.data.budgetEndDate));
-        console.log(duration);
-      } else if (response.data.data.period === "CUSTOM") {
-        setStartDate(formatDate(response.data.data.budgetStartDate));
-        setEndDate(formatDate(response.data.data.budgetEndDate));
-      }
+      setCollectData({
+        ...collectData,
+        title: response.data.data.title,
+        description: response.data.data.description,
+        amount: response.data.data.amount,
+        period: response.data.data.period,
+        budgetStartDate: formatDate(response.data.data.budgetStartDate),
+        budgetEndDate: formatDate(response.data.data.budgetEndDate),
+        year: response.data.data.year,
+        month: response.data.data.month,
+        duration: response.data.data.duration,
+      });
     } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
+      toast.error(error, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
     }
   };
-  console.log(typeof initialValues.period);
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line
+  }, []);
   const timerBeforeRedirect = () => {
     setTimeout(() => {
       window.location.href = "/home";
@@ -117,33 +126,35 @@ const EditBudget = () => {
 
   const onSubmit = async () => {
     let payload = {
-      title: title,
-      description: description,
-      amount: amount,
-      year: year,
-      duration: duration,
-      month: month,
-      period: period,
-      budgetStartDate: changeDateFormat(startDate),
-      budgetEndDate: period==="DAILY"?changeDateFormat(startDate):changeDateFormat(endDate),
-      
+      ...collectData,
+      amount: stripCommaAndConvertToNumber(collectData.amount),
+      budgetStartDate: changeDateFormat(collectData.budgetStartDate),
+      budgetEndDate:
+        collectData.period === "DAILY"
+          ? changeDateFormat(collectData.budgetStartDate)
+          : changeDateFormat(collectData.budgetEndDate),
     };
-    console.log("this is payload", payload);
     try {
-      await request.put(`budgets/${id}`, payload, {
+      const response = await request.put(`budgets/${id}`, payload, {
         headers: {
           "Content-Type": "application/json",
           DVC_KY_HDR: 2,
           Authorization: `Bearer ${token}`,
         },
       });
-      toast.success("Budget Editted successfully");
+      toast.success(response.data.message, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
       setLoading(false);
       timerBeforeRedirect();
     } catch (error) {
-      toast.error(error.response.status);
-      setLoading(false);
       console.log(error);
+      toast.error(error.response.status, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
+      setLoading(false);
     }
   };
   const formik = useFormik({
@@ -152,58 +163,23 @@ const EditBudget = () => {
     onSubmit,
   });
 
-  const years = [
-    { value: "2022", label: "2022" },
-    { value: "2023", label: "2023" },
-    { value: "2024", label: "2024" },
-    { value: "2025", label: "2025" },
-    { value: "2026", label: "2026" },
-    { value: "2027", label: "2027" },
-    { value: "2028", label: "2028" },
-  ];
-  const months = [
-    { value: "1", label: "January" },
-    { value: "2", label: "February" },
-    { value: "3", label: "March" },
-    { value: "4", label: "April" },
-    { value: "5", label: "May" },
-    { value: "6", label: "June" },
-    { value: "7", label: "July" },
-    { value: "8", label: "August" },
-    { value: "9", label: "September" },
-    { value: "10", label: "October" },
-    { value: "11", label: "November" },
-    { value: "12", label: "December" },
-  ];
-
-  const handleChange2 = (e) => {
-    setPeriod(e.target.value);
-  };
-  const handleChangeYear = (e) => {
-    setYear(e.target.value);
-  };
-  const handleChangeMonth = (e) => {
-    setMonth(e.target.value);
-  };
-  const handleChangeDuration = (e) => {
-    setDuration(e.target.value);
-  };
-  const handleChangeStartDate = (e) => {
-    setStartDate(e.target.value);
-  };
-  const handleChangeEndDate = (e) => {
-    setEndDate(e.target.value);
-  };
-  const handleChangeTitle = (e) => {
-    setTitle(e.target.value);
-  };
-  const handleChangeDescription = (e) => {
-    setDescription(e.target.value);
-  };
-  const handleChangeAmount = (e) => {
-    setAmount(e.target.value);
+  const generateYearsFromCurrentYear = () => {
+    let currentYear = new Date().getFullYear();
+    let years = [];
+    for (let i = currentYear; i < currentYear + 10; i++) {
+      years.push({ value: i, label: i });
+    }
+    return years;
   };
 
+  const handleChange = (e) => {
+    setCollectData({ ...collectData, [e.target.name]: e.target.value });
+
+    
+  };
+  const handleSelect = (e, name) => {
+    setCollectData({ ...collectData, [name]: e.target.value });
+  }
   return (
     <Layout>
       <StyledHome>
@@ -221,20 +197,25 @@ const EditBudget = () => {
               label="Title"
               type="text"
               name="title"
-              value={title}
-              onChange={(e) => handleChangeTitle(e)}
+              value={collectData.title}
+              onChange={(e) => handleChange(e)}
               error={formik.errors.title}
             />
           </div>
-          <div className="form__wrapper">
-            <FormInputComponent
+          <div className="form__wrapper4">
+            <CurrencyFormat 
               placeholder="Enter Amount"
               label="Amount"
-              type="text"
+              displayType={'input'}
+              style = {{width: '100%',
+              height: '100%',
+              padding: '10px',
+              }}
+              prefix={'#'}
               name="amount"
-              value={amount}
-              onChange={(e) => 
-                handleChangeAmount(e)}
+              thousandSeparator={true}
+              value={collectData.amount}
+              onChange={(e) => handleChange(e)}
               error={formik.errors.amount}
             />
           </div>
@@ -243,95 +224,103 @@ const EditBudget = () => {
 
             <FormSelectComponent
               name="period"
-              options={options}
+              options={Options}
+              value={collectData.period}
+              onChange={(e) => {
+                handleSelect(e, "period")
+              
+              }}
 
-              value={period}
-              onChange={(e) => handleChange2(e)}
               placeholder={"Select Frequency"}
             />
           </div>
-          {period === "ANNUAL" && (
+          {collectData.period === ANNUAL && (
             <div className="fommy">
               <FormSelectComponent
                 name="year"
-                options={years}
-                value={year}
-                onChange={(e) => handleChangeYear(e)}
+                options={generateYearsFromCurrentYear()}
+                value={collectData.year}
+                onChange={(e) => {
+                  handleSelect(e, "year")
+                
+                }}
                 placeholder={"Select Frequency"}
               />
             </div>
           )}
-          {period === "MONTHLY" && (
+          {collectData.period === MONTHLY && (
             <div className="fommy">
               <FormSelectComponent
                 name="year"
-                options={years}
-                value={year}
-                onChange={(e) => handleChangeYear(e)}
+                options={generateYearsFromCurrentYear()}
+                value={collectData.year}
+                onChange={(e) => {
+                  handleSelect(e, "year")
+                
+                }}
                 placeholder={"Select Frequency"}
               />
               <FormSelectComponent
                 name="month"
-                options={months}
-                value={month}
-                onChange={(e) => handleChangeMonth(e)}
+                options={Months}
+                value={collectData.month}
+                onChange={(e) => {
+                  handleSelect(e, "month")
+                
+                }}
                 placeholder={"Select Frequency"}
               />
             </div>
           )}
-          {period === "WEEKLY" && (
+          {collectData.period === WEEKLY && (
             <div className="fommy3">
               <FormInputComponent
                 placeholder="Start Date"
                 label="Start Date"
                 type="date"
-                value={formatDate(startDate)}
+                value={collectData.budgetStartDate}
                 name="budgetStartDate"
-                onChange={(e)=>handleChangeStartDate(e)}
+                onChange={(e) => handleChange(e)}
               />
               <FormInputComponent
                 placeholder="Duration"
                 label="duration"
                 type="number"
-                value={duration}
+                value={collectData.duration}
                 name="duration"
-                onChange={(e)=>handleChangeDuration(e)}
+                onChange={(e) => handleChange(e)}
               />
             </div>
           )}
-          {period === "DAILY" && (
+          {collectData.period === DAILY && (
             <div className="fommy3">
               <FormInputComponent
                 placeholder="Start Date"
                 label="Start Date"
                 type="date"
-                value={formatDate(startDate)}
+                value={collectData.budgetStartDate}
                 name="budgetStartDate"
-                onChange={(e) =>
-                  handleChangeStartDate(e)}
+                onChange={(e) => handleChange(e)}
               />
             </div>
           )}
-          {period === "CUSTOM" && (
+          {collectData.period === CUSTOM && (
             <div className="fommy3">
               <FormInputComponent
                 placeholder="Start Date"
                 label="Start Date"
                 type="date"
-                value={formatDate(startDate)}
+                value={collectData.budgetStartDate}
                 name="budgetStartDate"
-                onChange={(e) =>
-                  handleChangeStartDate(e)}
+                onChange={(e) => handleChange(e)}
               />
               <FormInputComponent
                 placeholder="End Date"
                 label="End Date"
                 type="date"
-                value={formatDate(endDate)}
+                value={collectData.budgetEndDate}
                 name="budgetEndDate"
-                onChange={(e)=>
-                  handleChangeEndDate(e)}
-                
+                onChange={(e) => handleChange(e)}
               />
             </div>
           )}
@@ -341,9 +330,8 @@ const EditBudget = () => {
               placeholder="Enter Description here..."
               label="Description"
               type="text"
-              value={description}
-              defaultValue={data?.description}
-              onChange={handleChangeDescription}
+              value={collectData.description}
+              onChange={(e) => handleChange(e)}
               name="description"
             />
           </div>
@@ -422,5 +410,10 @@ const StyledHome = styled.div`
   }
   .fommy3 {
     margin-top: 40px;
+  }
+  .form__wrapper4 {
+    width: 100%;
+    height: 50px;
+    margin-bottom: 20px;
   }
 `;
