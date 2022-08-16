@@ -57,7 +57,7 @@ const SidebarDemo = () => {
         <MenuItem
           label="Budget Category"
           Icon={MdListAlt}
-          to="/home"
+          to="/budgetCategory"
           // active={}
         />
         <div  className="logout">
