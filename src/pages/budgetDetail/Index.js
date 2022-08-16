@@ -10,9 +10,10 @@ import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
-
 const Index = ({ title }) => {
   const [data, setData] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -31,12 +32,18 @@ const Index = ({ title }) => {
     try {
       const response = await request.get(`budgets/${id}`, headers);
       setData(response.data.data);
+      setStartDate(response.data.data.startDate);
+      setEndDate(response.data.data.endDate);
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
     }
   };
-  console.log(data);
+  console.log(startDate);
+  console.log(endDate);
+  // let startDate = (data?.startDate).toString();
+  // let endDate = (data?.endDate).toString();
+  // console.log(data);
   //   budgetPeriod: "MONTHLY"
   // displayEndDate: "Jan 31,2022"
   // displayPercentageSpentSoFar: "0.0%"
@@ -53,7 +60,9 @@ const Index = ({ title }) => {
   return (
     <Layout>
       <DetailStyle>
-        <TitleCard />
+        <TitleCard 
+        amount = {data?.displayProjectedAmount}
+        />
 
         <div className="sub_container general mt-2 mb-2">
           <SubTitleCard
@@ -69,19 +78,24 @@ const Index = ({ title }) => {
             src="/images/percent.svg"
           />
         </div>
-        <div className="calender">
-          <Calendar />
-        </div>
+        {startDate && endDate ? <div className="calender">
+          <Calendar  startDate={startDate} endDate={endDate} />
+        </div>:null}
+        
 
         {data && data?.length > 0 ? (
           data?.lineItems.map((item, index) => (
-              <div key={index} className="mb-2">
-                <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
-              </div>
+            <div key={index} className="mb-2">
+              <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
+            </div>
           ))
         ) : (
           <div className="empty">
-            <img className="empty-img" src="/images/empty-img.svg" alt="empty" />
+            <img
+              className="empty-img"
+              src="/images/empty-img.svg"
+              alt="empty"
+            />
             <p>No line item found in the budget</p>
           </div>
         )}
@@ -121,14 +135,14 @@ const DetailStyle = styled.div`
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
-  .empty{
+  .empty {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
   }
-  .empty-img{
-    width:40px;
-    height:35px;
+  .empty-img {
+    width: 40px;
+    height: 35px;
   }
 `;

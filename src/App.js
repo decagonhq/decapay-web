@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./utils/protectedRoute";
 import Budget from "./pages/listBudget/Index";
 import CreateBudget from "./pages/budget";
+import EditBudget from "./pages/editBudget";
 
 function App() {
   return (
@@ -41,6 +42,14 @@ function App() {
           element={
             <PrivateRoute>
               <BudgetDetail />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/edithBudget/:id"
+          element={
+            <PrivateRoute>
+              <EditBudget />
             </PrivateRoute>
           }
         />
