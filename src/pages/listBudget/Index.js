@@ -101,10 +101,22 @@ const Index = () => {
                     {idOfBudget === index ? (
                       <Fragment>
                         <span ref={ref} className="popup">
-                          <p>
+                          <p
+                            onClick={() =>
+                              navigate(`../edithBudget/${item.id}`, {
+                                replace: true,
+                              })
+                            }
+                          >
                             Edit
                           </p>
-                          <p >
+                          <p
+                            onClick={() =>
+                              navigate(`../budgetDetail/${item.id}`, {
+                                replace: true,
+                              })
+                            }
+                          >
                             View details
                           </p>
                           <p style={{ color: "red" }}>Delete</p>
