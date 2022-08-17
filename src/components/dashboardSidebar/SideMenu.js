@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import styled from "styled-components";
 import MenuItem from "./MenuItem";
 import {  MdOutlineLogout } from "react-icons/md";
@@ -11,6 +11,9 @@ import {toast} from "react-toastify"
 
 const SidebarDemo = () => {
 
+  const[dashboarActive] = useState(true);
+  const[budgetActive] = useState(false);
+  const[budgetCatActive] = useState(false);
 
   const logout = async() => {
     let token = localStorage.getItem("token");
@@ -45,20 +48,20 @@ const SidebarDemo = () => {
           label="Dashboard"
           Icon={TbLayoutDashboard}
           to="/home"
-          // active={}
+          active={dashboarActive}
         />
         <MenuItem
           // key={index}
           label={"Budget"}
           Icon={AiOutlineDollar}
-          // active={}
+          active={budgetActive}
           to={"/createBudget"}
         />
         <MenuItem
           label="Budget Category"
           Icon={MdListAlt}
           to="/budgetCategory"
-          // active={}
+          active={budgetCatActive}
         />
         <div  className="logout">
           <MdOutlineLogout />
