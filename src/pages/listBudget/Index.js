@@ -95,7 +95,7 @@ const Index = () => {
                   <td>{item.displayTotalAmountSpentSoFar}</td>
                   <td>{item.displayPercentageSpentSoFar}</td>
                   <td 
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", fontSize: "30px", fontWeight: "bold" }}
                  onClick={() => setIdOfBudget(index)}>
                     ...
                     {idOfBudget === index ? (
@@ -155,7 +155,7 @@ const BudgetSyle = styled.div`
   align-items: center;
   padding: 1rem;
   
-  background: rgba(0, 0, 0, 0.04);
+  background: rgba(0, 156, 244, 0.05);
   .header {
     width: 100%;
     display: flex;
@@ -316,7 +316,7 @@ const BudgetSyle = styled.div`
     font-weight: 500;
     font-size: 16px;
     line-height: 22px;
-    color: #2254d3 !important;
+    /* color: #2254d3 !important; */
   }
 
   th,
