@@ -21,7 +21,7 @@ const CalendarWrapper = styled.div`
   .calenderElement {
     width: 100%;
     height: 100%;
-    padding: 20px;
+    /* padding: 20px; */
     font-family: "Inter";
     font-style: normal;
     line-height: 19px;
@@ -48,7 +48,7 @@ const Datething = ({startDate, endDate}) => {
 
   return (
     <CalendarWrapper>
-      <input value={calendar} readOnly className="inputBox" />
+      {/* <input value={calendar} readOnly className="inputBox" /> */}
       <Calendar
         onChange={handleSelect}
         className="calenderElement"
