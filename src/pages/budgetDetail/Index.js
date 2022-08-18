@@ -3,7 +3,6 @@ import styled from "styled-components";
 import TitleCard from "./TitleCard";
 import SubTitleCard from "./SubTitleCard";
 import BudgetItem from "./BudgetItem";
-import Button from "../../components/Button";
 import Calendar from "./DateComponent";
 import Layout from "../../components/dashboardSidebar/Layout";
 import request from "../../utils/apiHelper";
@@ -37,6 +36,7 @@ const Index = () => {
       console.log(error);
     }
   };
+  // console.log(data);
   return (
     <Layout>
       <DetailStyle>
