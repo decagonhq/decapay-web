@@ -1,39 +1,21 @@
 import React,{useRef,useState,Fragment,useEffect} from "react";
 import styled from "styled-components";
 import Layout from "../../components/dashboardSidebar/Layout";
-import EditBudgetCategory from "./EditBudgetCategory";
-import FormModal from "../../components/modal/FormModal";
-import request from "../../utils/apiHelper";
-import { toast } from "react-toastify";
-
+import { useNavigate } from "react-router-dom";
+const budgetCategory = [
+  { id: 1, name: "Food" },
+  { id: 2, name: "Transportation" },
+  { id: 3, name: "Entertainment" },
+  { id: 4, name: "Health" },
+  { id: 5, name: "Utilities" },
+  { id: 6, name: "Personal" },
+  { id: 7, name: "Groceries" },
+  { id: 8, name: "Other" },
+];
 
 const BudgetCategory = () => {
-  const [editModal, setEditModal] = useState(false);
   const [idOfBudget, setIdOfBudget] = useState(-1);
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line
-  }, []);
-
-  const headers = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
-  };
-
-  const fetchData = async () => {
-    try {
-      const response = await request.get(`budget_categories`, headers);
-      setData(response.data.data);
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
-    }
-  };
-  // console.log(data);
+  const navigate = useNavigate();
   const ref = useRef(null);
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -56,8 +38,8 @@ const BudgetCategory = () => {
           <div className="button-container">
             <button>Create budget category</button>
           </div>
-          {data && data.length > 0 ? (
-            data.map((item, index) => (
+          {budgetCategory && budgetCategory.length > 0 ? (
+            budgetCategory.map((item, index) => (
               <div className="category" key={index}>
                 <p className="category-title">{item.name}</p>
                 <p onClick={() => setIdOfBudget(index)} style={{ fontSize: "30px", cursor: "pointer" }} >...
@@ -65,9 +47,22 @@ const BudgetCategory = () => {
                       <Fragment>
                         <span ref={ref} className="popup">
                           <p
-                            onClick={() =>setEditModal(true)}
+                            onClick={() =>
+                              navigate(`../edithBudget/${item.id}`, {
+                                replace: true,
+                              })
+                            }
                           >
                             Edit
+                          </p>
+                          <p
+                            onClick={() =>
+                              navigate(`../budgetDetail/${item.id}`, {
+                                replace: true,
+                              })
+                            }
+                          >
+                            View details
                           </p>
                           <p style={{ color: "red" }}>Delete</p>
                         </span>
@@ -80,10 +75,6 @@ const BudgetCategory = () => {
             <p>There are no budget category</p>
           )}
         </div>
-        {editModal && 
-        <FormModal >
-          <EditBudgetCategory closeModal={() =>setEditModal(false)}/>
-          </FormModal>}
       </ListStyle>
     </Layout>
   );
