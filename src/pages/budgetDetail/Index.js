@@ -7,16 +7,30 @@ import Calendar from "./DateComponent";
 import Layout from "../../components/dashboardSidebar/Layout";
 import request from "../../utils/apiHelper";
 import { useParams } from "react-router-dom";
+import FormModal from "../../components/modal/FormModal";
+import BudgetLineItemResuable from "../../components/modal/modalForLineItem";
+import { toast } from "react-toastify";
 
 const Index = () => {
   const [data, setData] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [createLineModal, setCreateLineModal] = useState(false);
 
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line
   }, []);
+  const fetchCategory = async () => {
+    try {
+      const response = await request.get(`budget_categories`, headers);
+      setCategories(response.data.data);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  }
 
   const { id } = useParams();
   const headers = {
@@ -41,7 +55,12 @@ const Index = () => {
     <Layout>
       <DetailStyle>
         <div className="button-container">
-          <button className="button">Create line item</button>
+          <button className="button"
+            onClick={() => {
+              setCreateLineModal(true);
+            }
+            }
+           >Create line item</button>
         </div>
         <div className="budget-summary">
           <div className="title">
@@ -87,6 +106,17 @@ const Index = () => {
         )}
 
         {/* <Button>+ Create Budget</Button> */}
+        {createLineModal && (
+          <FormModal>
+            <BudgetLineItemResuable
+              closeModal={() => setCreateLineModal(false)}
+              formTitle="Create line item"
+              placeholderCurrency="enter projected amount"
+              placeholderSelect="Create line item"
+
+            />
+          </FormModal>
+        )}
       </DetailStyle>
     </Layout>
   );
