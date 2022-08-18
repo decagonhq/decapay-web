@@ -40,32 +40,38 @@ const Index = () => {
   return (
     <Layout>
       <DetailStyle>
-        <TitleCard 
-        amount = {data?.displayProjectedAmount}
-        />
-
-        <div className="sub_container general mt-2 mb-2">
-          <SubTitleCard
-            title="Total Amount spent"
-            alt=""
-            amount={data?.displayTotalAmountSpentSoFar}
-            src="/images/money-2.svg"
-          />
-          <SubTitleCard
-            title="Percent"
-            alt=""
-            amount={data?.displayPercentageSpentSoFar}
-            src="/images/percent.svg"
-          />
+        <div className="button-container">
+          <button className="button">Create line item</button>
         </div>
-        {startDate && endDate ? <div className="calender">
-          <Calendar  startDate={startDate} endDate={endDate} />
-        </div>:null}
-        
+        <div className="budget-summary">
+          <div className="title">
+            <TitleCard amount={data?.displayProjectedAmount} />
 
+            <div className="sub_container general mt-2 mb-2">
+              <SubTitleCard
+                title="Total Amount spent"
+                alt=""
+                amount={data?.displayTotalAmountSpentSoFar}
+                src="/images/money-2.svg"
+              />
+              <SubTitleCard
+                title="Percent"
+                alt=""
+                amount={data?.displayPercentageSpentSoFar}
+                src="/images/percent.svg"
+              />
+            </div>
+          </div>
+
+          {startDate && endDate ? (
+            <div className="calender">
+              <Calendar startDate={startDate} endDate={endDate} />
+            </div>
+          ) : null}
+        </div>
         {data && data?.length > 0 ? (
           data?.lineItems.map((item, index) => (
-            <div key={index} className="mb-2">
+            <div className="mb-2">
               <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
             </div>
           ))
@@ -80,7 +86,7 @@ const Index = () => {
           </div>
         )}
 
-        <Button>+ Create Budget</Button>
+        {/* <Button>+ Create Budget</Button> */}
       </DetailStyle>
     </Layout>
   );
@@ -89,18 +95,23 @@ const Index = () => {
 export default Index;
 
 const DetailStyle = styled.div`
-  padding: 10px;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
   box-sizing: border-box;
-  width: 563px;
-  padding: 40px;
   background: #ffffff;
-  border: 1px solid #d6d6d6;
 
   @media only screen and (max-width: 540px) {
     width: 100%;
+  }
+  .title {
+    width: 60%;
+    margin-top: 20px;
+  }
+  .budget-summary {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
   }
 
   .general {
@@ -120,5 +131,34 @@ const DetailStyle = styled.div`
   .empty-img {
     width: 40px;
     height: 35px;
+  }
+  .button-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .button {
+    margin-top: 20px;
+    color: white;
+    text-decoration: none;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0;
+    width: 200px;
+    height: 3.2rem;
+    font-weight: 400;
+    font-size: 16px;
+    border: none;
+    text-align: center;
+    color: white;
+    background: #14a800;
+    white-space: nowrap;
+    border: none;
+    :hover {
+      cursor: pointer;
+      background: #14a800;
+    }
   }
 `;

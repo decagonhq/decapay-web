@@ -6,11 +6,7 @@ const MenuItem = ({ label, onClick, Icon, active, to }) => {
   return (
     <MenuItemStyle>
       <div className="p-items">
-        <NavLink
-          exact={true}
-          className={(isActive) => "p-link" + (!isActive ? "" : " ")}
-          to={to}
-        >
+        <NavLink exact={true} className="p-link" to={to}>
           <Icon />
           <p>{label}</p>
         </NavLink>
@@ -25,17 +21,10 @@ const MenuItemStyle = styled.div`
     cursor: pointer;
     align-items: center;
     margin-bottom: 0.2rem;
-
-    & .selected {
-      color: #6c5ce7;
-      background: #dfe8fc;
-      border-radius: 10px;
-    }
   }
 
   .p-link {
     text-decoration: none;
-    /* color: #21334f; */
     font-size: 1.2rem;
     font-weight: bold;
     height: 22px;
@@ -46,61 +35,24 @@ const MenuItemStyle = styled.div`
     gap: 15px;
     align-items: center;
     width: 100%;
-
-    /* Normal text */
-
-    font-family: 'Inter';
+    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
     line-height: 19px;
-    /* identical to box height */
-
-    /* Label & subheading */
-
     color: #8e919c;
     cursor: pointer;
     &:hover {
-      background: #dfe8fc;
-      border-radius: 10px;
+      background: #14a800;
+      border-radius: 4px;
+      color: white;
     }
-
     & p {
       padding: 0;
       margin: 0;
     }
   }
-  .p-link-label {
-    text-decoration: none;
-    color: #21334f;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    width: 44px;
-    height: 22px;
-
-    /* Normal text */
-
-    font-family: "Sofia Pro";
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 22px;
-    /* identical to box height */
-
-    /* Label & subheading */
-
-    color: #8e919c;
-    &:hover {
-      color: #6c5ce7;
-    }
-    &:active {
-      color: #6c5ce7;
-    }
-    @media (max-width: 768px) {
-      display: none;
-    }
-  }
+ 
 `;
 
 export default MenuItem;
