@@ -36,6 +36,7 @@ const Index = () => {
       console.log(error);
     }
   };
+  // console.log(data);
   return (
     <Layout>
       <DetailStyle>
