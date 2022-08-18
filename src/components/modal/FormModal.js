@@ -37,5 +37,5 @@ const StyledHome = styled.div`
     overflow: auto;
     padding: 20px;
     /* print */
-   
+  }
 `;

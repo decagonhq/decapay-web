@@ -1,27 +1,45 @@
 import React,{useRef,useState,Fragment,useEffect} from "react";
 import styled from "styled-components";
 import Layout from "../../components/dashboardSidebar/Layout";
-import { useNavigate } from "react-router-dom";
-const budgetCategory = [
-  { id: 1, name: "Food" },
-  { id: 2, name: "Transportation" },
-  { id: 3, name: "Entertainment" },
-  { id: 4, name: "Health" },
-  { id: 5, name: "Utilities" },
-  { id: 6, name: "Personal" },
-  { id: 7, name: "Groceries" },
-  { id: 8, name: "Other" },
-];
+import FormModal from "../../components/modal/FormModal";
+import EditBudgetCategory from "./EditBudgetCategory";
+import request from "../../utils/apiHelper";
+import { toast } from "react-toastify";
 
 const BudgetCategory = () => {
   const [idOfBudget, setIdOfBudget] = useState(-1);
-  const navigate = useNavigate();
+  const [editModal, setEditModal] = useState(false);
+  const [data, setData] = useState([]);
+
   const ref = useRef(null);
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
       setIdOfBudget(-1);
     }
   };
+  
+  const headers = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+  };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await request.get(`budget_categories`, headers);
+      setData(response.data.data.content);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
+
 
   useEffect(() => {
     document.addEventListener("click", handleClickOutside, true);
@@ -38,8 +56,8 @@ const BudgetCategory = () => {
           <div className="button-container">
             <button>Create budget category</button>
           </div>
-          {budgetCategory && budgetCategory.length > 0 ? (
-            budgetCategory.map((item, index) => (
+          {data && data.length > 0 ? (
+            data.map((item, index) => (
               <div className="category" key={index}>
                 <p className="category-title">{item.name}</p>
                 <p onClick={() => setIdOfBudget(index)} style={{ fontSize: "30px", cursor: "pointer" }} >...
@@ -47,22 +65,9 @@ const BudgetCategory = () => {
                       <Fragment>
                         <span ref={ref} className="popup">
                           <p
-                            onClick={() =>
-                              navigate(`../edithBudget/${item.id}`, {
-                                replace: true,
-                              })
-                            }
+                            onClick={() =>setEditModal(true)}
                           >
                             Edit
-                          </p>
-                          <p
-                            onClick={() =>
-                              navigate(`../budgetDetail/${item.id}`, {
-                                replace: true,
-                              })
-                            }
-                          >
-                            View details
                           </p>
                           <p style={{ color: "red" }}>Delete</p>
                         </span>
@@ -75,6 +80,11 @@ const BudgetCategory = () => {
             <p>There are no budget category</p>
           )}
         </div>
+        {editModal && 
+        <FormModal >
+          <EditBudgetCategory closeModal={()=>setEditModal(false)} />
+        </FormModal>
+        }
       </ListStyle>
     </Layout>
   );
