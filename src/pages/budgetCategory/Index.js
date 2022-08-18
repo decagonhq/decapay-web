@@ -1,7 +1,6 @@
 import React,{useRef,useState,Fragment,useEffect} from "react";
 import styled from "styled-components";
 import Layout from "../../components/dashboardSidebar/Layout";
-import { useNavigate } from "react-router-dom";
 import EditBudgetCategory from "./EditBudgetCategory";
 import FormModal from "../../components/modal/FormModal";
 
@@ -19,7 +18,6 @@ const budgetCategory = [
 const BudgetCategory = () => {
   const [editModal, setEditModal] = useState(false);
   const [idOfBudget, setIdOfBudget] = useState(-1);
-  const navigate = useNavigate();
   const ref = useRef(null);
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
