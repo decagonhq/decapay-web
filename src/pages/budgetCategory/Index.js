@@ -33,7 +33,21 @@ const BudgetCategory = () => {
       toast.error(error.response.data.message);
     }
   };
-  // console.log(data);
+import { useNavigate } from "react-router-dom";
+const budgetCategory = [
+  { id: 1, name: "Food" },
+  { id: 2, name: "Transportation" },
+  { id: 3, name: "Entertainment" },
+  { id: 4, name: "Health" },
+  { id: 5, name: "Utilities" },
+  { id: 6, name: "Personal" },
+  { id: 7, name: "Groceries" },
+  { id: 8, name: "Other" },
+];
+
+const BudgetCategory = () => {
+  const [idOfBudget, setIdOfBudget] = useState(-1);
+  const navigate = useNavigate();
   const ref = useRef(null);
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -68,6 +82,23 @@ const BudgetCategory = () => {
                             onClick={() =>setEditModal(true)}
                           >
                             Edit
+                          </p>           
+                          onClick={() =>
+                              navigate(`../edithBudget/${item.id}`, {
+                                replace: true,
+                              })
+                            }
+                          >
+                            Edit
+                          </p>
+                          <p
+                            onClick={() =>
+                              navigate(`../budgetDetail/${item.id}`, {
+                                replace: true,
+                              })
+                            }
+                          >
+                            View details
                           </p>
                           <p style={{ color: "red" }}>Delete</p>
                         </span>
