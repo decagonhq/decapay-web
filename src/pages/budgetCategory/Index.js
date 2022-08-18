@@ -1,22 +1,23 @@
 import React,{useRef,useState,Fragment,useEffect} from "react";
 import styled from "styled-components";
 import Layout from "../../components/dashboardSidebar/Layout";
-import EditBudgetCategory from "./EditBudgetCategory";
 import FormModal from "../../components/modal/FormModal";
+import EditBudgetCategory from "./EditBudgetCategory";
 import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
 
-
 const BudgetCategory = () => {
-  const [editModal, setEditModal] = useState(false);
   const [idOfBudget, setIdOfBudget] = useState(-1);
+  const [editModal, setEditModal] = useState(false);
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line
-  }, []);
-
+  const ref = useRef(null);
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setIdOfBudget(-1);
+    }
+  };
+  
   const headers = {
     headers: {
       "Content-Type": "application/json",
@@ -24,36 +25,21 @@ const BudgetCategory = () => {
     },
   };
 
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line
+  }, []);
+
   const fetchData = async () => {
     try {
       const response = await request.get(`budget_categories`, headers);
-      setData(response.data.data);
+      setData(response.data.data.content);
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
     }
   };
-import { useNavigate } from "react-router-dom";
-const budgetCategory = [
-  { id: 1, name: "Food" },
-  { id: 2, name: "Transportation" },
-  { id: 3, name: "Entertainment" },
-  { id: 4, name: "Health" },
-  { id: 5, name: "Utilities" },
-  { id: 6, name: "Personal" },
-  { id: 7, name: "Groceries" },
-  { id: 8, name: "Other" },
-];
 
-const BudgetCategory = () => {
-  const [idOfBudget, setIdOfBudget] = useState(-1);
-  const navigate = useNavigate();
-  const ref = useRef(null);
-  const handleClickOutside = (event) => {
-    if (ref.current && !ref.current.contains(event.target)) {
-      setIdOfBudget(-1);
-    }
-  };
 
   useEffect(() => {
     document.addEventListener("click", handleClickOutside, true);
@@ -82,23 +68,6 @@ const BudgetCategory = () => {
                             onClick={() =>setEditModal(true)}
                           >
                             Edit
-                          </p>           
-                          onClick={() =>
-                              navigate(`../edithBudget/${item.id}`, {
-                                replace: true,
-                              })
-                            }
-                          >
-                            Edit
-                          </p>
-                          <p
-                            onClick={() =>
-                              navigate(`../budgetDetail/${item.id}`, {
-                                replace: true,
-                              })
-                            }
-                          >
-                            View details
                           </p>
                           <p style={{ color: "red" }}>Delete</p>
                         </span>
@@ -113,8 +82,9 @@ const BudgetCategory = () => {
         </div>
         {editModal && 
         <FormModal >
-          <EditBudgetCategory closeModal={() =>setEditModal(false)}/>
-          </FormModal>}
+          <EditBudgetCategory closeModal={()=>setEditModal(false)} />
+        </FormModal>
+        }
       </ListStyle>
     </Layout>
   );
