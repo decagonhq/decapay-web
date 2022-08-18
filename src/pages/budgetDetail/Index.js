@@ -16,21 +16,34 @@ const Index = () => {
   const [categories, setCategories] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [collectData , setCollectData] = useState({
+    budgetCategoryId: "",
+    amount : "",
+  });
   const [createLineModal, setCreateLineModal] = useState(false);
 
+  
   useEffect(() => {
     fetchData();
+    fetchCategory();
     // eslint-disable-next-line
   }, []);
   const fetchCategory = async () => {
     try {
       const response = await request.get(`budget_categories`, headers);
-      setCategories(response.data.data);
+      setCategories(response.data.data.map
+        (category => {
+          return {
+            value: category.id,
+            label: category.title,
+          };
+        }));
+      console.log(categories);
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.message);
+      toast.error(error.response);
     }
-  }
+  };
 
   const { id } = useParams();
   const headers = {
@@ -55,12 +68,14 @@ const Index = () => {
     <Layout>
       <DetailStyle>
         <div className="button-container">
-          <button className="button"
+          <button
+            className="button"
             onClick={() => {
               setCreateLineModal(true);
-            }
-            }
-           >Create line item</button>
+            }}
+          >
+            Create line item
+          </button>
         </div>
         <div className="budget-summary">
           <div className="title">
@@ -113,7 +128,14 @@ const Index = () => {
               formTitle="Create line item"
               placeholderCurrency="enter projected amount"
               placeholderSelect="Create line item"
-
+              selectValue=""
+              onChangeSelect={(e) => {}}
+              onChangeCurrency={(e) => {}}
+              labelCurrency="Projected amount"
+              currencyName="N"
+              valueCurrency=""
+              onClick={() => {}}
+              options={categories}
             />
           </FormModal>
         )}

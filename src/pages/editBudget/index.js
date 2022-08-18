@@ -56,7 +56,8 @@ const EditBudget = () => {
     else {
       let splitAmount = amount.split(",");
       let joinBackAmount = splitAmount.join("");
-      return parseInt(joinBackAmount);
+      let removeNairaandConvertToNumber = parseInt(joinBackAmount.replace("₦", ""));
+      return removeNairaandConvertToNumber;
     }
   }
 
