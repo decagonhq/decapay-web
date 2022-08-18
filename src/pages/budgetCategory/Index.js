@@ -2,6 +2,9 @@ import React,{useRef,useState,Fragment,useEffect} from "react";
 import styled from "styled-components";
 import Layout from "../../components/dashboardSidebar/Layout";
 import { useNavigate } from "react-router-dom";
+import EditBudgetCategory from "./EditBudgetCategory";
+import FormModal from "../../components/modal/FormModal";
+
 const budgetCategory = [
   { id: 1, name: "Food" },
   { id: 2, name: "Transportation" },
@@ -14,6 +17,7 @@ const budgetCategory = [
 ];
 
 const BudgetCategory = () => {
+  const [editModal, setEditModal] = useState(false);
   const [idOfBudget, setIdOfBudget] = useState(-1);
   const navigate = useNavigate();
   const ref = useRef(null);
@@ -47,22 +51,9 @@ const BudgetCategory = () => {
                       <Fragment>
                         <span ref={ref} className="popup">
                           <p
-                            onClick={() =>
-                              navigate(`../edithBudget/${item.id}`, {
-                                replace: true,
-                              })
-                            }
+                            onClick={() =>setEditModal(true)}
                           >
                             Edit
-                          </p>
-                          <p
-                            onClick={() =>
-                              navigate(`../budgetDetail/${item.id}`, {
-                                replace: true,
-                              })
-                            }
-                          >
-                            View details
                           </p>
                           <p style={{ color: "red" }}>Delete</p>
                         </span>
@@ -75,6 +66,10 @@ const BudgetCategory = () => {
             <p>There are no budget category</p>
           )}
         </div>
+        {editModal && 
+        <FormModal >
+          <EditBudgetCategory closeModal={() =>setEditModal(false)}/>
+          </FormModal>}
       </ListStyle>
     </Layout>
   );
