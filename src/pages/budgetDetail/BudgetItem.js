@@ -10,7 +10,7 @@ const Budget = ({ item, amount, soFar, percent }) => {
       <div className="list--wrapper">
         <div className="left_side">
           <p>{item}</p>
-          <p>projected amount: {amount}</p>
+          <p>Projected amount: {amount}</p>
           <p>Amount so far: {soFar}</p>
           <Link className="link" to={"/line"}>View expenses</Link>
         </div>
@@ -33,9 +33,10 @@ const Budget = ({ item, amount, soFar, percent }) => {
 export default Budget;
 
 const ListStyle = styled.div`
+  font-family: "Inter";
   width: 100%;
   height: 108px;
-  background: #ffffff;
+  background: rgba(0, 156, 244, 0.05);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.04);
 
   @media only screen and (max-width: 379px) {
@@ -49,15 +50,15 @@ const ListStyle = styled.div`
   }
   .list--wrapper {
     display: flex;
-    justify-content: space-between;
-    padding:20px;
+    justify-content: space-around;
+    padding:10px;
   }
   .left_side p{
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-   padding: 0;
-   margin: 0;
+    padding: 0;
+    margin: 0;
   }
   .right_side {
     align-items: center;
