@@ -28,6 +28,21 @@ const Index = () => {
     fetchCategory();
     // eslint-disable-next-line
   }, []);
+  const stripCommaAndConvertToNumber = (amount) => {
+    if (amount === "" || amount === null || amount === undefined ) {
+      return "";
+    }
+    else if(typeof(amount) === "number"){
+      return amount;
+    }
+    else {
+      let splitAmount = amount.split(",");
+      let joinBackAmount = splitAmount.join("");
+      let splitByNairaSign = joinBackAmount.split("#");
+      let joinBackAmountByNairaSign = splitByNairaSign.join("");
+      return parseInt(joinBackAmountByNairaSign);
+    }
+  }
   const fetchCategory = async () => {
     try {
       const response = await request.get(`budget_categories`, headers);
@@ -38,13 +53,39 @@ const Index = () => {
             label: category.title,
           };
         }));
-      console.log(categories);
+      // console.log(categories);
     } catch (error) {
       console.log(error);
       toast.error(error.response);
     }
   };
-
+  const submit = async () => {
+    let payload = {
+      budgetCategoryId: parseInt(collectData.budgetCategoryId),
+      amount: stripCommaAndConvertToNumber(collectData.amount),
+      
+    };
+    console.log(payload);
+    try {
+      const response = await request.post(
+        `budgets/${id}/lineItems`,
+        payload,
+        headers
+      );
+      setCreateLineModal(false);
+      toast.success(response.data.message);
+      fetchData();
+    } catch (error) {
+      console.log(error);
+      toast.error(error);
+    }
+  }
+  const handleOnChanege = (e, value) => {
+    setCollectData({
+      ...collectData,
+      [value]: e.target.value,
+    });
+  }
   const { id } = useParams();
   const headers = {
     headers: {
@@ -63,7 +104,7 @@ const Index = () => {
       console.log(error);
     }
   };
-  // console.log(data);
+  console.log("this is line item",data.lineItems); 
   return (
     <Layout>
       <DetailStyle>
@@ -103,10 +144,10 @@ const Index = () => {
             </div>
           ) : null}
         </div>
-        {data && data?.length > 0 ? (
+        {data.lineItems && data?.lineItems.length > 0 ? (
           data?.lineItems.map((item, index) => (
             <div className="mb-2">
-              <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
+              <BudgetItem log amount={item.displayProjectedAmoun} soFar={item.displayTotalAmountSpentSoFa} percent={item.percentageSpentSoFar} item={item.category}/>
             </div>
           ))
         ) : (
@@ -128,13 +169,18 @@ const Index = () => {
               formTitle="Create line item"
               placeholderCurrency="enter projected amount"
               placeholderSelect="Create line item"
-              selectValue=""
-              onChangeSelect={(e) => {}}
-              onChangeCurrency={(e) => {}}
+              selectValue={collectData.budgetCategoryId}
+              selectName = "budgetCategoryId"
+              currencyName = "amount"
+              onChangeSelect={(e) => {
+                handleOnChanege(e, "budgetCategoryId");
+              }}
+              onChangeCurrency={(e) => {
+                handleOnChanege(e, "amount");
+              }}
               labelCurrency="Projected amount"
-              currencyName="N"
-              valueCurrency=""
-              onClick={() => {}}
+              valueCurrency= {collectData.amount}
+              onClick={submit}
               options={categories}
             />
           </FormModal>

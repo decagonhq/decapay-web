@@ -8,7 +8,7 @@ import FormSelectComponent from "../../components/selectComponent";
 
 const BudgetLineItemResuable = ({
   closeModal,
-  name,
+  selectName,
   options,
   formTitle,
   selectValue,
@@ -17,18 +17,19 @@ const BudgetLineItemResuable = ({
   placeholderCurrency,
   labelCurrency,
   currencyName,
-    onChangeCurrency,
-    valueCurrency,
-    onClick,
+  onChangeCurrency,
+  valueCurrency,
+  onClick,
 }) => {
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   return (
     <StyledHome>
       <FormTitleSection title={formTitle} onClick={closeModal} />
+      
       <div className="form__wrapper">
         <FormSelectComponent
-          name={name}
+          name={selectName}
           options={options}
           value={selectValue}
           onChange={onChangeSelect}
@@ -46,13 +47,10 @@ const BudgetLineItemResuable = ({
           thousandSeparator={true}
           value={valueCurrency}
           onChange={onChangeCurrency}
-          
         />
       </div>
       <div className="btn">
-        <MyButton type="submit" className="form__button"
-            onClick={onClick}
-        >
+        <MyButton type="submit" className="form__button" onClick={onClick}>
           {loading ? <ClipLoader color="white" size="40px" /> : "Save"}
         </MyButton>
       </div>
