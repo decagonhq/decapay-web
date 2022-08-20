@@ -1,15 +1,25 @@
-import React,{useRef,useState,Fragment,useEffect} from "react";
+import React, { useRef, useState, Fragment, useEffect } from "react";
 import styled from "styled-components";
 import Layout from "../../components/dashboardSidebar/Layout";
 import FormModal from "../../components/modal/FormModal";
-import EditBudgetCategory from "./EditBudgetCategory";
+import BudgetCategoryReusable from "./EditBudgetCategory";
 import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
+// import { useFormik } from "formik";
+// import * as yup from "yup";
 
 const BudgetCategory = () => {
   const [idOfBudget, setIdOfBudget] = useState(-1);
   const [editModal, setEditModal] = useState(false);
+  const [createModal, setCreateModal] = useState(false);
+  const [category, setCategory] = useState("");
+  const [editCategory, setEditCategory] = useState({
+    category: "",
+    id: "",
+  });
+
   const [data, setData] = useState([]);
+  console.log(data);
 
   const ref = useRef(null);
   const handleClickOutside = (event) => {
@@ -17,14 +27,66 @@ const BudgetCategory = () => {
       setIdOfBudget(-1);
     }
   };
-  
+
   const headers = {
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + localStorage.getItem("token"),
     },
   };
-
+  const onSubmit = async () => {
+    console.log(category);
+    let payload = {
+      title: category,
+    };
+    try {
+      const response = await request.post(
+        `budget_categories`,
+        payload,
+        headers
+      );
+      setCreateModal(false);
+      toast.success(response.data.message);
+      setCategory("");
+      fetchData();
+    } catch (error) {
+      console.log(error);
+      // toast.error(error);
+    }
+  };
+  const onSubimtEdit = async () => {
+    console.log(editCategory);
+    let payload = {
+      title: editCategory.category,
+    };
+    try {
+      const response = await request.put(
+        `budget_categories/${editCategory.id}`,
+        payload,
+        headers
+      );
+      setEditModal(false);
+      toast.success(response.data.message);
+      setEditCategory({
+        category: "",
+        id: "",
+      });
+      fetchData();
+    } catch (error) {
+      console.log(error);
+      // toast.error(error);
+    }
+  };
+  const handleChange = (e) => {
+    setCategory(e.target.value);
+  };
+  const handleEdithChange = (e) => {
+    setEditCategory({
+      ...editCategory,
+      [e.target.name]: e.target.value,
+    });
+  };
+  console.log(editCategory);
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line
@@ -33,13 +95,12 @@ const BudgetCategory = () => {
   const fetchData = async () => {
     try {
       const response = await request.get(`budget_categories`, headers);
-      setData(response.data.data.content);
+      setData(response.data.data);
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
     }
   };
-
 
   useEffect(() => {
     document.addEventListener("click", handleClickOutside, true);
@@ -54,25 +115,37 @@ const BudgetCategory = () => {
       <ListStyle>
         <div className="category-container">
           <div className="button-container">
-            <button>Create budget category</button>
+            <button onClick={() => setCreateModal(true)}>
+              Create budget category
+            </button>
           </div>
           {data && data.length > 0 ? (
             data.map((item, index) => (
               <div className="category" key={index}>
-                <p className="category-title">{item.name}</p>
-                <p onClick={() => setIdOfBudget(index)} style={{ fontSize: "30px", cursor: "pointer" }} >...
-                {idOfBudget === index ? (
-                      <Fragment>
-                        <span ref={ref} className="popup">
-                          <p
-                            onClick={() =>setEditModal(true)}
-                          >
-                            Edit
-                          </p>
-                          <p style={{ color: "red" }}>Delete</p>
-                        </span>
-                      </Fragment>
-                    ) : null}
+                <p className="category-title">{item.title}</p>
+                <p
+                  onClick={() => setIdOfBudget(index)}
+                  style={{ fontSize: "30px", cursor: "pointer" }}
+                >
+                  ...
+                  {idOfBudget === index ? (
+                    <Fragment>
+                      <span ref={ref} className="popup">
+                        <p
+                          onClick={() => {
+                            setEditModal(true);
+                            setEditCategory({
+                              category: item.title,
+                              id: item.id,
+                            });
+                          }}
+                        >
+                          Edit
+                        </p>
+                        <p style={{ color: "red" }}>Delete</p>
+                      </span>
+                    </Fragment>
+                  ) : null}
                 </p>
               </div>
             ))
@@ -80,11 +153,38 @@ const BudgetCategory = () => {
             <p>There are no budget category</p>
           )}
         </div>
-        {editModal && 
-        <FormModal >
-          <EditBudgetCategory closeModal={()=>setEditModal(false)} />
-        </FormModal>
-        }
+        {editModal && (
+          <FormModal>
+            <BudgetCategoryReusable
+              closeModal={() => setEditModal(false)}
+              placeholder="Edit Budget category"
+              label="Name of budget category"
+              type="text"
+              name="category"
+              buttonType="submit"
+              value={editCategory.category}
+              onChange={(e) => handleEdithChange(e)}
+              onClick={onSubimtEdit}
+            />
+          </FormModal>
+        )}
+        {createModal && (
+          <FormModal>
+            <BudgetCategoryReusable
+              closeModal={() => setCreateModal(false)}
+              placeholder="Create budget categories"
+              buttonValue="Create"
+              label="Name of Category"
+              type="text"
+              name="budgetCategory"
+              buttonType="submit"
+              value={category}
+              onChange={(e) => handleChange(e)}
+              onClick={onSubmit}
+              formTitle={`What do you usually spend on?`}
+            />
+          </FormModal>
+        )}
       </ListStyle>
     </Layout>
   );

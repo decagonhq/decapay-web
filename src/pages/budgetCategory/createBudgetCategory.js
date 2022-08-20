@@ -5,46 +5,39 @@ import FormInputComponent from "../../components/InputComponent";
 import ClipLoader from "react-spinners/ClipLoader";
 import FormTitleSection from "../../components/modal/FormTitleSection";
 
-const BudgetCategoryReusable = ({ closeModal, onClick, placeholder, label,type, name, buttonType, value, formTitle, onChange}) => {
-
-  // eslint-disable-next-line 
+const CreateBudgetCategory = ({ closeModal }) => {
+  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
-  
-
   return (
     <StyledHome>
-      <FormTitleSection title={formTitle} onClick={closeModal} />
+      <FormTitleSection title="Create buget category" onClick={closeModal} />
       <div className="form__wrapper">
         <FormInputComponent
-          placeholder={placeholder}
-          label= {label}
-          type= {type}
-          onChange= {onChange}
-          name= {name}
-          value = {value}
+          placeholder="Budget category name"
+          label="Budget category"
+          type="text"
+          name="budgetCategory"
         />
       </div>
       <div className="btn">
-        <MyButton type= {buttonType}  className="form__button"
-          onClick={onClick}>
-        
+        <MyButton type="submit" className="form__button">
           {loading ? <ClipLoader color="white" size="40px" /> : "Save"}
         </MyButton>
       </div>
     </StyledHome>
   );
 };
-export default BudgetCategoryReusable;
+export default CreateBudgetCategory;
 
 const StyledHome = styled.div`
   .form__wrapper {
     width: 100%;
     border-radius: 5px;
   }
-  .btn{
+  .btn {
     display: flex;
     justify-content: center;
     align-items: center;
-    border:none;
+    border: none;
   }
 `;
