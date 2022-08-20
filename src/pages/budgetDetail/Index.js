@@ -7,17 +7,85 @@ import Calendar from "./DateComponent";
 import Layout from "../../components/dashboardSidebar/Layout";
 import request from "../../utils/apiHelper";
 import { useParams } from "react-router-dom";
+import FormModal from "../../components/modal/FormModal";
+import BudgetLineItemResuable from "../../components/modal/modalForLineItem";
+import { toast } from "react-toastify";
 
 const Index = () => {
   const [data, setData] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [collectData , setCollectData] = useState({
+    budgetCategoryId: "",
+    amount : "",
+  });
+  const [createLineModal, setCreateLineModal] = useState(false);
 
+  
   useEffect(() => {
     fetchData();
+    fetchCategory();
     // eslint-disable-next-line
   }, []);
-
+  const stripCommaAndConvertToNumber = (amount) => {
+    if (amount === "" || amount === null || amount === undefined ) {
+      return "";
+    }
+    else if(typeof(amount) === "number"){
+      return amount;
+    }
+    else {
+      let splitAmount = amount.split(",");
+      let joinBackAmount = splitAmount.join("");
+      let splitByNairaSign = joinBackAmount.split("#");
+      let joinBackAmountByNairaSign = splitByNairaSign.join("");
+      return parseInt(joinBackAmountByNairaSign);
+    }
+  }
+  const fetchCategory = async () => {
+    try {
+      const response = await request.get(`budget_categories`, headers);
+      setCategories(response.data.data.map
+        (category => {
+          return {
+            value: category.id,
+            label: category.title,
+          };
+        }));
+      // console.log(categories);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response);
+    }
+  };
+  const submit = async () => {
+    let payload = {
+      budgetCategoryId: parseInt(collectData.budgetCategoryId),
+      amount: stripCommaAndConvertToNumber(collectData.amount),
+      
+    };
+    console.log(payload);
+    try {
+      const response = await request.post(
+        `budgets/${id}/lineItems`,
+        payload,
+        headers
+      );
+      setCreateLineModal(false);
+      toast.success(response.data.message);
+      fetchData();
+    } catch (error) {
+      console.log(error);
+      toast.error(error);
+    }
+  }
+  const handleOnChanege = (e, value) => {
+    setCollectData({
+      ...collectData,
+      [value]: e.target.value,
+    });
+  }
   const { id } = useParams();
   const headers = {
     headers: {
@@ -36,12 +104,19 @@ const Index = () => {
       console.log(error);
     }
   };
-  // console.log(data);
+  console.log("this is line item",data.lineItems); 
   return (
     <Layout>
       <DetailStyle>
         <div className="button-container">
-          <button className="button">Create line item</button>
+          <button
+            className="button"
+            onClick={() => {
+              setCreateLineModal(true);
+            }}
+          >
+            Create line item
+          </button>
         </div>
         <div className="budget-summary">
           <div className="title">
@@ -69,10 +144,10 @@ const Index = () => {
             </div>
           ) : null}
         </div>
-        {data && data?.length > 0 ? (
+        {data.lineItems && data?.lineItems.length > 0 ? (
           data?.lineItems.map((item, index) => (
             <div className="mb-2">
-              <BudgetItem log amount="N200000" soFar="N3400" percent="20%" />
+              <BudgetItem log amount={item.displayProjectedAmoun} soFar={item.displayTotalAmountSpentSoFa} percent={item.percentageSpentSoFar} item={item.category}/>
             </div>
           ))
         ) : (
@@ -87,6 +162,29 @@ const Index = () => {
         )}
 
         {/* <Button>+ Create Budget</Button> */}
+        {createLineModal && (
+          <FormModal>
+            <BudgetLineItemResuable
+              closeModal={() => setCreateLineModal(false)}
+              formTitle="Create line item"
+              placeholderCurrency="enter projected amount"
+              placeholderSelect="Create line item"
+              selectValue={collectData.budgetCategoryId}
+              selectName = "budgetCategoryId"
+              currencyName = "amount"
+              onChangeSelect={(e) => {
+                handleOnChanege(e, "budgetCategoryId");
+              }}
+              onChangeCurrency={(e) => {
+                handleOnChanege(e, "amount");
+              }}
+              labelCurrency="Projected amount"
+              valueCurrency= {collectData.amount}
+              onClick={submit}
+              options={categories}
+            />
+          </FormModal>
+        )}
       </DetailStyle>
     </Layout>
   );
