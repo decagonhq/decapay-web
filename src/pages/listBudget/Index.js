@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useRef, useEffect, Fragment } from "react";
 import styled from "styled-components";
 import CreateBudget from "./CreateBugetForm";
+import EditBudget from "./EditBudget";
 // import GoBack from "../../components/Goback";
 import FormModal from "../../components/modal/FormModal";
-
 import Layout from "../../components/dashboardSidebar/Layout";
 import Pagination from "../../utils/pagination";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,8 @@ const Index = () => {
   const [idOfBudget, setIdOfBudget] = useState(-1);
   const [data, setData] = useState([]);
   const [createBudgetModal, setCreateBudgetModal] = useState(false);
+  const [editBudgetModal, setEditBudgetModal] = useState(false);
+  const [budgetTitle, setBudgetTitle] = useState("");
   // eslint-disable-next-line
   const [dataInfo, setDataInfo] = useState([]);
   const ref = useRef(null);
@@ -63,6 +65,11 @@ const Index = () => {
     };
   });
 
+  const handleEditModal = (title) => {
+    setEditBudgetModal(true);
+    setBudgetTitle(title)
+  }
+
   return (
     <Layout>
       <BudgetSyle>
@@ -108,20 +115,20 @@ const Index = () => {
                       fontSize: "30px",
                       fontWeight: "bold",
                     }}
-                    onClick={() => setIdOfBudget(index)}
+                    onClick={() => setIdOfBudget(item.id)}
                   >
                     ...
-                    {idOfBudget === index ? (
+                    {idOfBudget === item.id ? (
                       <Fragment>
                         <span ref={ref} className="popup">
                           <p
-                            onClick={() =>
-                              navigate(`../edithBudget/${item.id}`, {
-                                replace: true,
-                              })
+                            onClick={() =>handleEditModal(item.title)
+                              // navigate(`../edithBudget/${item.id}`, {
+                              //   replace: true,
+                              // })
                             }
                           >
-                            Edit
+                           Edit
                           </p>
                           <p
                             onClick={() =>
@@ -154,8 +161,13 @@ const Index = () => {
           />
         </div>
         {createBudgetModal && (
-          <FormModal >
-            <CreateBudget closeModal={()=>setCreateBudgetModal(false)} />
+          <FormModal>
+            <CreateBudget closeModal={() => setCreateBudgetModal(false)} />
+          </FormModal>
+        )}
+        {editBudgetModal && (
+          <FormModal>
+            <EditBudget title={budgetTitle} id={idOfBudget} closeModal={() => setEditBudgetModal(false)} />
           </FormModal>
         )}
       </BudgetSyle>
@@ -363,7 +375,7 @@ const BudgetSyle = styled.div`
     align-items: center;
     border-radius: 0;
     width: 200px;
-    height: 3.2rem;
+    height: 2.5rem;
     font-weight: 400;
     font-size: 16px;
     border: none;

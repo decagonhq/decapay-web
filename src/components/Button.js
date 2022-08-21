@@ -47,7 +47,7 @@ const StyledButton = styled.button`
   align-items: center;
   border-radius: 0;
   width: 100%;
-  height: ${({ height }) => (height ? height : "3.2rem")};
+  height: ${({ height }) => (height ? height : "2.5rem")};
   font-weight: 400;
   font-size: 16px;
   border: none;
@@ -69,7 +69,7 @@ const StyledButton = styled.button`
 
   @media only screen and (max-width: 600px) {
     font-size: 12px;
-    height: 4.2rem;
+    height: 2.5rem;
   }
   @media only screen and (max-width: 540px) {
     max-height: 2rem;
