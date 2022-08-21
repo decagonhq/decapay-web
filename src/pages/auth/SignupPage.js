@@ -189,7 +189,7 @@ const StyledHome = styled.div`
 
   .form__wrapper {
     width: 70%;
-    margin-bottom: -30px;
+    /* margin-bottom: -30px; */
   }
   .bottom__text {
     font-family: "Inter";

@@ -67,7 +67,7 @@ const Index = () => {
           label: category.title,
         };
       });
-      console.log(res);
+      // console.log(res);
       // add select to res
       res.unshift({ value: "", label: "Select Category" });
       setCategories(res);
@@ -98,7 +98,7 @@ const Index = () => {
       budgetCategoryId: parseInt(collectData.budgetCategoryId),
       amount: stripCommaAndConvertToNumber(collectData.amount),
     };
-    console.log(payload);
+    // console.log(payload);
     try {
       const response = await request.post(
         `budgets/${id}/lineItems`,
@@ -110,7 +110,7 @@ const Index = () => {
       fetchData();
     } catch (error) {
       console.log(error);
-      toast.error(error);
+      toast.error(error.message);
     }
   };
   const handleOnChanege = (e, value) => {
@@ -400,7 +400,8 @@ const DetailStyle = styled.div`
   .budget-summary {
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    gap: 20px;
+    /* justify-content: space-around; */
   }
 
   .general {
@@ -436,7 +437,7 @@ const DetailStyle = styled.div`
     align-items: center;
     border-radius: 0;
     width: 200px;
-    height: 3.2rem;
+    height: 2.5rem;
     font-weight: 400;
     font-size: 16px;
     border: none;
