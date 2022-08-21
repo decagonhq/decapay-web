@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useRef, useEffect, Fragment } from "react";
 import styled from "styled-components";
-
+import CreateBudget from "./CreateBugetForm";
 // import GoBack from "../../components/Goback";
+import FormModal from "../../components/modal/FormModal";
 
 import Layout from "../../components/dashboardSidebar/Layout";
 import Pagination from "../../utils/pagination";
@@ -14,7 +15,7 @@ const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [idOfBudget, setIdOfBudget] = useState(-1);
   const [data, setData] = useState([]);
-
+  const [createBudgetModal, setCreateBudgetModal] = useState(false);
   // eslint-disable-next-line
   const [dataInfo, setDataInfo] = useState([]);
   const ref = useRef(null);
@@ -65,8 +66,15 @@ const Index = () => {
   return (
     <Layout>
       <BudgetSyle>
-        <div className="header">
-          <p style={{fontWeight:"bold", fontSize:"20px"}}>Budget List</p>
+        <div className="header-wrapper">
+          <div className="header">
+            <p style={{ fontWeight: "bold", fontSize: "20px" }}>Budget List</p>
+          </div>
+          <div className="button-container">
+            <button onClick={() => setCreateBudgetModal(true)}>
+              Create budget
+            </button>
+          </div>
         </div>
 
         <div className="table-container">
@@ -94,9 +102,14 @@ const Index = () => {
                   <td>{item.displayProjectedAmount}</td>
                   <td>{item.displayTotalAmountSpentSoFar}</td>
                   <td>{item.displayPercentageSpentSoFar}</td>
-                  <td 
-                  style={{ cursor: "pointer", fontSize: "30px", fontWeight: "bold" }}
-                 onClick={() => setIdOfBudget(index)}>
+                  <td
+                    style={{
+                      cursor: "pointer",
+                      fontSize: "30px",
+                      fontWeight: "bold",
+                    }}
+                    onClick={() => setIdOfBudget(index)}
+                  >
                     ...
                     {idOfBudget === index ? (
                       <Fragment>
@@ -125,7 +138,6 @@ const Index = () => {
                     ) : null}
                   </td>
                 </tr>
-               
               ))
             ) : (
               <p>No budget to display</p>
@@ -141,6 +153,11 @@ const Index = () => {
             onPageChange={(page) => setCurrentPage(page)}
           />
         </div>
+        {createBudgetModal && (
+          <FormModal >
+            <CreateBudget closeModal={()=>setCreateBudgetModal(false)} />
+          </FormModal>
+        )}
       </BudgetSyle>
     </Layout>
   );
@@ -154,7 +171,7 @@ const BudgetSyle = styled.div`
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  
+
   background: rgba(0, 156, 244, 0.05);
   .header {
     width: 100%;
@@ -330,5 +347,34 @@ const BudgetSyle = styled.div`
     width: 40px;
     margin-right: 10px;
     border-radius: 60px;
+  }
+  .header-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  button {
+    color: white;
+    text-decoration: none;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0;
+    width: 200px;
+    height: 3.2rem;
+    font-weight: 400;
+    font-size: 16px;
+    border: none;
+    text-align: center;
+    color: white;
+    background: #14a800;
+    white-space: nowrap;
+    border: none;
+    :hover {
+      cursor: pointer;
+      background: #14a800;
+    }
   }
 `;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import MenuItem from "./MenuItem";
 import {  MdOutlineLogout } from "react-icons/md";
 import {TbLayoutDashboard} from "react-icons/tb";
-import {AiOutlineDollar} from "react-icons/ai";
+// import {AiOutlineDollar} from "react-icons/ai";
 import {MdListAlt} from "react-icons/md";
 import Logo from "../LogoComponent";
 import request from "../../utils/apiHelper"
@@ -12,7 +12,7 @@ import {toast} from "react-toastify"
 const SidebarDemo = () => {
 
   const[dashboarActive] = useState(true);
-  const[budgetActive] = useState(false);
+  // const[budgetActive] = useState(false);
   const[budgetCatActive] = useState(false);
 
   const logout = async() => {
@@ -50,13 +50,13 @@ const SidebarDemo = () => {
           to="/home"
           active={dashboarActive}
         />
-        <MenuItem
+        {/* <MenuItem
           // key={index}
           label={"Budget"}
           Icon={AiOutlineDollar}
           active={budgetActive}
           to={"/createBudget"}
-        />
+        /> */}
         <MenuItem
           label="Budget Category"
           Icon={MdListAlt}
