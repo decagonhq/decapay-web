@@ -56,7 +56,7 @@ const EditBudget = () => {
     else {
       let splitAmount = amount.split(",");
       let joinBackAmount = splitAmount.join("");
-      let removeNairaandConvertToNumber = parseInt(joinBackAmount.replace("#", ""));
+      let removeNairaandConvertToNumber = parseInt(joinBackAmount.replace("₦", ""));
       return removeNairaandConvertToNumber;
     }
   }
@@ -212,7 +212,7 @@ const EditBudget = () => {
               height: '100%',
               padding: '10px',
               }}
-              prefix={'#'}
+              prefix={'₦'}
               name="amount"
               thousandSeparator={true}
               value={collectData.amount}
