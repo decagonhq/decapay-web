@@ -49,7 +49,7 @@ const FormInputComponent = ({
 };
 
 const StyledFormInputComponent = styled.div`
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   input {
     display: inline-block;
     font-size: 1.6rem;
@@ -57,7 +57,7 @@ const StyledFormInputComponent = styled.div`
     -webkit-appearance: none;
     min-width: 100%;
     border: none;
-    height: ${({ height }) => (height ? height : "3.2rem")};
+    height: ${({ height }) => (height ? height : "2.5rem")};
     padding-bottom: 0rem;
     padding-left: 1rem;
     border: 1px solid rgba(33, 51, 79, 0.15) !important;
