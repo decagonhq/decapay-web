@@ -53,7 +53,7 @@ const Index = () => {
     } else {
       let splitAmount = amount.split(",");
       let joinBackAmount = splitAmount.join("");
-      let splitByNairaSign = joinBackAmount.split("#");
+      let splitByNairaSign = joinBackAmount.split("₦");
       let joinBackAmountByNairaSign = splitByNairaSign.join("");
       return parseInt(joinBackAmountByNairaSign);
     }
@@ -98,7 +98,7 @@ const Index = () => {
       budgetCategoryId: parseInt(collectData.budgetCategoryId),
       amount: stripCommaAndConvertToNumber(collectData.amount),
     };
-    // console.log(payload);
+    console.log(payload);
     try {
       const response = await request.post(
         `budgets/${id}/lineItems`,
