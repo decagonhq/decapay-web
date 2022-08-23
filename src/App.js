@@ -11,8 +11,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./utils/protectedRoute";
 import Budget from "./pages/listBudget/Index";
-import CreateBudget from "./pages/budget";
-import EditBudget from "./pages/editBudget";
 import BudgetCategory from "./pages/budgetCategory/Index";
 
 function App() {
@@ -21,15 +19,7 @@ function App() {
       <ToastContainer limit={1} style={{ fontSize: "16px" }} />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route
-          path="/createBudget"
-          element={
-            <PrivateRoute>
-              <CreateBudget />
-            </PrivateRoute>
-          }
-        />
-
+        
         <Route
           path="/home"
           element={
@@ -46,14 +36,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route
-          path="/edithBudget/:id"
-          element={
-            <PrivateRoute>
-              <EditBudget />
-            </PrivateRoute>
-          }
-        />
+       
          <Route
           path="/budgetCategory"
           element={
