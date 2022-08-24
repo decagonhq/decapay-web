@@ -67,8 +67,8 @@ const Index = () => {
 
   const handleEditModal = (title) => {
     setEditBudgetModal(true);
-    setBudgetTitle(title)
-  }
+    setBudgetTitle(title);
+  };
 
   return (
     <Layout>
@@ -83,15 +83,83 @@ const Index = () => {
             </button>
           </div>
         </div>
-
-        <div className="table-container">
           <div className="header page">
             <p>Most recent</p>
             <p>
               Showing {currentPage} of {PageSize - 2}
             </p>
           </div>
-          <table>
+
+          {/* Custom table starts here */}
+          <div className="category-container">
+            <div className="category header">
+              <p className="category-title">Budget title</p>
+              <p className="category-title">Period</p>
+              <p className="category-title">Amount</p>
+              <p className="category-title">Amount spent</p>
+              <p className="category-title">Percentage spent</p>
+              <p className="category-title">Action</p>
+            </div>
+            {currentTableData !== null && currentTableData?.length > 0 ? (
+              currentTableData.map((item, index) => (
+                <div className="category body" key={index}>
+                  <p className="category-title">{item.title}</p>
+                  <p className="category-title">{item.period}</p>
+                  <p className="category-title">
+                    {item.displayProjectedAmount}
+                  </p>
+                  <p className="category-title">
+                    {item.displayTotalAmountSpentSoFar}
+                  </p>
+                  <p className="category-title">
+                    {item.displayPercentageSpentSoFar}
+                  </p>
+                  <p
+                    style={{
+                      cursor: "pointer",
+                      fontSize: "30px",
+                      fontWeight: "bold",
+                    }}
+                    onClick={() => setIdOfBudget(item.id)}
+                    className="dots"
+                  >
+                    ...
+                    {idOfBudget === item.id ? (
+                      <Fragment>
+                        <span ref={ref} className="popup">
+                          <p
+                            onClick={
+                              () => handleEditModal(item.title)
+                              // navigate(`../edithBudget/${item.id}`, {
+                              //   replace: true,
+                              // })
+                            }
+                          >
+                            Edit
+                          </p>
+                          <p
+                            onClick={() =>
+                              navigate(`../budgetDetail/${item.id}`, {
+                                replace: true,
+                              })
+                            }
+                          >
+                            View details
+                          </p>
+                          <p style={{ color: "red" }}>Delete</p>
+                        </span>
+                      </Fragment>
+                    ) : null}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p>There are no budget category</p>
+            )}
+          </div>
+          {/* End of custom table */}
+
+          {/* <table>
             <tr>
               <th>Budget title</th>
               <th>Period</th>
@@ -122,13 +190,14 @@ const Index = () => {
                       <Fragment>
                         <span ref={ref} className="popup">
                           <p
-                            onClick={() =>handleEditModal(item.title)
+                            onClick={
+                              () => handleEditModal(item.title)
                               // navigate(`../edithBudget/${item.id}`, {
                               //   replace: true,
                               // })
                             }
                           >
-                           Edit
+                            Edit
                           </p>
                           <p
                             onClick={() =>
@@ -149,8 +218,7 @@ const Index = () => {
             ) : (
               <p>No budget to display</p>
             )}
-          </table>
-        </div>
+          </table> */}
         <div className="pagination-container">
           <Pagination
             className="pagination-bar"
@@ -167,7 +235,11 @@ const Index = () => {
         )}
         {editBudgetModal && (
           <FormModal>
-            <EditBudget title={budgetTitle} id={idOfBudget} closeModal={() => setEditBudgetModal(false)} />
+            <EditBudget
+              title={budgetTitle}
+              id={idOfBudget}
+              closeModal={() => setEditBudgetModal(false)}
+            />
           </FormModal>
         )}
       </BudgetSyle>
@@ -184,7 +256,7 @@ const BudgetSyle = styled.div`
   align-items: center;
   padding: 1rem;
 
-  background: rgba(0, 156, 244, 0.05);
+  /* background: rgba(0, 156, 244, 0.05); */
   .header {
     width: 100%;
     display: flex;
@@ -277,7 +349,7 @@ const BudgetSyle = styled.div`
   .popup {
     position: absolute;
     min-width: 150px;
-    right: 20px;
+    /* right: 20px; */
     /* top: 40px; */
     display: flex;
     flex-direction: column;
@@ -309,57 +381,6 @@ const BudgetSyle = styled.div`
       }
     }
   }
-  .table-container {
-    box-sizing: border-box;
-    padding: 0px 27px;
-    display: flex;
-    flex-direction: column;
-    overflow-x: auto;
-    font-family: "Inter";
-    border-radius: 15px;
-    height: 100vh;
-    width: 100%;
-  }
-  table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    width: 100%;
-    grid-area: a;
-  }
-  tr {
-    cursor: pointer;
-  }
-
-  th {
-    font-family: "Inter";
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 19px;
-    color: #8e919c;
-  }
-
-  td {
-    font-family: "Inter";
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 22px;
-    /* color: #2254d3 !important; */
-  }
-
-  th,
-  td {
-    text-align: left;
-    padding: 20px 8px;
-    border-bottom: 1px solid #dfe8fc;
-  }
-  .table-image {
-    height: 40px;
-    width: 40px;
-    margin-right: 10px;
-    border-radius: 60px;
-  }
   .header-wrapper {
     width: 100%;
     display: flex;
@@ -387,6 +408,89 @@ const BudgetSyle = styled.div`
     :hover {
       cursor: pointer;
       background: #14a800;
+    }
+  }
+
+  /* Custom table styles */
+
+  .category-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .category {
+    font-family: "Inter";
+    font-style: normal;
+
+    width: 100%;
+    align-items: center;
+    padding: 10px 14px;
+    height: 57px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    border-radius: 5px;
+  }
+  .header {
+    font-weight: 600;
+    margin-bottom: -20px;
+    font-size: 16px;
+  }
+  .body {
+    background: rgba(0, 156, 244, 0.05);
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  .dots {
+    font-size: 30px;
+    cursor: "pointer";
+    font-weight: "bold";
+  }
+  @media only screen and (max-width: 990px) {
+    .category {
+      padding: 5px 8px;
+      height: 100px;
+    }
+  }
+  @media only screen and (max-width: 487px) {
+    .category {
+      padding: 4px;
+      height: 150px;
+      font-size: 1rem;
+    }
+    .dots {
+      font-size: 25px;
+    }
+    .header {
+      font-size: 12px;
+    }
+    .body {
+      font-size: 12px;
+    }
+  }
+  @media only screen and (max-width: 377px) {
+    .category {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0px;
+      font-size: 12px;
+    }
+  }
+  @media only screen and (max-width: 290px) {
+    .category {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0px;
+      font-size: 10px;
     }
   }
 `;
