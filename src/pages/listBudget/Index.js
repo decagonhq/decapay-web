@@ -83,142 +83,78 @@ const Index = () => {
             </button>
           </div>
         </div>
-          <div className="header page">
-            <p>Most recent</p>
-            <p>
-              Showing {currentPage} of {PageSize - 2}
-            </p>
+        <div className="header page">
+          <p>Most recent</p>
+          <p>
+            Showing {currentPage} of {PageSize - 2}
+          </p>
+        </div>
+
+        {/* Custom table starts here */}
+        <div className="category-container">
+          <div className="category header">
+            <p className="category-title">Budget title</p>
+            <p className="category-title">Period</p>
+            <p className="category-title">Amount</p>
+            <p className="category-title">Amount spent</p>
+            <p className="category-title">Percentage spent</p>
+            <p className="category-title">Action</p>
           </div>
-
-          {/* Custom table starts here */}
-          <div className="category-container">
-            <div className="category header">
-              <p className="category-title">Budget title</p>
-              <p className="category-title">Period</p>
-              <p className="category-title">Amount</p>
-              <p className="category-title">Amount spent</p>
-              <p className="category-title">Percentage spent</p>
-              <p className="category-title">Action</p>
-            </div>
-            {currentTableData !== null && currentTableData?.length > 0 ? (
-              currentTableData.map((item, index) => (
-                <div className="category body" key={index}>
-                  <p className="category-title">{item.title}</p>
-                  <p className="category-title">{item.period}</p>
-                  <p className="category-title">
-                    {item.displayProjectedAmount}
-                  </p>
-                  <p className="category-title">
-                    {item.displayTotalAmountSpentSoFar}
-                  </p>
-                  <p className="category-title">
-                    {item.displayPercentageSpentSoFar}
-                  </p>
-                  <p
-                    style={{
-                      cursor: "pointer",
-                      fontSize: "30px",
-                      fontWeight: "bold",
-                    }}
-                    onClick={() => setIdOfBudget(item.id)}
-                    className="dots"
-                  >
-                    ...
-                    {idOfBudget === item.id ? (
-                      <Fragment>
-                        <span ref={ref} className="popup">
-                          <p
-                            onClick={
-                              () => handleEditModal(item.title)
-                              // navigate(`../edithBudget/${item.id}`, {
-                              //   replace: true,
-                              // })
-                            }
-                          >
-                            Edit
-                          </p>
-                          <p
-                            onClick={() =>
-                              navigate(`../budgetDetail/${item.id}`, {
-                                replace: true,
-                              })
-                            }
-                          >
-                            View details
-                          </p>
-                          <p style={{ color: "red" }}>Delete</p>
-                        </span>
-                      </Fragment>
-                    ) : null}
-                  </p>
-                </div>
-              ))
-            ) : (
-              <p>There are no budget category</p>
-            )}
-          </div>
-          {/* End of custom table */}
-
-          {/* <table>
-            <tr>
-              <th>Budget title</th>
-              <th>Period</th>
-              <th>Amount</th>
-              <th>Amount spent</th>
-              <th>Percentage spent</th>
-              <th>Action</th>
-            </tr>
-
-            {currentTableData !== null && currentTableData?.length > 0 ? (
-              currentTableData.map((item, index) => (
-                <tr>
-                  <td>{item.title}</td>
-                  <td>{item.period}</td>
-                  <td>{item.displayProjectedAmount}</td>
-                  <td>{item.displayTotalAmountSpentSoFar}</td>
-                  <td>{item.displayPercentageSpentSoFar}</td>
-                  <td
-                    style={{
-                      cursor: "pointer",
-                      fontSize: "30px",
-                      fontWeight: "bold",
-                    }}
-                    onClick={() => setIdOfBudget(item.id)}
-                  >
-                    ...
-                    {idOfBudget === item.id ? (
-                      <Fragment>
-                        <span ref={ref} className="popup">
-                          <p
-                            onClick={
-                              () => handleEditModal(item.title)
-                              // navigate(`../edithBudget/${item.id}`, {
-                              //   replace: true,
-                              // })
-                            }
-                          >
-                            Edit
-                          </p>
-                          <p
-                            onClick={() =>
-                              navigate(`../budgetDetail/${item.id}`, {
-                                replace: true,
-                              })
-                            }
-                          >
-                            View details
-                          </p>
-                          <p style={{ color: "red" }}>Delete</p>
-                        </span>
-                      </Fragment>
-                    ) : null}
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <p>No budget to display</p>
-            )}
-          </table> */}
+          {currentTableData !== null && currentTableData?.length > 0 ? (
+            currentTableData.map((item, index) => (
+              <div className="category body" key={index}>
+                <p className="category-title">{item.title}</p>
+                <p className="category-title">{item.period}</p>
+                <p className="category-title">{item.displayProjectedAmount}</p>
+                <p className="category-title">
+                  {item.displayTotalAmountSpentSoFar}
+                </p>
+                <p className="category-title">
+                  {item.displayPercentageSpentSoFar}
+                </p>
+                <p
+                  style={{
+                    cursor: "pointer",
+                    fontSize: "30px",
+                    fontWeight: "bold",
+                  }}
+                  onClick={() => setIdOfBudget(item.id)}
+                  className="dots"
+                >
+                  ...
+                  {idOfBudget === item.id ? (
+                    <Fragment>
+                      <span ref={ref} className="popup">
+                        <p
+                          onClick={
+                            () => handleEditModal(item.title)
+                            // navigate(`../edithBudget/${item.id}`, {
+                            //   replace: true,
+                            // })
+                          }
+                        >
+                          Edit
+                        </p>
+                        <p
+                          onClick={() =>
+                            navigate(`../budgetDetail/${item.id}`, {
+                              replace: true,
+                            })
+                          }
+                        >
+                          View details
+                        </p>
+                        <p style={{ color: "red" }}>Delete</p>
+                      </span>
+                    </Fragment>
+                  ) : null}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p>There are no budget category</p>
+          )}
+        </div>
         <div className="pagination-container">
           <Pagination
             className="pagination-bar"
