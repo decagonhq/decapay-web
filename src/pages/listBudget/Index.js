@@ -371,7 +371,7 @@ const BudgetSyle = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     gap: 10px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
   }
   .header {
     font-weight: 600;
