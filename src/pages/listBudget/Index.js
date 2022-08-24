@@ -11,7 +11,7 @@ import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
 
 
-let PageSize = 10;
+let pageSize = 5;
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [idOfBudget, setIdOfBudget] = useState(-1);
@@ -39,7 +39,7 @@ const Index = () => {
 console.log(currentPage);
   const fetchData = async () => {
     try {
-      const response = await request.get(`budgets?size=10&page=${currentPage}`, headers);
+      const response = await request.get(`budgets?size=${pageSize}&page=${currentPage}`, headers);
       console.log(response.data);
       setCurrentTableData(response.data.data.content);
       setTotalCount(response.data.data.totalElements);
@@ -87,7 +87,7 @@ console.log(currentPage);
         <div className="header page">
           <p>Most recent</p>
           <p>
-            Showing {currentPage} of {Math.ceil(totalCount / PageSize)}
+            Showing {currentPage} of {Math.ceil(totalCount / pageSize)}
           </p>
         </div>
 
@@ -161,7 +161,7 @@ console.log(currentPage);
             className="pagination-bar"
             currentPage={currentPage}
             totalCount={totalCount}
-            pageSize={PageSize}
+            pageSize={pageSize}
             onPageChange={(page) => setCurrentPage(page)}
           />
         </div>
