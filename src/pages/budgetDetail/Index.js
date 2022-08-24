@@ -176,7 +176,7 @@ const Index = () => {
     let newPayload = {
       amount: stripCommaAndConvertToNumber(projectedAmount),
     };
-    console.log(newPayload);
+    // console.log(newPayload);
     try {
       const response = await request.put(
         `budgets/${id}/lineItems/${categoryId}`,
@@ -206,6 +206,7 @@ const Index = () => {
       toast.error(error.response);
     }
   };
+  console.log(data.lineItems);
 
   return (
     <Layout>
@@ -257,7 +258,7 @@ const Index = () => {
                     Projected amount: {item.displayProjectedAmount}
                   </p>
                   <p>Amount so far: {item.percentageSpentSoFar}</p>
-                  <Link className="link" to={"/line"}>
+                  <Link className="link" to={`/budgetDetail/expenses/${item.categoryId}`}>
                     View expenses
                   </Link>
                 </div>
