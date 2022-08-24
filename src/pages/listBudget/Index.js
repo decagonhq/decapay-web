@@ -19,6 +19,8 @@ const Index = () => {
   const [editBudgetModal, setEditBudgetModal] = useState(false);
   const [budgetTitle, setBudgetTitle] = useState("");
   const [currentTableData, setCurrentTableData] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+
   // eslint-disable-next-line
   const [dataInfo, setDataInfo] = useState([]);
   const ref = useRef(null);
@@ -40,6 +42,7 @@ console.log(currentPage);
       const response = await request.get(`budgets?size=10&page=${currentPage}`, headers);
       console.log(response.data);
       setCurrentTableData(response.data.data.content);
+      setTotalCount(response.data.data.totalElements);
       setDataInfo(response.data.data.pageable);
     } catch (error) {
       console.log(error);
@@ -84,7 +87,7 @@ console.log(currentPage);
         <div className="header page">
           <p>Most recent</p>
           <p>
-            Showing {currentPage} of {PageSize - 2}
+            Showing {currentPage} of {Math.ceil(totalCount / PageSize)}
           </p>
         </div>
 
@@ -157,7 +160,7 @@ console.log(currentPage);
           <Pagination
             className="pagination-bar"
             currentPage={currentPage}
-            totalCount={14}
+            totalCount={totalCount}
             pageSize={PageSize}
             onPageChange={(page) => setCurrentPage(page)}
           />
