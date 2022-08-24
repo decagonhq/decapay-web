@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect, Fragment } from "react";
+import React, { useState, useRef, useEffect, Fragment } from "react";
 import styled from "styled-components";
 import CreateBudget from "./CreateBugetForm";
 import EditBudget from "./EditBudget";
@@ -10,14 +10,15 @@ import { useNavigate } from "react-router-dom";
 import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
 
+
 let PageSize = 10;
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [idOfBudget, setIdOfBudget] = useState(-1);
-  const [data, setData] = useState([]);
   const [createBudgetModal, setCreateBudgetModal] = useState(false);
   const [editBudgetModal, setEditBudgetModal] = useState(false);
   const [budgetTitle, setBudgetTitle] = useState("");
+  const [currentTableData, setCurrentTableData] = useState([]);
   // eslint-disable-next-line
   const [dataInfo, setDataInfo] = useState([]);
   const ref = useRef(null);
@@ -32,24 +33,19 @@ const Index = () => {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line
-  }, []);
-
+  }, [currentPage]);
+console.log(currentPage);
   const fetchData = async () => {
     try {
-      const response = await request.get(`budgets?pageNumber=${1}`, headers);
-      setData(response.data.data.content);
+      const response = await request.get(`budgets?size=10&page=${currentPage}`, headers);
+      console.log(response.data);
+      setCurrentTableData(response.data.data.content);
       setDataInfo(response.data.data.pageable);
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
     }
   };
-  const currentTableData = useMemo(() => {
-    const firstPageIndex = (currentPage - 1) * PageSize;
-    const lastPageIndex = firstPageIndex + PageSize;
-    return data.slice(firstPageIndex, lastPageIndex);
-    // eslint-disable-next-line
-  }, [currentPage, data]);
 
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -69,6 +65,8 @@ const Index = () => {
     setEditBudgetModal(true);
     setBudgetTitle(title);
   };
+
+  console.log(dataInfo);
 
   return (
     <Layout>
@@ -159,7 +157,7 @@ const Index = () => {
           <Pagination
             className="pagination-bar"
             currentPage={currentPage}
-            totalCount={data.length}
+            totalCount={14}
             pageSize={PageSize}
             onPageChange={(page) => setCurrentPage(page)}
           />
