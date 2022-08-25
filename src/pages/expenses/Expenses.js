@@ -60,6 +60,7 @@ const BudgetCategory = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const budgetId = urlParams.get("budgetId");
   const catId = urlParams.get("catId");
+  const lineItem = urlParams.get("item");
 
   // eslint-disable-next-line
   const fetchData = async () => {
@@ -95,8 +96,8 @@ const BudgetCategory = () => {
     <Layout>
       <ListStyle>
         <div className="header-wrapper">
-          <div className="header">
-            <p style={{ fontWeight: "bold", fontSize: "20px" }}>Expenses</p>
+          <div className="">
+            <p style={{ fontWeight: "bold", fontSize: "20px" }}>Expenses | {lineItem}</p>
           </div>
           <div className="button-container">
             <button>Add expenses</button>
@@ -104,8 +105,9 @@ const BudgetCategory = () => {
         </div>
         <div className="category-container">
           <div className="category header">
-            <p className="category-title">Description</p>
+            
             <p className="category-title">Amount</p>
+            <p className="category-title">Description</p>
             <p className="category-title">Date</p>
             <p className="category-title">Time</p>
             <p className="category-title">Action</p>
@@ -113,8 +115,9 @@ const BudgetCategory = () => {
           {expenses && expenses.length > 0 ? (
             expenses.map((item, index) => (
               <div className="category body" key={index}>
-                <p className="category-title">{item.description}</p>
+                
                 <p className="category-title">{item.amount}</p>
+                <p className="category-title">{item.description}</p>
                 <p className="category-title">{item.date}</p>
                 <p className="category-title">{item.time}</p>
                 <p onClick={() => setIdOfBudget(index)} className="dots">
@@ -162,7 +165,7 @@ const BudgetCategory = () => {
                   />
                 </div>
                 <div className="btn-wrapper">
-                  <MyButton
+                  <button
                     type="submit"
                     // className="form__button"
                     // onClick={onSubmitEdit}
@@ -172,7 +175,7 @@ const BudgetCategory = () => {
                     ) : (
                       "Save"
                     )}
-                  </MyButton>
+                  </button>
                 </div>
               </form>
             </div>
@@ -207,7 +210,6 @@ const ListStyle = styled.div`
     justify-content: space-between;
   }
   .button-container {
-    width: 100%;
     display: flex;
     justify-content: flex-end;
   }
@@ -219,7 +221,7 @@ const ListStyle = styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 0;
-    width: 200px;
+    width: 100%;
     height: 2.5rem;
     font-weight: 400;
     font-size: 16px;
@@ -229,6 +231,7 @@ const ListStyle = styled.div`
     background: #14a800;
     white-space: nowrap;
     border: none;
+    padding:10px;
     :hover {
       cursor: pointer;
       background: #14a800;
@@ -348,6 +351,7 @@ const ListStyle = styled.div`
   }
   .btn-wrapper {
     margin-top: 20px;
+    width: 100%;
   }
   .pagination-container {
     display: flex;
