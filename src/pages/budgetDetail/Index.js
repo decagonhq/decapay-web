@@ -272,7 +272,9 @@ const Index = () => {
                   </Link>
                 </div>
                 <div className="right_side">
-                  <p className="log">
+                  <p className="log"
+                  
+                  >
                     Log{" "}
                     <span>
                       <FiArrowUpRight className="icon" />
