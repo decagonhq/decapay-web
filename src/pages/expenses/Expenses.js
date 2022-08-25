@@ -3,15 +3,13 @@ import styled from "styled-components";
 import Layout from "../../components/dashboardSidebar/Layout";
 import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
-import MyButton from "../../components/Button";
+// import MyButton from "../../components/Button";
 import ClipLoader from "react-spinners/ClipLoader";
 import FormTitleSection from "../../components/modal/FormTitleSection";
 import CurrencyFormat from "react-currency-format";
 import Pagination from "../../utils/pagination";
-// import useDialog from "../../hooks/useDialog";
 import FormModal from "../../components/modal/FormModal";
-// import { useFormik } from "formik";
-// import * as yup from "yup";
+import Goback from "../../components/Goback"
 
 const expenses = [
   {
@@ -95,6 +93,8 @@ const BudgetCategory = () => {
   return (
     <Layout>
       <ListStyle>
+        <div className="goback"> <Goback /></div>
+       
         <div className="header-wrapper">
           <div className="">
             <p style={{ fontWeight: "bold", fontSize: "20px" }}>Expenses | {lineItem}</p>
@@ -201,11 +201,13 @@ const ListStyle = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  
+  .goback{
+    margin-top:20px;
+  }
   .header-wrapper {
     width: 100%;
     display: flex;
-    margin-top:20px;
+    
     flex-direction: row;
     justify-content: space-between;
   }
@@ -269,7 +271,7 @@ const ListStyle = styled.div`
   .body {
     background: rgba(0, 156, 244, 0.05);
     font-weight: 500;
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .popup {
