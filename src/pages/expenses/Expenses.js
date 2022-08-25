@@ -9,7 +9,7 @@ import FormTitleSection from "../../components/modal/FormTitleSection";
 import CurrencyFormat from "react-currency-format";
 import Pagination from "../../utils/pagination";
 import FormModal from "../../components/modal/FormModal";
-import Goback from "../../components/Goback"
+import Goback from "../../components/Goback";
 
 const expenses = [
   {
@@ -77,8 +77,8 @@ const BudgetCategory = () => {
   };
 
   useEffect(() => {
-   fetchData();
-     // eslint-disable-next-line
+    fetchData();
+    // eslint-disable-next-line
   }, []);
   console.log(data);
 
@@ -93,29 +93,34 @@ const BudgetCategory = () => {
   return (
     <Layout>
       <ListStyle>
-        <div className="goback"> <Goback /></div>
-       
+        <div className="goback">
+          {" "}
+          <Goback />
+        </div>
+
         <div className="header-wrapper">
           <div className="">
-            <p style={{ fontWeight: "bold", fontSize: "20px" }}>Expenses | {lineItem}</p>
+            <p style={{ fontWeight: "bold", fontSize: "20px" }}>
+              Expenses | {lineItem}
+            </p>
           </div>
           <div className="button-container">
             <button>Add expenses</button>
           </div>
         </div>
         <div className="category-container">
-          <div className="category header">
-            
-            <p className="category-title">Amount</p>
-            <p className="category-title">Description</p>
-            <p className="category-title">Date</p>
-            <p className="category-title">Time</p>
-            <p className="category-title">Action</p>
-          </div>
+          {expenses && expenses.length > 0 && (
+            <div className="category header">
+              <p className="category-title">Amount</p>
+              <p className="category-title">Description</p>
+              <p className="category-title">Date</p>
+              <p className="category-title">Time</p>
+              <p className="category-title">Action</p>
+            </div>
+          )}
           {expenses && expenses.length > 0 ? (
             expenses.map((item, index) => (
               <div className="category body" key={index}>
-                
                 <p className="category-title">{item.amount}</p>
                 <p className="category-title">{item.description}</p>
                 <p className="category-title">{item.date}</p>
@@ -139,7 +144,14 @@ const BudgetCategory = () => {
               </div>
             ))
           ) : (
-            <p>There are no budget category</p>
+            <div className="empty">
+              <img
+                className="empty-img"
+                src="/images/empty-img.svg"
+                alt="empty"
+              />
+              <p>No expenses to display yet</p>
+            </div>
           )}
         </div>
         {editModal && (
@@ -201,13 +213,13 @@ const ListStyle = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  .goback{
-    margin-top:20px;
+  .goback {
+    margin-top: 20px;
   }
   .header-wrapper {
     width: 100%;
     display: flex;
-    
+
     flex-direction: row;
     justify-content: space-between;
   }
@@ -233,7 +245,7 @@ const ListStyle = styled.div`
     background: #14a800;
     white-space: nowrap;
     border: none;
-    padding:10px;
+    padding: 10px;
     :hover {
       cursor: pointer;
       background: #14a800;
@@ -259,7 +271,7 @@ const ListStyle = styled.div`
     padding: 10px 14px;
     height: 57px;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
     gap: 10px;
     /* border-radius:5px; */
   }
@@ -354,6 +366,16 @@ const ListStyle = styled.div`
   .btn-wrapper {
     margin-top: 20px;
     width: 100%;
+  }
+  .empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .empty-img {
+    width: 40px;
+    height: 35px;
   }
   .pagination-container {
     display: flex;
