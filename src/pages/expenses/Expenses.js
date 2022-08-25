@@ -3,6 +3,12 @@ import styled from "styled-components";
 import Layout from "../../components/dashboardSidebar/Layout";
 import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
+import MyButton from "../../components/Button";
+import ClipLoader from "react-spinners/ClipLoader";
+import FormTitleSection from "../../components/modal/FormTitleSection";
+import CurrencyFormat from "react-currency-format";
+// import useDialog from "../../hooks/useDialog";
+import FormModal from "../../components/modal/FormModal";
 // import { useFormik } from "formik";
 // import * as yup from "yup";
 
@@ -25,6 +31,9 @@ const expenses = [
 
 const BudgetCategory = () => {
   const [idOfBudget, setIdOfBudget] = useState(-1);
+  const [editModal,setEditModal] = useState(false)
+  // eslint-disable-next-line
+  const [loading, setLoading] = useState(false)
   const [data, setData] = useState([]);
   console.log(data);
 
@@ -89,7 +98,7 @@ const BudgetCategory = () => {
                   {idOfBudget === index ? (
                     <Fragment>
                       <span ref={ref} className="popup">
-                        <p>Edit</p>
+                        <p onClick={()=>setEditModal(true)} >Edit</p>
                         <p style={{ color: "red" }}>Delete</p>
                       </span>
                     </Fragment>
@@ -101,6 +110,45 @@ const BudgetCategory = () => {
             <p>There are no budget category</p>
           )}
         </div>
+        {editModal && (
+          <FormModal>
+            <div>
+              <FormTitleSection
+                title={`Edit Expenses`}
+                onClick={() => setEditModal(!editModal)}
+              />
+              <form 
+              // onSubmit={onSubmitEdit}
+              >
+                <div className="form__wrapper">
+                  <CurrencyFormat
+                    label="Projected amount"
+                    displayType={"input"}
+                    style={{ width: "100%", height: "100%", padding: "10px" }}
+                    prefix={"₦"}
+                    name="amount"
+                    thousandSeparator={true}
+                    // value={projectedAmount}
+                    // onChange={(e) => handleOnChange(e)}
+                  />
+                </div>
+                <div className="btn-wrapper">
+                  <MyButton
+                    type="submit"
+                    // className="form__button"
+                    // onClick={onSubmitEdit}
+                  >
+                    {loading ? (
+                      <ClipLoader color="white" size="40px" />
+                    ) : (
+                      "Save"
+                    )}
+                  </MyButton>
+                </div>
+              </form>
+            </div>
+          </FormModal>
+        )}
       </ListStyle>
     </Layout>
   );
@@ -237,4 +285,12 @@ const ListStyle = styled.div`
      font-size:10px;
   }
 }
+.form__wrapper {
+    width: 100%;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  .btn-wrapper {
+    margin-top: 20px;
+  }
 `;
