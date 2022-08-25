@@ -258,7 +258,7 @@ const Index = () => {
                     Projected amount: {item.displayProjectedAmount}
                   </p>
                   <p>Amount so far: {item.percentageSpentSoFar}</p>
-                  <Link className="link" to={`/budgetDetail/expenses/${item.categoryId}`}>
+                  <Link className="link" to={`/budgetDetail/expenses/?budgetId=${id}&catId=${item.categoryId}`}>
                     View expenses
                   </Link>
                 </div>
