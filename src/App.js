@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./utils/protectedRoute";
 import Budget from "./pages/listBudget/Index";
 import BudgetCategory from "./pages/budgetCategory/Index";
+import Expenses from "./pages/expenses/Expenses";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <ToastContainer limit={1} style={{ fontSize: "16px" }} />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/budgetDetail/expenses" element={<Expenses />} />
         
         <Route
           path="/home"

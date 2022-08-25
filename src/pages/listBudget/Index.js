@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect, Fragment } from "react";
+import React, { useState, useRef, useEffect, Fragment } from "react";
 import styled from "styled-components";
 import CreateBudget from "./CreateBugetForm";
 import EditBudget from "./EditBudget";
@@ -10,14 +10,17 @@ import { useNavigate } from "react-router-dom";
 import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
 
-let PageSize = 10;
+
+let pageSize = 5;
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [idOfBudget, setIdOfBudget] = useState(-1);
-  const [data, setData] = useState([]);
   const [createBudgetModal, setCreateBudgetModal] = useState(false);
   const [editBudgetModal, setEditBudgetModal] = useState(false);
   const [budgetTitle, setBudgetTitle] = useState("");
+  const [currentTableData, setCurrentTableData] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+
   // eslint-disable-next-line
   const [dataInfo, setDataInfo] = useState([]);
   const ref = useRef(null);
@@ -32,24 +35,20 @@ const Index = () => {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line
-  }, []);
-
+  }, [currentPage]);
+console.log(currentPage);
   const fetchData = async () => {
     try {
-      const response = await request.get(`budgets?pageNumber=${1}`, headers);
-      setData(response.data.data.content);
+      const response = await request.get(`budgets?size=${pageSize}&page=${currentPage}`, headers);
+      console.log(response.data);
+      setCurrentTableData(response.data.data.content);
+      setTotalCount(response.data.data.totalElements);
       setDataInfo(response.data.data.pageable);
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
     }
   };
-  const currentTableData = useMemo(() => {
-    const firstPageIndex = (currentPage - 1) * PageSize;
-    const lastPageIndex = firstPageIndex + PageSize;
-    return data.slice(firstPageIndex, lastPageIndex);
-    // eslint-disable-next-line
-  }, [currentPage, data]);
 
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -67,8 +66,10 @@ const Index = () => {
 
   const handleEditModal = (title) => {
     setEditBudgetModal(true);
-    setBudgetTitle(title)
-  }
+    setBudgetTitle(title);
+  };
+
+  console.log(dataInfo);
 
   return (
     <Layout>
@@ -83,80 +84,84 @@ const Index = () => {
             </button>
           </div>
         </div>
+        <div className="header page">
+          <p>Most recent</p>
+          <p>
+            Showing {currentPage} of {Math.ceil(totalCount / pageSize)}
+          </p>
+        </div>
 
-        <div className="table-container">
-          <div className="header page">
-            <p>Most recent</p>
-            <p>
-              Showing {currentPage} of {PageSize - 2}
-            </p>
+        {/* Custom table starts here */}
+        <div className="category-container">
+          <div className="category header">
+            <p className="category-title">Budget title</p>
+            <p className="category-title">Period</p>
+            <p className="category-title">Amount</p>
+            <p className="category-title">Amount spent</p>
+            <p className="category-title">Percentage spent</p>
+            <p className="category-title">Action</p>
           </div>
-          <table>
-            <tr>
-              <th>Budget title</th>
-              <th>Period</th>
-              <th>Amount</th>
-              <th>Amount spent</th>
-              <th>Percentage spent</th>
-              <th>Action</th>
-            </tr>
-
-            {currentTableData !== null && currentTableData?.length > 0 ? (
-              currentTableData.map((item, index) => (
-                <tr>
-                  <td>{item.title}</td>
-                  <td>{item.period}</td>
-                  <td>{item.displayProjectedAmount}</td>
-                  <td>{item.displayTotalAmountSpentSoFar}</td>
-                  <td>{item.displayPercentageSpentSoFar}</td>
-                  <td
-                    style={{
-                      cursor: "pointer",
-                      fontSize: "30px",
-                      fontWeight: "bold",
-                    }}
-                    onClick={() => setIdOfBudget(item.id)}
-                  >
-                    ...
-                    {idOfBudget === item.id ? (
-                      <Fragment>
-                        <span ref={ref} className="popup">
-                          <p
-                            onClick={() =>handleEditModal(item.title)
-                              // navigate(`../edithBudget/${item.id}`, {
-                              //   replace: true,
-                              // })
-                            }
-                          >
-                           Edit
-                          </p>
-                          <p
-                            onClick={() =>
-                              navigate(`../budgetDetail/${item.id}`, {
-                                replace: true,
-                              })
-                            }
-                          >
-                            View details
-                          </p>
-                          <p style={{ color: "red" }}>Delete</p>
-                        </span>
-                      </Fragment>
-                    ) : null}
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <p>No budget to display</p>
-            )}
-          </table>
+          {currentTableData !== null && currentTableData?.length > 0 ? (
+            currentTableData.map((item, index) => (
+              <div className="category body" key={index}>
+                <p className="category-title">{item.title}</p>
+                <p className="category-title">{item.period}</p>
+                <p className="category-title">{item.displayProjectedAmount}</p>
+                <p className="category-title">
+                  {item.displayTotalAmountSpentSoFar}
+                </p>
+                <p className="category-title">
+                  {item.displayPercentageSpentSoFar}
+                </p>
+                <p
+                  style={{
+                    cursor: "pointer",
+                    fontSize: "30px",
+                    fontWeight: "bold",
+                  }}
+                  onClick={() => setIdOfBudget(item.id)}
+                  className="dots"
+                >
+                  ...
+                  {idOfBudget === item.id ? (
+                    <Fragment>
+                      <span ref={ref} className="popup">
+                        <p
+                          onClick={
+                            () => handleEditModal(item.title)
+                            // navigate(`../edithBudget/${item.id}`, {
+                            //   replace: true,
+                            // })
+                          }
+                        >
+                          Edit
+                        </p>
+                        <p
+                          onClick={() =>
+                            navigate(`../budgetDetail/${item.id}`, {
+                              replace: true,
+                            })
+                          }
+                        >
+                          View details
+                        </p>
+                        <p style={{ color: "red" }}>Delete</p>
+                      </span>
+                    </Fragment>
+                  ) : null}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p>There are no budget category</p>
+          )}
         </div>
         <div className="pagination-container">
           <Pagination
             className="pagination-bar"
             currentPage={currentPage}
-            totalCount={data.length}
-            pageSize={PageSize}
+            totalCount={totalCount}
+            pageSize={pageSize}
             onPageChange={(page) => setCurrentPage(page)}
           />
         </div>
@@ -167,7 +172,11 @@ const Index = () => {
         )}
         {editBudgetModal && (
           <FormModal>
-            <EditBudget title={budgetTitle} id={idOfBudget} closeModal={() => setEditBudgetModal(false)} />
+            <EditBudget
+              title={budgetTitle}
+              id={idOfBudget}
+              closeModal={() => setEditBudgetModal(false)}
+            />
           </FormModal>
         )}
       </BudgetSyle>
@@ -184,7 +193,7 @@ const BudgetSyle = styled.div`
   align-items: center;
   padding: 1rem;
 
-  background: rgba(0, 156, 244, 0.05);
+  /* background: rgba(0, 156, 244, 0.05); */
   .header {
     width: 100%;
     display: flex;
@@ -277,7 +286,7 @@ const BudgetSyle = styled.div`
   .popup {
     position: absolute;
     min-width: 150px;
-    right: 20px;
+    /* right: 20px; */
     /* top: 40px; */
     display: flex;
     flex-direction: column;
@@ -309,57 +318,6 @@ const BudgetSyle = styled.div`
       }
     }
   }
-  .table-container {
-    box-sizing: border-box;
-    padding: 0px 27px;
-    display: flex;
-    flex-direction: column;
-    overflow-x: auto;
-    font-family: "Inter";
-    border-radius: 15px;
-    height: 100vh;
-    width: 100%;
-  }
-  table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    width: 100%;
-    grid-area: a;
-  }
-  tr {
-    cursor: pointer;
-  }
-
-  th {
-    font-family: "Inter";
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 19px;
-    color: #8e919c;
-  }
-
-  td {
-    font-family: "Inter";
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 22px;
-    /* color: #2254d3 !important; */
-  }
-
-  th,
-  td {
-    text-align: left;
-    padding: 20px 8px;
-    border-bottom: 1px solid #dfe8fc;
-  }
-  .table-image {
-    height: 40px;
-    width: 40px;
-    margin-right: 10px;
-    border-radius: 60px;
-  }
   .header-wrapper {
     width: 100%;
     display: flex;
@@ -387,6 +345,89 @@ const BudgetSyle = styled.div`
     :hover {
       cursor: pointer;
       background: #14a800;
+    }
+  }
+
+  /* Custom table styles */
+
+  .category-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .category {
+    font-family: "Inter";
+    font-style: normal;
+
+    width: 100%;
+    align-items: center;
+    padding: 10px 14px;
+    height: 57px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    /* border-radius: 5px; */
+  }
+  .header {
+    font-weight: 600;
+    margin-bottom: -20px;
+    font-size: 16px;
+  }
+  .body {
+    background: rgba(0, 156, 244, 0.05);
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  .dots {
+    font-size: 30px;
+    cursor: "pointer";
+    font-weight: "bold";
+  }
+  @media only screen and (max-width: 990px) {
+    .category {
+      padding: 5px 8px;
+      height: 100px;
+    }
+  }
+  @media only screen and (max-width: 487px) {
+    .category {
+      padding: 4px;
+      height: 150px;
+      font-size: 1rem;
+    }
+    .dots {
+      font-size: 25px;
+    }
+    .header {
+      font-size: 12px;
+    }
+    .body {
+      font-size: 12px;
+    }
+  }
+  @media only screen and (max-width: 377px) {
+    .category {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0px;
+      font-size: 12px;
+    }
+  }
+  @media only screen and (max-width: 290px) {
+    .category {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0px;
+      font-size: 10px;
     }
   }
 `;

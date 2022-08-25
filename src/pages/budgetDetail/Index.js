@@ -176,7 +176,7 @@ const Index = () => {
     let newPayload = {
       amount: stripCommaAndConvertToNumber(projectedAmount),
     };
-    console.log(newPayload);
+    // console.log(newPayload);
     try {
       const response = await request.put(
         `budgets/${id}/lineItems/${categoryId}`,
@@ -206,10 +206,15 @@ const Index = () => {
       toast.error(error.response);
     }
   };
+  console.log(data.lineItems);
 
   return (
     <Layout>
       <DetailStyle>
+        <div className="header-wrapper">
+        <div className="header">
+          <p style={{ fontWeight: "bold", fontSize: "20px" }}>Budget Detail</p>
+        </div>
         <div className="button-container">
           <button
             className="button"
@@ -220,6 +225,8 @@ const Index = () => {
             Create line item
           </button>
         </div>
+        </div>
+        
         <div className="budget-summary">
           <div className="title">
             <TitleCard amount={data?.displayProjectedAmount} />
@@ -257,7 +264,10 @@ const Index = () => {
                     Projected amount: {item.displayProjectedAmount}
                   </p>
                   <p>Amount so far: {item.percentageSpentSoFar}</p>
-                  <Link className="link" to={"/line"}>
+                  <Link
+                    className="link"
+                    to={`/budgetDetail/expenses/?budgetId=${id}&catId=${item.categoryId}&item=${item.category}`}
+                  >
                     View expenses
                   </Link>
                 </div>
@@ -422,10 +432,17 @@ const DetailStyle = styled.div`
     width: 40px;
     height: 35px;
   }
-  .button-container {
+  .header-wrapper {
     width: 100%;
     display: flex;
-    justify-content: flex-end;
+    margin-top:20px;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .button-container {
+    /* width: 100%; */
+    /* display: flex;
+    justify-content: flex-end; */
   }
   .button {
     margin-top: 20px;
