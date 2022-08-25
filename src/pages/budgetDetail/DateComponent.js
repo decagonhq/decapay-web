@@ -19,13 +19,13 @@ const CalendarWrapper = styled.div`
   align-items: center;
   justify-content: center;
   .calenderElement {
-    width: 100%;
+    max-width: 100% !important;
     height: 100%;
     /* padding: 20px; */
     font-family: "Inter";
     font-style: normal;
     line-height: 19px;
-    margin:0 auto;
+    /* margin:0 auto; */
     @media only screen and (max-width: 379px) {
       height: 180px;
     }
