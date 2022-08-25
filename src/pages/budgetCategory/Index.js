@@ -113,12 +113,18 @@ const BudgetCategory = () => {
   return (
     <Layout>
       <ListStyle>
-        <div className="category-container">
+      <div className="header-wrapper">
+          <div className="header">
+            <p style={{ fontWeight: "bold", fontSize: "20px" }}>Budget category</p>
+          </div>
           <div className="button-container">
             <button onClick={() => setCreateModal(true)}>
               Create budget category
             </button>
           </div>
+        </div>
+        <div className="category-container">
+          
           {data && data.length > 0 ? (
             data.map((item, index) => (
               <div className="category" key={index}>
@@ -197,8 +203,16 @@ const ListStyle = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  .button-container {
+  .header-wrapper {
     width: 100%;
+    display: flex;
+    margin-top:20px;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .button-container {
+    /* width: 100%; */
     display: flex;
     justify-content: flex-end;
   }
@@ -240,7 +254,7 @@ const ListStyle = styled.div`
     align-items: center;
     border-radius: 0;
     width: 200px;
-    height: 3.2rem;
+    height: 2.5rem;
     font-weight: 400;
     font-size: 16px;
     border: none;

@@ -211,6 +211,10 @@ const Index = () => {
   return (
     <Layout>
       <DetailStyle>
+        <div className="header-wrapper">
+        <div className="header">
+          <p style={{ fontWeight: "bold", fontSize: "20px" }}>Budget Detail</p>
+        </div>
         <div className="button-container">
           <button
             className="button"
@@ -221,6 +225,8 @@ const Index = () => {
             Create line item
           </button>
         </div>
+        </div>
+        
         <div className="budget-summary">
           <div className="title">
             <TitleCard amount={data?.displayProjectedAmount} />
@@ -258,7 +264,10 @@ const Index = () => {
                     Projected amount: {item.displayProjectedAmount}
                   </p>
                   <p>Amount so far: {item.percentageSpentSoFar}</p>
-                  <Link className="link" to={`/budgetDetail/expenses/?budgetId=${id}&catId=${item.categoryId}`}>
+                  <Link
+                    className="link"
+                    to={`/budgetDetail/expenses/?budgetId=${id}&catId=${item.categoryId}`}
+                  >
                     View expenses
                   </Link>
                 </div>
@@ -423,10 +432,17 @@ const DetailStyle = styled.div`
     width: 40px;
     height: 35px;
   }
-  .button-container {
+  .header-wrapper {
     width: 100%;
     display: flex;
-    justify-content: flex-end;
+    margin-top:20px;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .button-container {
+    /* width: 100%; */
+    /* display: flex;
+    justify-content: flex-end; */
   }
   .button {
     margin-top: 20px;
