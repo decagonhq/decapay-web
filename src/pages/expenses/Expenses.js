@@ -99,7 +99,7 @@ const BudgetCategory = () => {
             <p style={{ fontWeight: "bold", fontSize: "20px" }}>Expenses</p>
           </div>
           <div className="button-container">
-            <button>Create budget</button>
+            <button>Add expenses</button>
           </div>
         </div>
         <div className="category-container">
