@@ -70,13 +70,12 @@ const LogExpenseResuable = ({
           onChange={onChangeInputDate}
         />
       </div>
-      
+
       <div className="btn">
         <MyButton type="submit" className="form__button" onClick={onClick}>
           {loading ? <ClipLoader color="white" size="40px" /> : "Save"}
         </MyButton>
       </div>
-      
     </StyledHome>
   );
 };

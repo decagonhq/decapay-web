@@ -129,7 +129,10 @@ const Index = () => {
       setCategories(res);
     } catch (error) {
       console.log(error);
-      toast.error(error.response);
+      toast.error(error.response.data.message, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
     }
   };
 
@@ -162,11 +165,17 @@ const Index = () => {
         headers
       );
       setCreateLineModal(false);
-      toast.success(response.data.message);
+      toast.success(response.data.message, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
       fetchData();
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      toast.error(error.response.data.message, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
     }
   };
   const [logExpenseModal, setLogExpenseModal] = useState(false);
@@ -183,13 +192,16 @@ const Index = () => {
     });
   };
   const handleOnChangeDate = (e, value) => {
-    console.log("this is date", e.target.value);
-    console.log("this is start", startDate);
-    console.log("this is end date", endDate);
     if (e.target.value > endDate) {
-      toast.error("Date cannot be greater than end date");
+      toast.error("Date cannot be greater than end date",{
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
     } else if (e.target.value < startDate) {
-      toast.error("Date cannot be less than start date");
+      toast.error("Date cannot be less than start date",{
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
     }
     else{
     setCreateLogExpense({
@@ -258,11 +270,17 @@ const Index = () => {
         headers
       );
       fetchData();
-      toast.success(response.data.message);
+      toast.success(response.data.message, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      toast.error(error.response);
+      toast.error(error.response.data.message, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
     }
   };
 
@@ -273,11 +291,17 @@ const Index = () => {
         headers
       );
       fetchData();
-      toast.success(response.data.message);
+      toast.success(response.data.message, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      toast.error(error.response);
+      toast.error(error.response.data.message, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
     }
   };
 
