@@ -37,17 +37,6 @@ const LogExpenseResuable = ({
     <StyledHome>
       <ToastContainer />
       <FormTitleSection title={formTitle} onClick={closeModal} />
-      
-      <div className="form__wrapper">
-        <FormInputComponent
-          placeholder={placeholderInputDate}
-          label={inputLabelDate}
-          type={inputDateType}
-          value={inputDateValue}
-          name={inputNameDate}
-          onChange={onChangeInputDate}
-        />
-      </div>
       <div className="form__wrapper">
         <CurrencyFormat
           placeholder={placeholderCurrency}
@@ -71,6 +60,17 @@ const LogExpenseResuable = ({
           onChange={onChangeInput}
         />
       </div>
+      <div className="form__wrapper">
+        <FormInputComponent
+          placeholder={placeholderInputDate}
+          label={inputLabelDate}
+          type={inputDateType}
+          value={inputDateValue}
+          name={inputNameDate}
+          onChange={onChangeInputDate}
+        />
+      </div>
+      
       <div className="btn">
         <MyButton type="submit" className="form__button" onClick={onClick}>
           {loading ? <ClipLoader color="white" size="40px" /> : "Save"}
