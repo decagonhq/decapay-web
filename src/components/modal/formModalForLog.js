@@ -4,92 +4,82 @@ import MyButton from "../../components/Button";
 import ClipLoader from "react-spinners/ClipLoader";
 import FormTitleSection from "../../components/modal/FormTitleSection";
 import CurrencyFormat from "react-currency-format";
-import FormSelectComponent from "../../components/selectComponent";
 import FormInputComponent from "../InputComponent";
-
+import { ToastContainer } from "react-toastify";
 
 const LogExpenseResuable = ({
-    closeModal,
-    inputName,
-    options,
-    formTitle,
-    inputValue,
-    inputType,
-    onChangeInput,
-    placeholderInput,
-    placeholderCurrency,
-    labelCurrency,
-    currencyName,
-    onChangeCurrency,
-    valueCurrency,
-    onClick,
-    inputLabel
-    }) => {
-    const limitDatePickerFromStartToEndDate = (date) => {
-        return date.getTime() > new Date().getTime();
-
-    }
-    // eslint-disable-next-line
-    const [loading, setLoading] = useState(false);
-    return (
-        <StyledHome>
-        <FormTitleSection title={formTitle} onClick={closeModal} />
-        <div className="form__wrapper">
+  closeModal,
+  inputName,
+  options,
+  formTitle,
+  inputValue,
+  inputDateValue,
+  onChangeInputDate,
+  inputDateType,
+  inputLabelDate,
+  inputNameDate,
+  placeholderInputDate,
+  inputType,
+  onChangeInput,
+  placeholderInput,
+  placeholderCurrency,
+  labelCurrency,
+  currencyName,
+  onChangeCurrency,
+  valueCurrency,
+  onClick,
+  onClickCancel,
+  inputLabel,
+}) => {
+  // eslint-disable-next-line
+  const [loading, setLoading] = useState(false);
+  return (
+    <StyledHome>
+      <ToastContainer />
+      <FormTitleSection title={formTitle} onClick={closeModal} />
+      
+      <div className="form__wrapper">
         <FormInputComponent
-              placeholder= {placeholderInput}
-              label= {inputLabel}
-              type={inputType}
-              value={inputValue}
-              name= {inputName}
-              onChange={onChangeInput}
-            />
-        </div>
-        <div className="form__wrapper">
+          placeholder={placeholderInputDate}
+          label={inputLabelDate}
+          type={inputDateType}
+          value={inputDateValue}
+          name={inputNameDate}
+          onChange={onChangeInputDate}
+        />
+      </div>
+      <div className="form__wrapper">
+        <CurrencyFormat
+          placeholder={placeholderCurrency}
+          label={labelCurrency}
+          displayType={"input"}
+          style={{ width: "100%", height: "100%", padding: "10px" }}
+          prefix={"₦"}
+          name={currencyName}
+          thousandSeparator={true}
+          value={valueCurrency}
+          onChange={onChangeCurrency}
+        />
+      </div>
+      <div className="form__wrapper">
         <FormInputComponent
-              placeholder= {placeholderInput}
-              label= {inputLabel}
-              type={inputType}
-              value={inputValue}
-              name= {inputName}
-              onChange={onChangeInput}
-            />
-        </div>
-        <div className="form__wrapper">
-            <CurrencyFormat
-            placeholder={placeholderCurrency}
-            label={labelCurrency}
-            displayType={"input"}
-            style={{ width: "100%", height: "100%", padding: "10px" }}
-            prefix={"₦"}
-            name={currencyName}
-            thousandSeparator={true}
-            value={valueCurrency}
-            onChange={onChangeCurrency}
-            />
-        </div>
-        <div className="form__wrapper">
-        <FormInputComponent
-              placeholder= {placeholderInput}
-              label= {inputLabel}
-              type={inputType}
-              value={inputValue}
-              name= {inputName}
-              onChange={onChangeInput}
-            />
-        </div>
-        <div className="btn">
-            <MyButton type="submit" className="form__button" onClick={onClick}>
-            {loading ? <ClipLoader color="white" size="40px" /> : "Save"}
-            </MyButton>
-        </div>
-        <div className="btn">
-            <MyButton type="submit" className="form__button" onClick={onClick}>
-            {loading ? <ClipLoader color="white" size="40px" /> : "Cancel"}
-            </MyButton>
-        </div>
-        </StyledHome>
-    );
-}
+          placeholder={placeholderInput}
+          label={inputLabel}
+          type={inputType}
+          value={inputValue}
+          name={inputName}
+          onChange={onChangeInput}
+        />
+      </div>
+      <div className="btn">
+        <MyButton type="submit" className="form__button" onClick={onClick}>
+          {loading ? <ClipLoader color="white" size="40px" /> : "Save"}
+        </MyButton>
+      </div>
+      
+    </StyledHome>
+  );
+};
 export default LogExpenseResuable;
 
 const StyledHome = styled.div`

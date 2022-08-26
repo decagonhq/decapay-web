@@ -18,6 +18,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import FormTitleSection from "../../components/modal/FormTitleSection";
 import CurrencyFormat from "react-currency-format";
 import useDialog from "../../hooks/useDialog";
+import LogExpenseResuable from "../../components/modal/formModalForLog";
 
 const Index = () => {
   const [data, setData] = useState([]);
@@ -30,10 +31,22 @@ const Index = () => {
   const [categoryName, setCategoryName] = useState("");
   const [categoryId, setCategoryId] = useState(-1);
   const [loading, setLoading] = useState(false);
+  const [getCategordId, setGetCategordId] = useState(-1);
+  const headers = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+  };
   // const [editLineItemPayload, setEditLineItemPayload] = useState({});
   const [collectData, setCollectData] = useState({
     budgetCategoryId: "",
     amount: "",
+  });
+  const [createLogExpense, setCreateLogExpense] = useState({
+    amount: "",
+    description: "",
+    transactionDate: new Date().toISOString().substring(0, 10),
   });
   const ref = useRef(null);
   const { deleteItem } = useDialog();
@@ -45,6 +58,35 @@ const Index = () => {
     fetchCategory();
     // eslint-disable-next-line
   }, []);
+  const changeDateFormat = (date) => {
+    const splitDate = date.split("-");
+    return `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
+  };
+  const postLogExpense = async () => {
+    let payload = {
+      amount: stripCommaAndConvertToNumber(createLogExpense.amount),
+      transactionDate : changeDateFormat(createLogExpense.transactionDate),
+      description: createLogExpense.description,
+    }
+    setLoading(true);
+    try{
+    const response = await request.post(`budgets/${id}/lineItems/${getCategordId}/expenses`, payload, headers);
+    setLoading(false);
+      if (response) {
+        toast.success(response.data.message);
+        setCreateLogExpense({
+          amount: "",
+          description: "",
+          transactionDate: new Date().toISOString().substring(0, 10),
+        });
+        setLogExpenseModal(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+      toast.error(error.response);
+    }
+  }
   const stripCommaAndConvertToNumber = (amount) => {
     if (amount === "" || amount === null || amount === undefined) {
       return "";
@@ -113,19 +155,37 @@ const Index = () => {
       toast.error(error.message);
     }
   };
+  const [logExpenseModal, setLogExpenseModal] = useState(false);
   const handleOnChanege = (e, value) => {
     setCollectData({
       ...collectData,
       [value]: e.target.value,
     });
   };
-  const { id } = useParams();
-  const headers = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
+  const handleOnChangeCreatLog = (e, value) => {
+    setCreateLogExpense({
+      ...createLogExpense,
+      [value]: e.target.value,
+    });
   };
+  const handleOnChangeDate = (e, value) => {
+    console.log("this is date", e.target.value);
+    console.log("this is start", startDate);
+    console.log("this is end date", endDate);
+    if (e.target.value > endDate) {
+      toast.error("Date cannot be greater than end date");
+    } else if (e.target.value < startDate) {
+      toast.error("Date cannot be less than start date");
+    }
+    else{
+    setCreateLogExpense({
+      ...createLogExpense,
+      [value]: e.target.value,
+    });
+  }
+  };
+  const { id } = useParams();
+  
 
   const fetchData = async () => {
     try {
@@ -206,27 +266,28 @@ const Index = () => {
       toast.error(error.response);
     }
   };
-  console.log(data.lineItems);
 
   return (
     <Layout>
       <DetailStyle>
         <div className="header-wrapper">
-        <div className="header">
-          <p style={{ fontWeight: "bold", fontSize: "20px" }}>Budget Detail</p>
+          <div className="header">
+            <p style={{ fontWeight: "bold", fontSize: "20px" }}>
+              Budget Detail
+            </p>
+          </div>
+          <div className="button-container">
+            <button
+              className="button"
+              onClick={() => {
+                setCreateLineModal(true);
+              }}
+            >
+              Create line item
+            </button>
+          </div>
         </div>
-        <div className="button-container">
-          <button
-            className="button"
-            onClick={() => {
-              setCreateLineModal(true);
-            }}
-          >
-            Create line item
-          </button>
-        </div>
-        </div>
-        
+
         <div className="budget-summary">
           <div className="title">
             <TitleCard amount={data?.displayProjectedAmount} />
@@ -271,10 +332,14 @@ const Index = () => {
                     View expenses
                   </Link>
                 </div>
-                <div className="right_side">
-                  <p className="log"
-                  
-                  >
+                <div
+                  className="right_side"
+                  onClick={() => {
+                    setLogExpenseModal(true);
+                    setGetCategordId(item.categoryId);
+                  }}
+                >
+                  <p className="log">
                     Log{" "}
                     <span>
                       <FiArrowUpRight className="icon" />
@@ -388,6 +453,38 @@ const Index = () => {
             </div>
           </FormModal>
         )}
+        {logExpenseModal && (
+          <FormModal>
+            <LogExpenseResuable
+              closeModal={() => setLogExpenseModal(false)}
+              formTitle="Log expense for "
+              placeholderCurrency="enter amount"
+              placeholderInputDate="Enter date"
+              placeholderInput="Enter description"
+              inputLabelDate="Date"
+              labelCurrency="Amount"
+              inputLabel="Description"
+              inputDateType="date"
+              inputType="text"
+              inputDateValue={createLogExpense.transactionDate}
+              inputValue={createLogExpense.description}
+              inputNameDate="transactionDate"
+              valueCurrency={createLogExpense.amount}
+              inputName="description"
+              currencyName="amount"
+              onClick={postLogExpense}
+              onChangeInputDate={(e) => {
+                handleOnChangeDate(e, "transactionDate");
+              }}
+              onChangeCurrency={(e) => {
+                handleOnChangeCreatLog(e, "amount");
+              }}
+              onChangeInput={(e) => {
+                handleOnChangeCreatLog(e, "description");
+              }}
+            />
+          </FormModal>
+        )}
       </DetailStyle>
     </Layout>
   );
@@ -437,7 +534,7 @@ const DetailStyle = styled.div`
   .header-wrapper {
     width: 100%;
     display: flex;
-    margin-top:20px;
+    margin-top: 20px;
     flex-direction: row;
     justify-content: space-between;
   }
