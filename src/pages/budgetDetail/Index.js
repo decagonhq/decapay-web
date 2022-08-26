@@ -94,7 +94,6 @@ const Index = () => {
       }
     } catch (error) {
       setLoading(false);
-      console.log(error);
       toast.error(error.response.data.message, {
         autoClose: 3000,
         onClose: dismissToast,
@@ -123,12 +122,10 @@ const Index = () => {
           label: category.title,
         };
       });
-      // console.log(res);
       // add select to res
       res.unshift({ value: "", label: "Select Category" });
       setCategories(res);
     } catch (error) {
-      console.log(error);
       toast.error(error.response.data.message, {
         autoClose: 3000,
         onClose: dismissToast,
@@ -157,7 +154,6 @@ const Index = () => {
       budgetCategoryId: parseInt(collectData.budgetCategoryId),
       amount: stripCommaAndConvertToNumber(collectData.amount),
     };
-    // console.log(payload);
     try {
       const response = await request.post(
         `budgets/${id}/lineItems`,
@@ -171,7 +167,6 @@ const Index = () => {
       });
       fetchData();
     } catch (error) {
-      console.log(error);
       toast.error(error.response.data.message, {
         autoClose: 3000,
         onClose: dismissToast,
@@ -220,7 +215,10 @@ const Index = () => {
       setStartDate(response.data.data.startDate);
       setEndDate(response.data.data.endDate);
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
     }
   };
 
@@ -262,7 +260,6 @@ const Index = () => {
     let newPayload = {
       amount: stripCommaAndConvertToNumber(projectedAmount),
     };
-    // console.log(newPayload);
     try {
       const response = await request.put(
         `budgets/${id}/lineItems/${categoryId}`,
