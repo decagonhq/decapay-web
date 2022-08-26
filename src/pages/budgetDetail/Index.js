@@ -48,6 +48,13 @@ const Index = () => {
     description: "",
     transactionDate: new Date().toISOString().substring(0, 10),
   });
+  const initLogData = () => {
+    setCreateLogExpense({
+      amount: "",
+      description: "",
+      transactionDate: new Date().toISOString().substring(0, 10),
+    });
+  }
   const ref = useRef(null);
   const { deleteItem } = useDialog();
 
@@ -74,11 +81,7 @@ const Index = () => {
     setLoading(false);
       if (response) {
         toast.success(response.data.message);
-        setCreateLogExpense({
-          amount: "",
-          description: "",
-          transactionDate: new Date().toISOString().substring(0, 10),
-        });
+        initLogData();
         setLogExpenseModal(false);
       }
     } catch (error) {
