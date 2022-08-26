@@ -43,18 +43,15 @@ const Index = () => {
     budgetCategoryId: "",
     amount: "",
   });
-  const [createLogExpense, setCreateLogExpense] = useState({
-    amount: "",
-    description: "",
-    transactionDate: new Date().toISOString().substring(0, 10),
-  });
+  
   const initLogData = () => {
-    setCreateLogExpense({
+    return {
       amount: "",
       description: "",
       transactionDate: new Date().toISOString().substring(0, 10),
-    });
+    }
   }
+  const [createLogExpense, setCreateLogExpense] = useState(initLogData());
   const ref = useRef(null);
   const { deleteItem } = useDialog();
 
@@ -83,7 +80,9 @@ const Index = () => {
     try{
     const response = await request.post(`budgets/${id}/lineItems/${getCategordId}/expenses`, payload, headers);
     setLoading(false);
-    initLogData();
+    setCreateLogExpense(
+      initLogData()
+    );
       if (response) {
         toast.success(response.data.message, {
         autoClose: 3000,
