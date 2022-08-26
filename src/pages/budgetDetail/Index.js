@@ -52,6 +52,7 @@ const Index = () => {
     }
   }
   const [createLogExpense, setCreateLogExpense] = useState(initLogData());
+
   const ref = useRef(null);
   const { deleteItem } = useDialog();
 
@@ -83,6 +84,7 @@ const Index = () => {
     setCreateLogExpense(
       initLogData()
     );
+    
       if (response) {
         toast.success(response.data.message, {
         autoClose: 3000,
