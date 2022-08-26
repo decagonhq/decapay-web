@@ -43,22 +43,21 @@ const Index = () => {
     budgetCategoryId: "",
     amount: "",
   });
-  
+  const [createLogExpense, setCreateLogExpense] = useState({
+    amount: "",
+    description: "",
+    transactionDate: new Date().toISOString().substring(0, 10),
+  });
   const initLogData = () => {
-    return {
+    setCreateLogExpense({
       amount: "",
       description: "",
       transactionDate: new Date().toISOString().substring(0, 10),
-    }
+    });
   }
-  const [createLogExpense, setCreateLogExpense] = useState(initLogData());
   const ref = useRef(null);
   const { deleteItem } = useDialog();
 
-  const dismissToast = () => {
-    toast.dismiss();
-
-  }
   const [createLineModal, setCreateLineModal] = useState(false);
 
   useEffect(() => {
@@ -80,23 +79,15 @@ const Index = () => {
     try{
     const response = await request.post(`budgets/${id}/lineItems/${getCategordId}/expenses`, payload, headers);
     setLoading(false);
-    setCreateLogExpense(
-      initLogData()
-    );
       if (response) {
-        toast.success(response.data.message, {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
-        fetchData();
+        toast.success(response.data.message);
+        initLogData();
         setLogExpenseModal(false);
       }
     } catch (error) {
       setLoading(false);
-      toast.error(error.response.data.message, {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
+      console.log(error);
+      toast.error(error.response);
     }
   }
   const stripCommaAndConvertToNumber = (amount) => {
@@ -121,14 +112,13 @@ const Index = () => {
           label: category.title,
         };
       });
+      // console.log(res);
       // add select to res
       res.unshift({ value: "", label: "Select Category" });
       setCategories(res);
     } catch (error) {
-      toast.error(error.response.data.message, {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
+      console.log(error);
+      toast.error(error.response);
     }
   };
 
@@ -153,6 +143,7 @@ const Index = () => {
       budgetCategoryId: parseInt(collectData.budgetCategoryId),
       amount: stripCommaAndConvertToNumber(collectData.amount),
     };
+    // console.log(payload);
     try {
       const response = await request.post(
         `budgets/${id}/lineItems`,
@@ -160,16 +151,11 @@ const Index = () => {
         headers
       );
       setCreateLineModal(false);
-      toast.success(response.data.message, {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
+      toast.success(response.data.message);
       fetchData();
     } catch (error) {
-      toast.error(error.response.data.message, {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
+      console.log(error);
+      toast.error(error.message);
     }
   };
   const [logExpenseModal, setLogExpenseModal] = useState(false);
@@ -186,16 +172,13 @@ const Index = () => {
     });
   };
   const handleOnChangeDate = (e, value) => {
+    console.log("this is date", e.target.value);
+    console.log("this is start", startDate);
+    console.log("this is end date", endDate);
     if (e.target.value > endDate) {
-      toast.error("Date cannot be greater than end date",{
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
+      toast.error("Date cannot be greater than end date");
     } else if (e.target.value < startDate) {
-      toast.error("Date cannot be less than start date",{
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
+      toast.error("Date cannot be less than start date");
     }
     else{
     setCreateLogExpense({
@@ -214,10 +197,7 @@ const Index = () => {
       setStartDate(response.data.data.startDate);
       setEndDate(response.data.data.endDate);
     } catch (error) {
-      toast.error(error.response.data.message, {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
+      console.log(error);
     }
   };
 
@@ -259,6 +239,7 @@ const Index = () => {
     let newPayload = {
       amount: stripCommaAndConvertToNumber(projectedAmount),
     };
+    // console.log(newPayload);
     try {
       const response = await request.put(
         `budgets/${id}/lineItems/${categoryId}`,
@@ -266,17 +247,11 @@ const Index = () => {
         headers
       );
       fetchData();
-      toast.success(response.data.message, {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
+      toast.success(response.data.message);
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      toast.error(error.response.data.message, {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
+      toast.error(error.response);
     }
   };
 
@@ -287,17 +262,11 @@ const Index = () => {
         headers
       );
       fetchData();
-      toast.success(response.data.message, {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
+      toast.success(response.data.message);
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      toast.error(error.response.data.message, {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
+      toast.error(error.response);
     }
   };
 
