@@ -11,6 +11,7 @@ import Pagination from "../../utils/pagination";
 import FormModal from "../../components/modal/FormModal";
 import Goback from "../../components/Goback";
 import useDialog from "../../hooks/useDialog";
+import FormInputComponent from "../../components/InputComponent";
 
 let pageSize = 5;
 const BudgetCategory = () => {
@@ -22,6 +23,8 @@ const BudgetCategory = () => {
   const [currentTableData, setCurrentTableData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [editData, setEditData] = useState({});
+
   const { deleteItemId } = useDialog();
   // console.log(data);
 
@@ -43,10 +46,10 @@ const BudgetCategory = () => {
   const budgetId = urlParams.get("budgetId");
   const catId = urlParams.get("catId");
   const lineItem = urlParams.get("item");
+
   const dismissToast = () => {
     toast.dismiss();
-
-  }
+  };
   // eslint-disable-next-line
   const fetchData = async () => {
     try {
@@ -78,10 +81,7 @@ const BudgetCategory = () => {
 
   const handleDeleteItem = async (id) => {
     try {
-      const response = await request.delete(
-        `expenses/${id}`,
-        headers
-      );
+      const response = await request.delete(`expenses/${id}`, headers);
       fetchData();
       toast.success(response.data.message, {
         autoClose: 3000,
@@ -96,6 +96,13 @@ const BudgetCategory = () => {
       });
     }
   };
+
+  const editHandler = (item) => {
+    setEditModal(true);
+    let curr = currentTableData?.find((i) => i.id === item);
+    setEditData(curr);
+  };
+  // console.log(editData);
 
   return (
     <Layout>
@@ -139,13 +146,18 @@ const BudgetCategory = () => {
                       <span ref={ref} className="popup">
                         <p
                           className="pop-item"
-                          onClick={() => setEditModal(true)}
+                          onClick={() => editHandler(item.id)}
                         >
                           Edit
                         </p>
-                        <p onClick={() =>
+                        <p
+                          onClick={() =>
                             deleteItemId(handleDeleteItem, item.id)
-                          } className="pop-item delete">Delete</p>
+                          }
+                          className="pop-item delete"
+                        >
+                          Delete
+                        </p>
                       </span>
                     </Fragment>
                   ) : null}
@@ -181,8 +193,28 @@ const BudgetCategory = () => {
                     prefix={"₦"}
                     name="amount"
                     thousandSeparator={true}
-                    // value={projectedAmount}
+                    value={editData?.amount}
                     // onChange={(e) => handleOnChange(e)}
+                  />
+                </div>
+                <div className="form__wrapper">
+                  <FormInputComponent
+                    // placeholder="Enter your email"
+                    label="Description"
+                    type="text"
+                    name="description"
+                    value={editData?.description}
+                    // onChange={handleChange}
+                  />
+                </div>
+                <div className="form__wrapper">
+                  <FormInputComponent
+                    // placeholder="Enter your email"
+                    label="Date"
+                    type="data"
+                    name="transactionDate"
+                    value={editData?.transactionDate}
+                    // onChange={handleChange}
                   />
                 </div>
                 <div className="btn-wrapper">
