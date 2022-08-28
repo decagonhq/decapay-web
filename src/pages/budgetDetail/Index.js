@@ -230,7 +230,7 @@ const Index = () => {
     setProjectedAmount(item?.projectedAmount);
     setCategoryName(item?.category);
   };
-
+// console.log(data)
   useEffect(() => {
     // eslint-disable-next-line
     getLineItem();
@@ -252,10 +252,6 @@ const Index = () => {
 
   const onSubmitEdit = async (e) => {
     e.preventDefault();
-    // let newPayload = {
-    //   ...editLineItemPayload,
-    //   projectedAmount: amount,
-    // };
     setLoading(true);
     let newPayload = {
       amount: stripCommaAndConvertToNumber(projectedAmount),
@@ -359,7 +355,7 @@ const Index = () => {
                   <p ref={projectAmountRef}>
                     Projected amount: {item.displayProjectedAmount}
                   </p>
-                  <p>Amount so far: {item.percentageSpentSoFar}</p>
+                  <p>Amount so far: {item.displayTotalAmountSpentSoFar}</p>
                   <Link
                     className="link"
                     to={`/budgetDetail/expenses/?budgetId=${id}&catId=${item.categoryId}&item=${item.category}`}
@@ -380,7 +376,7 @@ const Index = () => {
                       <FiArrowUpRight className="icon" />
                     </span>
                   </p>
-                  <p className="link">{item.percentageSpentSoFar}</p>
+                  <p className="link">{item.displayPercentageSpentSoFar}</p>
                 </div>
                 <p
                   onClick={() => openPopup(index, item.categoryId)}
