@@ -68,7 +68,7 @@ const BudgetCategory = () => {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line
-  }, []);
+  }, [currentPage]);
   // console.log(data);
 
   useEffect(() => {
