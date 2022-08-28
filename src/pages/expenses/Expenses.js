@@ -10,23 +10,7 @@ import CurrencyFormat from "react-currency-format";
 import Pagination from "../../utils/pagination";
 import FormModal from "../../components/modal/FormModal";
 import Goback from "../../components/Goback";
-
-const expenses = [
-  {
-    id: 1,
-    amount: "£100",
-    description: "international expenses are often not too good",
-    date: "2020-01-01",
-    time: "12:00",
-  },
-  {
-    id: 2,
-    amount: "£800",
-    description: "Buy and sell in Nigeria is a good idea",
-    date: "2020-01-01",
-    time: "12:00",
-  },
-];
+import useDialog from "../../hooks/useDialog";
 
 let pageSize = 5;
 const BudgetCategory = () => {
@@ -34,12 +18,12 @@ const BudgetCategory = () => {
   const [editModal, setEditModal] = useState(false);
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
   // eslint-disable-next-line
   const [currentTableData, setCurrentTableData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  console.log(data);
+  const { deleteItemId } = useDialog();
+  // console.log(data);
 
   const ref = useRef(null);
   const handleClickOutside = (event) => {
@@ -59,7 +43,10 @@ const BudgetCategory = () => {
   const budgetId = urlParams.get("budgetId");
   const catId = urlParams.get("catId");
   const lineItem = urlParams.get("item");
+  const dismissToast = () => {
+    toast.dismiss();
 
+  }
   // eslint-disable-next-line
   const fetchData = async () => {
     try {
@@ -67,7 +54,6 @@ const BudgetCategory = () => {
         `budgets/${budgetId}/lineItems/${catId}/expenses?size=${pageSize}&page=${currentPage}`,
         headers
       );
-      setData(response.data.data);
       setCurrentTableData(response.data.data.content);
       setTotalCount(response.data.data.totalElements);
     } catch (error) {
@@ -80,7 +66,7 @@ const BudgetCategory = () => {
     fetchData();
     // eslint-disable-next-line
   }, []);
-  console.log(data);
+  // console.log(data);
 
   useEffect(() => {
     document.addEventListener("click", handleClickOutside, true);
@@ -89,6 +75,27 @@ const BudgetCategory = () => {
       document.removeEventListener("click", handleClickOutside, true);
     };
   });
+
+  const handleDeleteItem = async (id) => {
+    try {
+      const response = await request.delete(
+        `expenses/${id}`,
+        headers
+      );
+      fetchData();
+      toast.success(response.data.message, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      toast.error(error.response.data.message, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
+    }
+  };
 
   return (
     <Layout>
@@ -109,22 +116,22 @@ const BudgetCategory = () => {
           </div>
         </div>
         <div className="category-container">
-          {expenses && expenses.length > 0 && (
+          {currentTableData && currentTableData.length > 0 && (
             <div className="category header">
               <p className="category-title">Amount</p>
               <p className="category-title">Description</p>
               <p className="category-title">Date</p>
-              <p className="category-title">Time</p>
+              {/* <p className="category-title">Time</p> */}
               <p className="category-title">Action</p>
             </div>
           )}
-          {expenses && expenses.length > 0 ? (
-            expenses.map((item, index) => (
+          {currentTableData && currentTableData.length > 0 ? (
+            currentTableData.map((item, index) => (
               <div className="category body" key={index}>
-                <p className="category-title">{item.amount}</p>
+                <p className="category-title">{item.displayAmount}</p>
                 <p className="category-title">{item.description}</p>
-                <p className="category-title">{item.date}</p>
-                <p className="category-title">{item.time}</p>
+                <p className="category-title">{item.displayTransactionDate}</p>
+                {/* <p className="category-title">{item.time}</p> */}
                 <p onClick={() => setIdOfBudget(index)} className="dots">
                   ...
                   {idOfBudget === index ? (
@@ -136,7 +143,9 @@ const BudgetCategory = () => {
                         >
                           Edit
                         </p>
-                        <p className="pop-item delete">Delete</p>
+                        <p onClick={() =>
+                            deleteItemId(handleDeleteItem, item.id)
+                          } className="pop-item delete">Delete</p>
                       </span>
                     </Fragment>
                   ) : null}
