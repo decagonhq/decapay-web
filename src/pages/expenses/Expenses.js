@@ -311,9 +311,10 @@ const ListStyle = styled.div`
     align-items: center;
     padding: 10px 14px;
     height: 57px;
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
-    gap: 10px;
+    display: flex;
+    justify-content: space-between;
+    /* grid-template-columns: 1fr 2fr 1fr 1fr 1fr; */
+    gap: 50px;
     /* border-radius:5px; */
   }
   .header {
