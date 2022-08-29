@@ -75,7 +75,7 @@ const Index = () => {
 
   // console.log(dataInfo);
   const stateOptions = [
-    { value: "", label: "Filter by state" },
+    { value: "", label: "All Budgets" },
     { value: "current", label: "Current" },
     { value: "upcomming", label: "Upcoming" },
     { value: "past", label: "Past" },
