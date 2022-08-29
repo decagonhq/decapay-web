@@ -9,8 +9,9 @@ import Pagination from "../../utils/pagination";
 import { useNavigate } from "react-router-dom";
 import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
+import FormSelectComponent from "../../components/selectComponent";
 
-let pageSize = 5;
+let pageSize = 6;
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [idOfBudget, setIdOfBudget] = useState(-1);
@@ -19,6 +20,7 @@ const Index = () => {
   const [budgetTitle, setBudgetTitle] = useState("");
   const [currentTableData, setCurrentTableData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [budgetState,setBudgetState] = useState("current")
 
   // eslint-disable-next-line
   const [dataInfo, setDataInfo] = useState([]);
@@ -34,12 +36,12 @@ const Index = () => {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line
-  }, [currentPage]);
-  console.log(currentPage);
+  }, [currentPage,budgetState]);
+  // console.log(budgetState);
   const fetchData = async () => {
     try {
       const response = await request.get(
-        `budgets?size=${pageSize}&page=${currentPage}`,
+        `budgets?size=${pageSize}&page=${currentPage}&state=${budgetState}`,
         headers
       );
       console.log(response.data);
@@ -72,13 +74,28 @@ const Index = () => {
   };
 
   // console.log(dataInfo);
+  const stateOptions = [
+    { value: "", label: "Filter by state" },
+    { value: "current", label: "Current" },
+    { value: "upcomming", label: "Upcoming" },
+    { value: "past", label: "Past" },
+  ];
 
   return (
     <Layout>
       <BudgetSyle>
         <div className="header-wrapper">
-          <div className="header">
+          <div className="">
             <p style={{ fontWeight: "bold", fontSize: "20px" }}>Budget List</p>
+          </div>
+          <div style={{ width: "20%" }}>
+            <FormSelectComponent
+              name="year"
+              options={stateOptions}
+              value={budgetState}
+              onChange={(e)=>setBudgetState(e.target.value)}
+              placeholder={"Filter by state"}
+            />
           </div>
           <div className="button-container">
             <button onClick={() => setCreateBudgetModal(true)}>
@@ -86,6 +103,7 @@ const Index = () => {
             </button>
           </div>
         </div>
+
         <div className="header page">
           <p>Most recent</p>
           <p>
@@ -95,7 +113,7 @@ const Index = () => {
 
         {/* Custom table starts here */}
         <div className="category-container">
-          <div className="category header">
+          <div className="category ">
             <p className="category-title">Budget title</p>
             <p className="category-title">Period</p>
             <p className="category-title">Amount</p>
@@ -213,6 +231,9 @@ const BudgetSyle = styled.div`
     display: flex;
     justify-content: space-between;
     padding: 10px;
+    font-weight: 600;
+    margin-bottom: -20px;
+    font-size: 16px;
   }
   .page {
     font-family: "Inter";
@@ -387,11 +408,6 @@ const BudgetSyle = styled.div`
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     gap: 10px;
     /* border-radius: 5px; */
-  }
-  .header {
-    font-weight: 600;
-    margin-bottom: -20px;
-    font-size: 16px;
   }
   .body {
     background: rgba(0, 156, 244, 0.05);
