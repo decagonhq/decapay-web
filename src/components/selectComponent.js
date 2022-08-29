@@ -25,7 +25,7 @@ const StyledFormSelectComponent = styled.div`
     }
     select{
         display: inline-block;
-        font-size: 1.2rem;
+        font-size: 14px;
         color: rgba(33, 51, 79, 0.8);
         width: 100%; 
         background: none;
