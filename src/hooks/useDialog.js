@@ -5,6 +5,10 @@ import { toast } from "react-toastify";
  * Represents a React hook to show a delete dialog box.
  *
  */
+ const dismissToast = () => {
+  toast.dismiss();
+};
+
 
 export default function useDialog() {
   const deleteItemId = (handleDelete, id) => {
@@ -31,12 +35,18 @@ export default function useDialog() {
           .then(() => {
             swal.stopLoading();
             swal.close();
-            toast.success("Deleted successfully");
+            toast.success("Deleted successfully",{
+              autoClose: 3000,
+              onClose: dismissToast,
+            });
           })
           .catch((err) => {
             swal.stopLoading();
             swal.close();
-            toast.error(err?.response?.data?.message || "Could not delete");
+            toast.error(err?.response?.data?.message || "Could not delete",{
+              autoClose: 3000,
+              onClose: dismissToast,
+            });
           });
       } else {
         swal.stopLoading();
@@ -68,13 +78,19 @@ export default function useDialog() {
           .then(() => {
             swal.stopLoading();
             swal.close();
-            toast.success("Removed successfully");
+            toast.success("Removed successfully",{
+              autoClose: 3000,
+              onClose: dismissToast,
+            });
           })
           .catch((err) => {
             swal.stopLoading();
             swal.close();
             toast.error(
-              err?.response?.data?.message || "Could not delete"
+              err?.response?.data?.message || "Could not delete",{
+                autoClose: 3000,
+                onClose: dismissToast,
+              }
             );
           });
       } else {
