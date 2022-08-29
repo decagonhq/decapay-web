@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
 
-
 let pageSize = 5;
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -36,10 +35,13 @@ const Index = () => {
     fetchData();
     // eslint-disable-next-line
   }, [currentPage]);
-console.log(currentPage);
+  console.log(currentPage);
   const fetchData = async () => {
     try {
-      const response = await request.get(`budgets?size=${pageSize}&page=${currentPage}`, headers);
+      const response = await request.get(
+        `budgets?size=${pageSize}&page=${currentPage}`,
+        headers
+      );
       console.log(response.data);
       setCurrentTableData(response.data.data.content);
       setTotalCount(response.data.data.totalElements);
@@ -69,7 +71,7 @@ console.log(currentPage);
     setBudgetTitle(title);
   };
 
-  console.log(dataInfo);
+  // console.log(dataInfo);
 
   return (
     <Layout>
@@ -104,7 +106,19 @@ console.log(currentPage);
           {currentTableData !== null && currentTableData?.length > 0 ? (
             currentTableData.map((item, index) => (
               <div className="category body" key={index}>
-                <p className="category-title">{item.title}</p>
+                <p
+                  onClick={() =>
+                    navigate(`../budgetDetail/${item.id}`, {
+                      replace: true,
+                    })
+                  }
+                  className="category-title"
+                  style={{
+                    cursor: "pointer",
+                  }}
+                >
+                  {item.title}
+                </p>
                 <p className="category-title">{item.period}</p>
                 <p className="category-title">{item.displayProjectedAmount}</p>
                 <p className="category-title">
