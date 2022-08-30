@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Layout from "../../components/dashboardSidebar/Layout";
 import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
-// import MyButton from "../../components/Button";
 import ClipLoader from "react-spinners/ClipLoader";
 import FormTitleSection from "../../components/modal/FormTitleSection";
 import CurrencyFormat from "react-currency-format";
@@ -25,8 +24,63 @@ const BudgetCategory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [editData, setEditData] = useState({});
 
+  const headers = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+  };
+  const changeDateFormat = (date) => {
+    const splitDate = date.split("-");
+    return `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
+  };
+  const stripCommaAndConvertToNumber = (amount) => {
+    if (amount === "" || amount === null || amount === undefined) {
+      return "";
+    } else if (typeof amount === "number") {
+      return amount;
+    } else {
+      let splitAmount = amount.split(",");
+      let joinBackAmount = splitAmount.join("");
+      let splitByNairaSign = joinBackAmount.split("₦");
+      let joinBackAmountByNairaSign = splitByNairaSign.join("");
+      return parseInt(joinBackAmountByNairaSign);
+    }
+  };
+
+  const submitEditData = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    let payload = {
+      amount: stripCommaAndConvertToNumber(editData.amount),
+      description: editData.description,
+      transactionDate: changeDateFormat(editData.transactionDate),
+    };
+    console.log(payload);
+    try {
+    const response = await request.put(
+      `expenses/${editData.id}`,
+      payload,
+      headers
+    );
+    setLoading(false);
+    toast.success(response.data.message, {
+      autoClose: 3000,
+      onClose: dismissToast,
+    });
+    setEditModal(false);
+    fetchData();
+  } catch (error) {
+    console.log(payload);
+    setLoading(false);
+    toast.error(error.response.data.message, {
+      autoClose: 3000,
+      onClose: dismissToast,
+    });
+  }
+  };
+
   const { deleteItemId } = useDialog();
-  // console.log(data);
 
   const ref = useRef(null);
   const handleClickOutside = (event) => {
@@ -35,14 +89,8 @@ const BudgetCategory = () => {
     }
   };
 
-  const headers = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
-  };
-
   const urlParams = new URLSearchParams(window.location.search);
+  const collectDate = urlParams.get("startDate");
   const budgetId = urlParams.get("budgetId");
   const catId = urlParams.get("catId");
   const lineItem = urlParams.get("item");
@@ -96,13 +144,32 @@ const BudgetCategory = () => {
       });
     }
   };
+  const handleOnChangeDate = (e, value) => {
+    if (e.target.value > new Date().toISOString().substring(0, 10)) {
+      toast.error("Date cannot be greater than today", {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
+    } else if (e.target.value < collectDate) {
+      toast.error("Date cannot be less than start date",{
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
+    }
+    else{
+      setEditData({ ...editData, [value]: e.target.value });
+  }
+  };
+  const handleEditModal = (e, value) => {
+    setEditData({ ...editData, [value]: e.target.value });
+  };
+  
 
   const editHandler = (item) => {
     setEditModal(true);
     let curr = currentTableData?.find((i) => i.id === item);
     setEditData(curr);
   };
-  // console.log(editData);
 
   return (
     <Layout>
@@ -146,7 +213,7 @@ const BudgetCategory = () => {
                       <span ref={ref} className="popup">
                         <p
                           className="pop-item"
-                          onClick={() => editHandler(item.id)}
+                          onClick={() => {editHandler(item.id)}}
                         >
                           Edit
                         </p>
@@ -178,13 +245,14 @@ const BudgetCategory = () => {
         {editModal && (
           <FormModal>
             <div>
+            
               <FormTitleSection
                 title={`Edit Expenses`}
                 onClick={() => setEditModal(!editModal)}
               />
               <form
-              // onSubmit={onSubmitEdit}
               >
+                
                 <div className="form__wrapper">
                   <CurrencyFormat
                     label="Projected amount"
@@ -193,35 +261,38 @@ const BudgetCategory = () => {
                     prefix={"₦"}
                     name="amount"
                     thousandSeparator={true}
+                    onChange={(e) => {
+                      handleEditModal(e, "amount");
+                    }}
                     value={editData?.amount}
-                    // onChange={(e) => handleOnChange(e)}
                   />
                 </div>
                 <div className="form__wrapper">
                   <FormInputComponent
-                    // placeholder="Enter your email"
                     label="Description"
                     type="text"
                     name="description"
+                    onChange={(e) => {
+                      handleEditModal(e, "description");
+                    }}
                     value={editData?.description}
-                    // onChange={handleChange}
                   />
                 </div>
                 <div className="form__wrapper">
                   <FormInputComponent
-                    // placeholder="Enter your email"
                     label="Date"
-                    type="data"
+                    type="date"
                     name="transactionDate"
+                    onChange={(e) => {
+                      handleOnChangeDate(e, "transactionDate");
+                    }}
                     value={editData?.transactionDate}
-                    // onChange={handleChange}
                   />
                 </div>
                 <div className="btn-wrapper">
                   <button
                     type="submit"
-                    // className="form__button"
-                    // onClick={onSubmitEdit}
+                    onClick ={submitEditData}
                   >
                     {loading ? (
                       <ClipLoader color="white" size="40px" />

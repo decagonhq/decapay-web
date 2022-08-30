@@ -188,8 +188,8 @@ const Index = () => {
     });
   };
   const handleOnChangeDate = (e, value) => {
-    if (e.target.value > endDate) {
-      toast.error("Date cannot be greater than end date",{
+    if (e.target.value > new Date().toISOString().substring(0, 10)) {
+      toast.error("Date cannot be greater than today", {
         autoClose: 3000,
         onClose: dismissToast,
       });
@@ -359,7 +359,7 @@ const Index = () => {
                   <p>Amount so far: {item.displayTotalAmountSpentSoFar}</p>
                   <Link
                     className="link"
-                    to={`/budgetDetail/expenses/?budgetId=${id}&catId=${item.categoryId}&item=${item.category}`}
+                    to={`/budgetDetail/expenses/?budgetId=${id}&catId=${item.categoryId}&item=${item.category}&startDate=${startDate}`}
                   >
                     View expenses
                   </Link>
