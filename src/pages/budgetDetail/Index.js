@@ -18,6 +18,8 @@ import ClipLoader from "react-spinners/ClipLoader";
 import FormTitleSection from "../../components/modal/FormTitleSection";
 import CurrencyFormat from "react-currency-format";
 import useDialog from "../../hooks/useDialog";
+import moment from "moment";
+import { stripCommaAndConvertToNumber } from "../../utils/utils";
 import LogExpenseResuable from "../../components/modal/formModalForLog";
 
 const Index = () => {
@@ -43,14 +45,16 @@ const Index = () => {
     budgetCategoryId: "",
     amount: "",
   });
-  
+
   const initLogData = () => {
     return {
       amount: "",
       description: "",
-      transactionDate: new Date().toISOString().substring(0, 10),
-    }
-  }
+      transactionDate: moment(
+        new Date().toISOString().substring(0, 10)
+      ).toDate(),
+    };
+  };
   const [createLogExpense, setCreateLogExpense] = useState(initLogData());
 
   const ref = useRef(null);
@@ -58,8 +62,7 @@ const Index = () => {
 
   const dismissToast = () => {
     toast.dismiss();
-
-  }
+  };
   const [createLineModal, setCreateLineModal] = useState(false);
 
   useEffect(() => {
@@ -67,29 +70,36 @@ const Index = () => {
     fetchCategory();
     // eslint-disable-next-line
   }, []);
-  const changeDateFormat = (date) => {
-    const splitDate = date.split("-");
-    return `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
+  
+  const disableDateInputFieldBasedOnStartDateToCurrentDate = (date) => {
+    if (date > moment(new Date().toISOString().substring(0, 10)).toDate()) {
+      return true;
+    } else if (date < startDate) {
+      return true;
+    }
+    return false;
   };
   const postLogExpense = async () => {
     let payload = {
       amount: stripCommaAndConvertToNumber(createLogExpense.amount),
-      transactionDate : changeDateFormat(createLogExpense.transactionDate),
+      transactionDate: moment(createLogExpense.transactionDate).format("DD/MM/YYYY"),
       description: createLogExpense.description,
-    }
+    };
     setLoading(true);
-    try{
-    const response = await request.post(`budgets/${id}/lineItems/${getCategordId}/expenses`, payload, headers);
-    setLoading(false);
-    setCreateLogExpense(
-      initLogData()
-    );
-    
+    try {
+      const response = await request.post(
+        `budgets/${id}/lineItems/${getCategordId}/expenses`,
+        payload,
+        headers
+      );
+      setLoading(false);
+      setCreateLogExpense(initLogData());
+
       if (response) {
         toast.success(response.data.message, {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
+          autoClose: 3000,
+          onClose: dismissToast,
+        });
         fetchData();
         setLogExpenseModal(false);
       }
@@ -100,20 +110,8 @@ const Index = () => {
         onClose: dismissToast,
       });
     }
-  }
-  const stripCommaAndConvertToNumber = (amount) => {
-    if (amount === "" || amount === null || amount === undefined) {
-      return "";
-    } else if (typeof amount === "number") {
-      return amount;
-    } else {
-      let splitAmount = amount.split(",");
-      let joinBackAmount = splitAmount.join("");
-      let splitByNairaSign = joinBackAmount.split("₦");
-      let joinBackAmountByNairaSign = splitByNairaSign.join("");
-      return parseInt(joinBackAmountByNairaSign);
-    }
   };
+
   const fetchCategory = async () => {
     try {
       const response = await request.get(`budget_categories`, headers);
@@ -187,27 +185,10 @@ const Index = () => {
       [value]: e.target.value,
     });
   };
-  const handleOnChangeDate = (e, value) => {
-    if (e.target.value > new Date().toISOString().substring(0, 10)) {
-      toast.error("Date cannot be greater than today", {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
-    } else if (e.target.value < startDate) {
-      toast.error("Date cannot be less than start date",{
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
-    }
-    else{
-    setCreateLogExpense({
-      ...createLogExpense,
-      [value]: e.target.value,
-    });
-  }
+  const handleOnChangeDate = (value) => {
+    setCreateLogExpense({ ...createLogExpense, transactionDate: value });
   };
   const { id } = useParams();
-  
 
   const fetchData = async () => {
     try {
@@ -231,7 +212,7 @@ const Index = () => {
     setProjectedAmount(item?.projectedAmount);
     setCategoryName(item?.category);
   };
-// console.log(data)
+  // console.log(data)
   useEffect(() => {
     // eslint-disable-next-line
     getLineItem();
@@ -502,12 +483,18 @@ const Index = () => {
               inputValue={createLogExpense.description}
               inputNameDate="transactionDate"
               valueCurrency={createLogExpense.amount}
+              selectedDate = {createLogExpense.transactionDate}
               inputName="description"
               currencyName="amount"
+              minDate={moment(startDate).toDate()}
+              maxDate={moment(
+                new Date().toISOString().substring(0, 10)
+              ).toDate()}
               onClick={postLogExpense}
-              onChangeInputDate={(e) => {
-                handleOnChangeDate(e, "transactionDate");
+              handleChangeDate={(e) => {
+                handleOnChangeDate(e);
               }}
+              disabled={disableDateInputFieldBasedOnStartDateToCurrentDate()}
               onChangeCurrency={(e) => {
                 handleOnChangeCreatLog(e, "amount");
               }}
