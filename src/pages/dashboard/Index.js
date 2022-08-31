@@ -1,30 +1,14 @@
-import React, { useState, useRef, useEffect, Fragment } from "react";
+import React, { useState,useEffect } from "react";
 import styled from "styled-components";
-import CreateBudget from "./CreateBugetForm";
-import EditBudget from "./EditBudget";
 // import GoBack from "../../components/Goback";
-import FormModal from "../../components/modal/FormModal";
 import Layout from "../../components/dashboardSidebar/Layout";
-import Pagination from "../../utils/pagination";
 import { useNavigate } from "react-router-dom";
 import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
-import FormSelectComponent from "../../components/selectComponent";
 
-let pageSize = 6;
 const Index = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [idOfBudget, setIdOfBudget] = useState(-1);
-  const [createBudgetModal, setCreateBudgetModal] = useState(false);
-  const [editBudgetModal, setEditBudgetModal] = useState(false);
-  const [budgetTitle, setBudgetTitle] = useState("");
   const [currentTableData, setCurrentTableData] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [budgetState,setBudgetState] = useState("current")
 
-  // eslint-disable-next-line
-  const [dataInfo, setDataInfo] = useState([]);
-  const ref = useRef(null);
 
   const headers = {
     headers: {
@@ -36,82 +20,44 @@ const Index = () => {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line
-  }, [currentPage,budgetState]);
+  }, []);
   // console.log(budgetState);
   const fetchData = async () => {
     try {
       const response = await request.get(
-        `budgets?size=${pageSize}&page=${currentPage}&state=${budgetState}`,
+        `budgets?size=8&page=1&state=current`,
         headers
       );
       console.log(response.data);
       setCurrentTableData(response.data.data.content);
-      setTotalCount(response.data.data.totalElements);
-      setDataInfo(response.data.data.pageable);
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
     }
   };
 
-  const handleClickOutside = (event) => {
-    if (ref.current && !ref.current.contains(event.target)) {
-      setIdOfBudget(-1);
-    }
-  };
-  const navigate = useNavigate();
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside, true);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside, true);
-    };
-  });
-
-  const handleEditModal = (title) => {
-    setEditBudgetModal(true);
-    setBudgetTitle(title);
-  };
-
-  // console.log(dataInfo);
-  const stateOptions = [
-    { value: "", label: "All Budgets" },
-    { value: "current", label: "Current" },
-    { value: "upcomming", label: "Upcoming" },
-    { value: "past", label: "Past" },
-  ];
-
-  // get last part of url
   
-
+  const navigate = useNavigate();
+  
   return (
     <Layout>
       <BudgetSyle>
-        <div className="header-wrapper">
+        {/* <div className="header-wrapper">
           <div className="">
-            <p style={{ fontWeight: "bold", fontSize: "20px" }}>Budget List</p>
+            <p style={{ fontWeight: "bold", fontSize: "20px" }}>Current budget</p>
           </div>
-          <div style={{ width: "20%" }}>
-            <FormSelectComponent
-              name="year"
-              options={stateOptions}
-              value={budgetState}
-              onChange={(e)=>setBudgetState(e.target.value)}
-              placeholder={"Filter by state"}
-            />
-          </div>
-          <div className="button-container">
-            <button onClick={() => setCreateBudgetModal(true)}>
-              Create budget
-            </button>
-          </div>
-        </div>
+        </div> */}
 
         <div className="header page">
-          <p>Most recent</p>
-          <p>
-            Showing {currentPage} of {Math.ceil(totalCount / pageSize)}
-          </p>
+        <div className="">
+            <p style={{ fontWeight: "bold", fontSize: "20px" }}>Current budget</p>
+          </div>
+          <p onClick={() =>
+                    navigate(`../budgets/`, {
+                      replace: true,
+                    })
+                  } style={{color:"green", cursor:"pointer"}}>See all budgets</p>
+          
         </div>
 
         {/* Custom table starts here */}
@@ -122,7 +68,7 @@ const Index = () => {
             <p className="category-title">Amount</p>
             <p className="category-title">Amount spent</p>
             <p className="category-title">Percentage spent</p>
-            <p className="category-title">Action</p>
+            {/* <p className="category-title">Action</p> */}
           </div>
           {currentTableData !== null && currentTableData?.length > 0 ? (
             currentTableData.map((item, index) => (
@@ -148,7 +94,7 @@ const Index = () => {
                 <p className="category-title">
                   {item.displayPercentageSpentSoFar}
                 </p>
-                <p
+                {/* <p
                   style={{
                     cursor: "pointer",
                     fontSize: "30px",
@@ -161,16 +107,7 @@ const Index = () => {
                   {idOfBudget === item.id ? (
                     <Fragment>
                       <span ref={ref} className="popup">
-                        <p
-                          onClick={
-                            () => handleEditModal(item.title)
-                            // navigate(`../edithBudget/${item.id}`, {
-                            //   replace: true,
-                            // })
-                          }
-                        >
-                          Edit
-                        </p>
+                       
                         <p
                           onClick={() =>
                             navigate(`../budgetDetail/${item.id}`, {
@@ -184,36 +121,15 @@ const Index = () => {
                       </span>
                     </Fragment>
                   ) : null}
-                </p>
+                </p> */}
               </div>
             ))
           ) : (
             <p>There are no budget category</p>
           )}
         </div>
-        <div className="pagination-container">
-          <Pagination
-            className="pagination-bar"
-            currentPage={currentPage}
-            totalCount={totalCount}
-            pageSize={pageSize}
-            onPageChange={(page) => setCurrentPage(page)}
-          />
-        </div>
-        {createBudgetModal && (
-          <FormModal>
-            <CreateBudget closeModal={() => setCreateBudgetModal(false)} />
-          </FormModal>
-        )}
-        {editBudgetModal && (
-          <FormModal>
-            <EditBudget
-              title={budgetTitle}
-              id={idOfBudget}
-              closeModal={() => setEditBudgetModal(false)}
-            />
-          </FormModal>
-        )}
+       
+        
       </BudgetSyle>
     </Layout>
   );
@@ -245,7 +161,7 @@ const BudgetSyle = styled.div`
     font-size: 16px;
     line-height: 19px;
 
-    color: #a5b1b7;
+    /* color: #a5b1b7; */
   }
   .budget-container {
     padding: 10px;
@@ -409,7 +325,7 @@ const BudgetSyle = styled.div`
     height: 57px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-    gap: 10px;
+    gap: 20px;
     /* border-radius: 5px; */
   }
   .body {
