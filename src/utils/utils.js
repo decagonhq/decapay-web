@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const formatPrice = (number) => {
 
     return new Intl.NumberFormat("en-NG", {
@@ -37,4 +39,12 @@ export const formatPrice = (number) => {
       let joinBackAmountByNairaSign = splitByNairaSign.join("");
       return parseInt(joinBackAmountByNairaSign);
     }
+  };
+  export const disableDateInputFieldBasedOnStartDateToCurrentDate = (date, startDate) => {
+    if (date > moment(new Date().toISOString().substring(0, 10)).toDate()) {
+      return true;
+    } else if (date < startDate) {
+      return true;
+    }
+    return false;
   };

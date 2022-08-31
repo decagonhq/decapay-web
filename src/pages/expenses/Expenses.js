@@ -13,8 +13,9 @@ import useDialog from "../../hooks/useDialog";
 import FormInputComponent from "../../components/InputComponent";
 import DatePicker from "react-datepicker";
 import moment from "moment";
-import { stripCommaAndConvertToNumber } from "../../utils/utils";
+import { stripCommaAndConvertToNumber,disableDateInputFieldBasedOnStartDateToCurrentDate } from "../../utils/utils";
 import "react-datepicker/dist/react-datepicker.css";
+import { dateFormats } from "../../constants";
 
 let pageSize = 5;
 const BudgetCategory = () => {
@@ -43,8 +44,7 @@ const BudgetCategory = () => {
     let payload = {
       amount: stripCommaAndConvertToNumber(editData.amount),
       description: editData.description,
-      // transactionDate: changeDateFormat(editData.transactionDate),
-      transactionDate: moment(editData.transactionDate).format("DD/MM/YYYY"),
+      transactionDate: moment(editData.transactionDate).format(dateFormats),
     };
     try {
       const response = await request.put(
@@ -145,14 +145,7 @@ const BudgetCategory = () => {
     let curr = currentTableData?.find((i) => i.id === item);
     setEditData(curr);
   };
-  const disableDateInputFieldBasedOnStartDateToCurrentDate = (date) => {
-    if (date > new Date().toISOString().substring(0, 10)) {
-      return true;
-    } else if (date < startDate) {
-      return true;
-    }
-    return false;
-  };
+  
 
   return (
     <Layout>
@@ -272,7 +265,7 @@ const BudgetCategory = () => {
                       new Date().toISOString().substring(0, 10)
                     ).toDate()}
                     disabled={disableDateInputFieldBasedOnStartDateToCurrentDate(
-                      moment(editData?.transactionDate).toDate()
+                      moment(editData?.transactionDate).toDate(), startDate
                     )}
                   />
                 </div>

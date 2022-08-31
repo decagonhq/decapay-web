@@ -19,7 +19,11 @@ import FormTitleSection from "../../components/modal/FormTitleSection";
 import CurrencyFormat from "react-currency-format";
 import useDialog from "../../hooks/useDialog";
 import moment from "moment";
-import { stripCommaAndConvertToNumber } from "../../utils/utils";
+import {
+  stripCommaAndConvertToNumber,
+  disableDateInputFieldBasedOnStartDateToCurrentDate,
+} from "../../utils/utils";
+import { dateFormats } from "../../constants";
 import LogExpenseResuable from "../../components/modal/formModalForLog";
 
 const Index = () => {
@@ -70,19 +74,13 @@ const Index = () => {
     fetchCategory();
     // eslint-disable-next-line
   }, []);
-  
-  const disableDateInputFieldBasedOnStartDateToCurrentDate = (date) => {
-    if (date > moment(new Date().toISOString().substring(0, 10)).toDate()) {
-      return true;
-    } else if (date < startDate) {
-      return true;
-    }
-    return false;
-  };
+
   const postLogExpense = async () => {
     let payload = {
       amount: stripCommaAndConvertToNumber(createLogExpense.amount),
-      transactionDate: moment(createLogExpense.transactionDate).format("DD/MM/YYYY"),
+      transactionDate: moment(createLogExpense.transactionDate).format(
+        dateFormats
+      ),
       description: createLogExpense.description,
     };
     setLoading(true);
@@ -483,7 +481,7 @@ const Index = () => {
               inputValue={createLogExpense.description}
               inputNameDate="transactionDate"
               valueCurrency={createLogExpense.amount}
-              selectedDate = {createLogExpense.transactionDate}
+              selectedDate={createLogExpense.transactionDate}
               inputName="description"
               currencyName="amount"
               minDate={moment(startDate).toDate()}
@@ -494,7 +492,9 @@ const Index = () => {
               handleChangeDate={(e) => {
                 handleOnChangeDate(e);
               }}
-              disabled={disableDateInputFieldBasedOnStartDateToCurrentDate()}
+              disabled={disableDateInputFieldBasedOnStartDateToCurrentDate(
+                startDate
+              )}
               onChangeCurrency={(e) => {
                 handleOnChangeCreatLog(e, "amount");
               }}
