@@ -1,0 +1,40 @@
+export const formatPrice = (number) => {
+
+    return new Intl.NumberFormat("en-NG", {
+  
+      style: "currency",
+  
+      currency: "NGN",
+  
+      //}).format(number / 100)
+  
+    }).format(number);
+  
+  };
+  
+  
+  
+  export const formatStringPrice = (number) => {
+  
+    return new Intl.NumberFormat("en-US", {
+  
+      minimumFractionDigits: 2,
+  
+      maximumFractionDigits: 2,
+  
+    }).format(number);
+  
+  };
+  export const stripCommaAndConvertToNumber = (amount) => {
+    if (amount === "" || amount === null || amount === undefined) {
+      return "";
+    } else if (typeof amount === "number") {
+      return amount;
+    } else {
+      let splitAmount = amount.split(",");
+      let joinBackAmount = splitAmount.join("");
+      let splitByNairaSign = joinBackAmount.split("₦");
+      let joinBackAmountByNairaSign = splitByNairaSign.join("");
+      return parseInt(joinBackAmountByNairaSign);
+    }
+  };

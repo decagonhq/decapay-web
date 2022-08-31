@@ -6,6 +6,7 @@ import FormTitleSection from "../../components/modal/FormTitleSection";
 import CurrencyFormat from "react-currency-format";
 import FormInputComponent from "../InputComponent";
 import { ToastContainer } from "react-toastify";
+import DatePicker from "react-datepicker";
 
 const LogExpenseResuable = ({
   closeModal,
@@ -29,6 +30,11 @@ const LogExpenseResuable = ({
   valueCurrency,
   onClick,
   onClickCancel,
+  selectedDate,
+  handleChangeDate,
+  minDate,
+  maxDate,
+  disabled,
   inputLabel,
 }) => {
   // eslint-disable-next-line
@@ -61,13 +67,13 @@ const LogExpenseResuable = ({
         />
       </div>
       <div className="form__wrapper">
-        <FormInputComponent
-          placeholder={placeholderInputDate}
-          label={inputLabelDate}
-          type={inputDateType}
-          value={inputDateValue}
-          name={inputNameDate}
-          onChange={onChangeInputDate}
+        <h7>Select Date</h7>
+        <DatePicker
+          selected={selectedDate}
+          onChange={handleChangeDate}
+          minDate={minDate}
+          maxDate={maxDate}
+          disabled={disabled}
         />
       </div>
 
@@ -85,6 +91,14 @@ const StyledHome = styled.div`
   .form__wrapper {
     width: 100%;
     border-radius: 5px;
+
+    .react-datepicker-wrapper,
+    .react-datepicker__input-container,
+    .react-datepicker__input-container input {
+      display: block;
+      width: 100%;
+      height: 39px;
+    }
   }
   .btn {
     display: flex;

@@ -11,6 +11,10 @@ import FormModal from "../../components/modal/FormModal";
 import Goback from "../../components/Goback";
 import useDialog from "../../hooks/useDialog";
 import FormInputComponent from "../../components/InputComponent";
+import DatePicker from "react-datepicker";
+import moment from "moment";
+import { stripCommaAndConvertToNumber } from "../../utils/utils";
+import "react-datepicker/dist/react-datepicker.css";
 
 let pageSize = 5;
 const BudgetCategory = () => {
@@ -30,23 +34,8 @@ const BudgetCategory = () => {
       Authorization: "Bearer " + localStorage.getItem("token"),
     },
   };
-  const changeDateFormat = (date) => {
-    const splitDate = date.split("-");
-    return `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
-  };
-  const stripCommaAndConvertToNumber = (amount) => {
-    if (amount === "" || amount === null || amount === undefined) {
-      return "";
-    } else if (typeof amount === "number") {
-      return amount;
-    } else {
-      let splitAmount = amount.split(",");
-      let joinBackAmount = splitAmount.join("");
-      let splitByNairaSign = joinBackAmount.split("₦");
-      let joinBackAmountByNairaSign = splitByNairaSign.join("");
-      return parseInt(joinBackAmountByNairaSign);
-    }
-  };
+
+  
 
   const submitEditData = async (event) => {
     event.preventDefault();
@@ -54,30 +43,30 @@ const BudgetCategory = () => {
     let payload = {
       amount: stripCommaAndConvertToNumber(editData.amount),
       description: editData.description,
-      transactionDate: changeDateFormat(editData.transactionDate),
+      // transactionDate: changeDateFormat(editData.transactionDate),
+      transactionDate: moment(editData.transactionDate).format("DD/MM/YYYY"),
     };
-    console.log(payload);
     try {
-    const response = await request.put(
-      `expenses/${editData.id}`,
-      payload,
-      headers
-    );
-    setLoading(false);
-    toast.success(response.data.message, {
-      autoClose: 3000,
-      onClose: dismissToast,
-    });
-    setEditModal(false);
-    fetchData();
-  } catch (error) {
-    console.log(payload);
-    setLoading(false);
-    toast.error(error.response.data.message, {
-      autoClose: 3000,
-      onClose: dismissToast,
-    });
-  }
+      const response = await request.put(
+        `expenses/${editData.id}`,
+        payload,
+        headers
+      );
+      setLoading(false);
+      toast.success(response.data.message, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
+      setEditModal(false);
+      fetchData();
+    } catch (error) {
+      console.log(payload);
+      setLoading(false);
+      toast.error(error.response.data.message, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
+    }
   };
 
   const { deleteItemId } = useDialog();
@@ -90,7 +79,7 @@ const BudgetCategory = () => {
   };
 
   const urlParams = new URLSearchParams(window.location.search);
-  const collectDate = urlParams.get("startDate");
+  const startDate = urlParams.get("startDate");
   const budgetId = urlParams.get("budgetId");
   const catId = urlParams.get("catId");
   const lineItem = urlParams.get("item");
@@ -144,31 +133,25 @@ const BudgetCategory = () => {
       });
     }
   };
-  const handleOnChangeDate = (e, value) => {
-    if (e.target.value > new Date().toISOString().substring(0, 10)) {
-      toast.error("Date cannot be greater than today", {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
-    } else if (e.target.value < collectDate) {
-      toast.error("Date cannot be less than start date",{
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
-    }
-    else{
-      setEditData({ ...editData, [value]: e.target.value });
-  }
+  const handleOnChangeDate = (value) => {
+    setEditData({ ...editData, transactionDate: value });
   };
   const handleEditModal = (e, value) => {
     setEditData({ ...editData, [value]: e.target.value });
   };
-  
 
   const editHandler = (item) => {
     setEditModal(true);
     let curr = currentTableData?.find((i) => i.id === item);
     setEditData(curr);
+  };
+  const disableDateInputFieldBasedOnStartDateToCurrentDate = (date) => {
+    if (date > new Date().toISOString().substring(0, 10)) {
+      return true;
+    } else if (date < startDate) {
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -213,7 +196,9 @@ const BudgetCategory = () => {
                       <span ref={ref} className="popup">
                         <p
                           className="pop-item"
-                          onClick={() => {editHandler(item.id)}}
+                          onClick={() => {
+                            editHandler(item.id);
+                          }}
                         >
                           Edit
                         </p>
@@ -245,14 +230,11 @@ const BudgetCategory = () => {
         {editModal && (
           <FormModal>
             <div>
-            
               <FormTitleSection
                 title={`Edit Expenses`}
                 onClick={() => setEditModal(!editModal)}
               />
-              <form
-              >
-                
+              <form>
                 <div className="form__wrapper">
                   <CurrencyFormat
                     label="Projected amount"
@@ -279,21 +261,23 @@ const BudgetCategory = () => {
                   />
                 </div>
                 <div className="form__wrapper">
-                  <FormInputComponent
-                    label="Date"
-                    type="date"
-                    name="transactionDate"
+                <h7>Select Date</h7>
+                  <DatePicker
+                    selected={moment(editData?.transactionDate).toDate()}
                     onChange={(e) => {
-                      handleOnChangeDate(e, "transactionDate");
+                      handleOnChangeDate(e);
                     }}
-                    value={editData?.transactionDate}
+                    minDate={moment(startDate).toDate()}
+                    maxDate={moment(
+                      new Date().toISOString().substring(0, 10)
+                    ).toDate()}
+                    disabled={disableDateInputFieldBasedOnStartDateToCurrentDate(
+                      moment(editData?.transactionDate).toDate()
+                    )}
                   />
                 </div>
                 <div className="btn-wrapper">
-                  <button
-                    type="submit"
-                    onClick ={submitEditData}
-                  >
+                  <button type="submit" onClick={submitEditData}>
                     {loading ? (
                       <ClipLoader color="white" size="40px" />
                     ) : (
@@ -363,7 +347,24 @@ const ListStyle = styled.div`
       background: #14a800;
     }
   }
-
+  /* .form__wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 10px;
+  } */
+  .form__wrapper {
+    .react-datepicker-wrapper,
+    .react-datepicker__input-container,
+    .react-datepicker__input-container input {
+      display: block;
+      width: 100%;
+      height: 39px;
+    }
+  }
   .category-container {
     display: flex;
     flex-direction: column;
