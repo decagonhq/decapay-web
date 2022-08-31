@@ -19,6 +19,8 @@ import FormTitleSection from "../../components/modal/FormTitleSection";
 import CurrencyFormat from "react-currency-format";
 import useDialog from "../../hooks/useDialog";
 import LogExpenseResuable from "../../components/modal/formModalForLog";
+import Goback from "../../components/Goback";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const [data, setData] = useState([]);
@@ -43,23 +45,23 @@ const Index = () => {
     budgetCategoryId: "",
     amount: "",
   });
-  
+
   const initLogData = () => {
     return {
       amount: "",
       description: "",
       transactionDate: new Date().toISOString().substring(0, 10),
-    }
-  }
+    };
+  };
   const [createLogExpense, setCreateLogExpense] = useState(initLogData());
+  const navigate = useNavigate();
 
   const ref = useRef(null);
   const { deleteItem } = useDialog();
 
   const dismissToast = () => {
     toast.dismiss();
-
-  }
+  };
   const [createLineModal, setCreateLineModal] = useState(false);
 
   useEffect(() => {
@@ -74,22 +76,24 @@ const Index = () => {
   const postLogExpense = async () => {
     let payload = {
       amount: stripCommaAndConvertToNumber(createLogExpense.amount),
-      transactionDate : changeDateFormat(createLogExpense.transactionDate),
+      transactionDate: changeDateFormat(createLogExpense.transactionDate),
       description: createLogExpense.description,
-    }
+    };
     setLoading(true);
-    try{
-    const response = await request.post(`budgets/${id}/lineItems/${getCategordId}/expenses`, payload, headers);
-    setLoading(false);
-    setCreateLogExpense(
-      initLogData()
-    );
-    
+    try {
+      const response = await request.post(
+        `budgets/${id}/lineItems/${getCategordId}/expenses`,
+        payload,
+        headers
+      );
+      setLoading(false);
+      setCreateLogExpense(initLogData());
+
       if (response) {
         toast.success(response.data.message, {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
+          autoClose: 3000,
+          onClose: dismissToast,
+        });
         fetchData();
         setLogExpenseModal(false);
       }
@@ -100,7 +104,7 @@ const Index = () => {
         onClose: dismissToast,
       });
     }
-  }
+  };
   const stripCommaAndConvertToNumber = (amount) => {
     if (amount === "" || amount === null || amount === undefined) {
       return "";
@@ -189,25 +193,23 @@ const Index = () => {
   };
   const handleOnChangeDate = (e, value) => {
     if (e.target.value > endDate) {
-      toast.error("Date cannot be greater than end date",{
+      toast.error("Date cannot be greater than end date", {
         autoClose: 3000,
         onClose: dismissToast,
       });
     } else if (e.target.value < startDate) {
-      toast.error("Date cannot be less than start date",{
+      toast.error("Date cannot be less than start date", {
         autoClose: 3000,
         onClose: dismissToast,
       });
+    } else {
+      setCreateLogExpense({
+        ...createLogExpense,
+        [value]: e.target.value,
+      });
     }
-    else{
-    setCreateLogExpense({
-      ...createLogExpense,
-      [value]: e.target.value,
-    });
-  }
   };
   const { id } = useParams();
-  
 
   const fetchData = async () => {
     try {
@@ -302,6 +304,16 @@ const Index = () => {
   return (
     <Layout>
       <DetailStyle>
+        <div className="goback">
+          {" "}
+          <Goback
+            onClick={() =>
+              navigate(`../home`, {
+                replace: true,
+              })
+            }
+          />
+        </div>
         <div className="header-wrapper">
           <div className="header">
             <p style={{ fontWeight: "bold", fontSize: "20px" }}>
@@ -530,7 +542,9 @@ const DetailStyle = styled.div`
   margin: 0 auto;
   box-sizing: border-box;
   background: #ffffff;
-
+  .goback {
+    margin-top: 20px;
+  }
   @media only screen and (max-width: 540px) {
     width: 100%;
   }

@@ -26,10 +26,10 @@ function Goback(props) {
   );
 }
 
-const GoBack =() => {
+const GoBack =({onClick}) => {
   const navigate = useNavigate();
   return (
-    <GoBackStyle onClick={()=>navigate.goBack(null)} >
+    <GoBackStyle onClick={onClick ? onClick : ()=>navigate(-1)} >
       <Goback width="0.8em" height="0.8em" />
       <p>Back</p>
     </GoBackStyle>
