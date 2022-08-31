@@ -119,7 +119,6 @@ const Index = () => {
           label: category.title,
         };
       });
-      // add select to res
       res.unshift({ value: "", label: "Select Category" });
       setCategories(res);
     } catch (error) {
