@@ -13,6 +13,7 @@ import PrivateRoute from "./utils/protectedRoute";
 import Budget from "./pages/listBudget/Index";
 import BudgetCategory from "./pages/budgetCategory/Index";
 import Expenses from "./pages/expenses/Expenses";
+import ListBudget from "./pages/dashboard/Index"
 
 function App() {
   return (
@@ -24,6 +25,14 @@ function App() {
         
         <Route
           path="/home"
+          element={
+            <PrivateRoute>
+              <ListBudget />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/budgets"
           element={
             <PrivateRoute>
               <Budget />
