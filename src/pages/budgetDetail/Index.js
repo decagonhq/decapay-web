@@ -280,7 +280,15 @@ const Index = () => {
       });
     }
   };
-  
+  const checkIfEndDateIsLessThanToday = () => {
+    let today = new Date();
+    let endDate = new Date(data?.endDate);
+    if (today > endDate) {
+      return endDate;
+    } else {
+      return today;
+    }
+  }
 
   return (
     <Layout>
