@@ -53,7 +53,6 @@ const MenuItemStyle = styled.div`
     cursor: pointer;
     &:hover {
       background: #14a800;
-      border-radius: 4px;
       color: white;
     }
 
