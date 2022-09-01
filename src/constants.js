@@ -26,3 +26,5 @@ export const Months = [
     { value: "11", label: "November" },
     { value: "12", label: "December" },
   ];
+
+export const dateFormats = "DD/MM/YYYY";

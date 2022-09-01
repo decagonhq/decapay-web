@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Layout from "../../components/dashboardSidebar/Layout";
 import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
-// import MyButton from "../../components/Button";
 import ClipLoader from "react-spinners/ClipLoader";
 import FormTitleSection from "../../components/modal/FormTitleSection";
 import CurrencyFormat from "react-currency-format";
@@ -12,6 +11,11 @@ import FormModal from "../../components/modal/FormModal";
 import Goback from "../../components/Goback";
 import useDialog from "../../hooks/useDialog";
 import FormInputComponent from "../../components/InputComponent";
+import DatePicker from "react-datepicker";
+import moment from "moment";
+import { stripCommaAndConvertToNumber,disableDateInputFieldBasedOnStartDateToCurrentDate } from "../../utils/utils";
+import "react-datepicker/dist/react-datepicker.css";
+import { dateFormats } from "../../constants";
 
 let pageSize = 5;
 const BudgetCategory = () => {
@@ -25,8 +29,47 @@ const BudgetCategory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [editData, setEditData] = useState({});
 
+  const headers = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("token"),
+    },
+  };
+
+  
+
+  const submitEditData = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    let payload = {
+      amount: stripCommaAndConvertToNumber(editData.amount),
+      description: editData.description,
+      transactionDate: moment(editData.transactionDate).format(dateFormats),
+    };
+    try {
+      const response = await request.put(
+        `expenses/${editData.id}`,
+        payload,
+        headers
+      );
+      setLoading(false);
+      toast.success(response.data.message, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
+      setEditModal(false);
+      fetchData();
+    } catch (error) {
+      console.log(payload);
+      setLoading(false);
+      toast.error(error.response.data.message, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
+    }
+  };
+
   const { deleteItemId } = useDialog();
-  // console.log(data);
 
   const ref = useRef(null);
   const handleClickOutside = (event) => {
@@ -35,14 +78,8 @@ const BudgetCategory = () => {
     }
   };
 
-  const headers = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
-  };
-
   const urlParams = new URLSearchParams(window.location.search);
+  const startDate = urlParams.get("startDate");
   const budgetId = urlParams.get("budgetId");
   const catId = urlParams.get("catId");
   const lineItem = urlParams.get("item");
@@ -96,13 +133,19 @@ const BudgetCategory = () => {
       });
     }
   };
+  const handleOnChangeDate = (value) => {
+    setEditData({ ...editData, transactionDate: value });
+  };
+  const handleEditModal = (e, value) => {
+    setEditData({ ...editData, [value]: e.target.value });
+  };
 
   const editHandler = (item) => {
     setEditModal(true);
     let curr = currentTableData?.find((i) => i.id === item);
     setEditData(curr);
   };
-  // console.log(editData);
+  
 
   return (
     <Layout>
@@ -146,7 +189,9 @@ const BudgetCategory = () => {
                       <span ref={ref} className="popup">
                         <p
                           className="pop-item"
-                          onClick={() => editHandler(item.id)}
+                          onClick={() => {
+                            editHandler(item.id);
+                          }}
                         >
                           Edit
                         </p>
@@ -182,9 +227,7 @@ const BudgetCategory = () => {
                 title={`Edit Expenses`}
                 onClick={() => setEditModal(!editModal)}
               />
-              <form
-              // onSubmit={onSubmitEdit}
-              >
+              <form>
                 <div className="form__wrapper">
                   <CurrencyFormat
                     label="Projected amount"
@@ -193,36 +236,41 @@ const BudgetCategory = () => {
                     prefix={"₦"}
                     name="amount"
                     thousandSeparator={true}
+                    onChange={(e) => {
+                      handleEditModal(e, "amount");
+                    }}
                     value={editData?.amount}
-                    // onChange={(e) => handleOnChange(e)}
                   />
                 </div>
                 <div className="form__wrapper">
                   <FormInputComponent
-                    // placeholder="Enter your email"
                     label="Description"
                     type="text"
                     name="description"
+                    onChange={(e) => {
+                      handleEditModal(e, "description");
+                    }}
                     value={editData?.description}
-                    // onChange={handleChange}
                   />
                 </div>
                 <div className="form__wrapper">
-                  <FormInputComponent
-                    // placeholder="Enter your email"
-                    label="Date"
-                    type="data"
-                    name="transactionDate"
-                    value={editData?.transactionDate}
-                    // onChange={handleChange}
+                <h7>Select Date</h7>
+                  <DatePicker
+                    selected={moment(editData?.transactionDate).toDate()}
+                    onChange={(e) => {
+                      handleOnChangeDate(e);
+                    }}
+                    minDate={moment(startDate).toDate()}
+                    maxDate={moment(
+                      new Date().toISOString().substring(0, 10)
+                    ).toDate()}
+                    disabled={disableDateInputFieldBasedOnStartDateToCurrentDate(
+                      moment(editData?.transactionDate).toDate(), startDate
+                    )}
                   />
                 </div>
                 <div className="btn-wrapper">
-                  <button
-                    type="submit"
-                    // className="form__button"
-                    // onClick={onSubmitEdit}
-                  >
+                  <button type="submit" onClick={submitEditData}>
                     {loading ? (
                       <ClipLoader color="white" size="40px" />
                     ) : (
@@ -292,7 +340,24 @@ const ListStyle = styled.div`
       background: #14a800;
     }
   }
-
+  /* .form__wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 10px;
+  } */
+  .form__wrapper {
+    .react-datepicker-wrapper,
+    .react-datepicker__input-container,
+    .react-datepicker__input-container input {
+      display: block;
+      width: 100%;
+      height: 39px;
+    }
+  }
   .category-container {
     display: flex;
     flex-direction: column;

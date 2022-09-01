@@ -18,9 +18,13 @@ import ClipLoader from "react-spinners/ClipLoader";
 import FormTitleSection from "../../components/modal/FormTitleSection";
 import CurrencyFormat from "react-currency-format";
 import useDialog from "../../hooks/useDialog";
+import moment from "moment";
+import {
+  stripCommaAndConvertToNumber,
+  disableDateInputFieldBasedOnStartDateToCurrentDate,
+} from "../../utils/utils";
+import { dateFormats } from "../../constants";
 import LogExpenseResuable from "../../components/modal/formModalForLog";
-import Goback from "../../components/Goback";
-import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const [data, setData] = useState([]);
@@ -50,11 +54,12 @@ const Index = () => {
     return {
       amount: "",
       description: "",
-      transactionDate: new Date().toISOString().substring(0, 10),
+      transactionDate: moment(
+        new Date().toISOString().substring(0, 10)
+      ).toDate(),
     };
   };
   const [createLogExpense, setCreateLogExpense] = useState(initLogData());
-  const navigate = useNavigate();
 
   const ref = useRef(null);
   const { deleteItem } = useDialog();
@@ -69,14 +74,13 @@ const Index = () => {
     fetchCategory();
     // eslint-disable-next-line
   }, []);
-  const changeDateFormat = (date) => {
-    const splitDate = date.split("-");
-    return `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
-  };
+
   const postLogExpense = async () => {
     let payload = {
       amount: stripCommaAndConvertToNumber(createLogExpense.amount),
-      transactionDate: changeDateFormat(createLogExpense.transactionDate),
+      transactionDate: moment(createLogExpense.transactionDate).format(
+        dateFormats
+      ),
       description: createLogExpense.description,
     };
     setLoading(true);
@@ -105,19 +109,7 @@ const Index = () => {
       });
     }
   };
-  const stripCommaAndConvertToNumber = (amount) => {
-    if (amount === "" || amount === null || amount === undefined) {
-      return "";
-    } else if (typeof amount === "number") {
-      return amount;
-    } else {
-      let splitAmount = amount.split(",");
-      let joinBackAmount = splitAmount.join("");
-      let splitByNairaSign = joinBackAmount.split("₦");
-      let joinBackAmountByNairaSign = splitByNairaSign.join("");
-      return parseInt(joinBackAmountByNairaSign);
-    }
-  };
+
   const fetchCategory = async () => {
     try {
       const response = await request.get(`budget_categories`, headers);
@@ -127,7 +119,6 @@ const Index = () => {
           label: category.title,
         };
       });
-      // add select to res
       res.unshift({ value: "", label: "Select Category" });
       setCategories(res);
     } catch (error) {
@@ -191,23 +182,8 @@ const Index = () => {
       [value]: e.target.value,
     });
   };
-  const handleOnChangeDate = (e, value) => {
-    if (e.target.value > endDate) {
-      toast.error("Date cannot be greater than end date", {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
-    } else if (e.target.value < startDate) {
-      toast.error("Date cannot be less than start date", {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
-    } else {
-      setCreateLogExpense({
-        ...createLogExpense,
-        [value]: e.target.value,
-      });
-    }
+  const handleOnChangeDate = (value) => {
+    setCreateLogExpense({ ...createLogExpense, transactionDate: value });
   };
   const { id } = useParams();
 
@@ -233,7 +209,7 @@ const Index = () => {
     setProjectedAmount(item?.projectedAmount);
     setCategoryName(item?.category);
   };
-// console.log(data)
+  // console.log(data)
   useEffect(() => {
     // eslint-disable-next-line
     getLineItem();
@@ -304,16 +280,6 @@ const Index = () => {
   return (
     <Layout>
       <DetailStyle>
-        <div className="goback">
-          {" "}
-          <Goback
-            onClick={() =>
-              navigate(`../home`, {
-                replace: true,
-              })
-            }
-          />
-        </div>
         <div className="header-wrapper">
           <div className="header">
             <p style={{ fontWeight: "bold", fontSize: "20px" }}>
@@ -371,7 +337,7 @@ const Index = () => {
                   <p>Amount so far: {item.displayTotalAmountSpentSoFar}</p>
                   <Link
                     className="link"
-                    to={`/budgetDetail/expenses/?budgetId=${id}&catId=${item.categoryId}&item=${item.category}`}
+                    to={`/budgetDetail/expenses/?budgetId=${id}&catId=${item.categoryId}&item=${item.category}&startDate=${startDate}`}
                   >
                     View expenses
                   </Link>
@@ -514,12 +480,20 @@ const Index = () => {
               inputValue={createLogExpense.description}
               inputNameDate="transactionDate"
               valueCurrency={createLogExpense.amount}
+              selectedDate={createLogExpense.transactionDate}
               inputName="description"
               currencyName="amount"
+              minDate={moment(startDate).toDate()}
+              maxDate={moment(
+                new Date().toISOString().substring(0, 10)
+              ).toDate()}
               onClick={postLogExpense}
-              onChangeInputDate={(e) => {
-                handleOnChangeDate(e, "transactionDate");
+              handleChangeDate={(e) => {
+                handleOnChangeDate(e);
               }}
+              disabled={disableDateInputFieldBasedOnStartDateToCurrentDate(
+                startDate
+              )}
               onChangeCurrency={(e) => {
                 handleOnChangeCreatLog(e, "amount");
               }}
@@ -542,9 +516,7 @@ const DetailStyle = styled.div`
   margin: 0 auto;
   box-sizing: border-box;
   background: #ffffff;
-  .goback {
-    margin-top: 20px;
-  }
+
   @media only screen and (max-width: 540px) {
     width: 100%;
   }
