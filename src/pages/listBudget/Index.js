@@ -21,7 +21,7 @@ const Index = () => {
   const [budgetTitle, setBudgetTitle] = useState("");
   const [currentTableData, setCurrentTableData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [budgetState,setBudgetState] = useState("")
+  const [budgetState,setBudgetState] = useState("current")
 
   // eslint-disable-next-line
   const [dataInfo, setDataInfo] = useState([]);
