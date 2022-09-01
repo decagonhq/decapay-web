@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect,Fragment,useRef } from "react";
 import styled from "styled-components";
 // import GoBack from "../../components/Goback";
 import Layout from "../../components/dashboardSidebar/Layout";
@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 
 const Index = () => {
   const [currentTableData, setCurrentTableData] = useState([]);
-
+  const [idOfBudget, setIdOfBudget] = useState(-1);
 
   const headers = {
     headers: {
@@ -16,7 +16,7 @@ const Index = () => {
       Authorization: "Bearer " + localStorage.getItem("token"),
     },
   };
-
+  const ref = useRef(null);
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line
@@ -68,7 +68,7 @@ const Index = () => {
             <p className="category-title">Amount</p>
             <p className="category-title">Amount spent</p>
             <p className="category-title">Percentage spent</p>
-            {/* <p className="category-title">Action</p> */}
+            <p className="category-title">Action</p>
           </div>
           {currentTableData !== null && currentTableData?.length > 0 ? (
             currentTableData.map((item, index) => (
@@ -94,7 +94,7 @@ const Index = () => {
                 <p className="category-title">
                   {item.displayPercentageSpentSoFar}
                 </p>
-                {/* <p
+                <p
                   style={{
                     cursor: "pointer",
                     fontSize: "30px",
@@ -117,11 +117,11 @@ const Index = () => {
                         >
                           View details
                         </p>
-                        <p style={{ color: "red" }}>Delete</p>
+                        {/* <p style={{ color: "red" }}>Delete</p> */}
                       </span>
                     </Fragment>
                   ) : null}
-                </p> */}
+                </p>
               </div>
             ))
           ) : (
