@@ -13,6 +13,7 @@ import PrivateRoute from "./utils/protectedRoute";
 import Budget from "./pages/listBudget/Index";
 import BudgetCategory from "./pages/budgetCategory/Index";
 import Expenses from "./pages/expenses/Expenses";
+import ListBudget from "./pages/dashboard/Index";
 
 function App() {
   return (
@@ -20,10 +21,25 @@ function App() {
       <ToastContainer limit={1} style={{ fontSize: "16px" }} />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/budgetDetail/expenses" element={<Expenses />} />
-        
+        <Route
+          path="/budgetDetail/expenses"
+          element={
+            <PrivateRoute>
+              <Expenses />
+            </PrivateRoute>
+          }
+        />
+
         <Route
           path="/home"
+          element={
+            <PrivateRoute>
+              <ListBudget />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/budgets"
           element={
             <PrivateRoute>
               <Budget />
@@ -38,8 +54,8 @@ function App() {
             </PrivateRoute>
           }
         />
-       
-         <Route
+
+        <Route
           path="/budgetCategory"
           element={
             <PrivateRoute>

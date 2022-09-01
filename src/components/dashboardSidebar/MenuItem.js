@@ -5,8 +5,15 @@ import styled from "styled-components";
 const MenuItem = ({ label, onClick, Icon, active, to }) => {
   return (
     <MenuItemStyle>
-      <div className="p-items">
-        <NavLink exact={true} className="p-link" to={to}>
+      <div
+        onClick={onClick}
+        className={active ? "selected p-items" : "p-items"}
+      >
+        <NavLink
+          exact={true}
+          className={active ? "link text-active" : "link text-inactive"}
+          to={to}
+        >
           <Icon />
           <p>{label}</p>
         </NavLink>
@@ -22,8 +29,11 @@ const MenuItemStyle = styled.div`
     align-items: center;
     margin-bottom: 0.2rem;
   }
-
-  .p-link {
+  .selected {
+    color: white;
+    background: #14a800;
+  }
+  .link{
     text-decoration: none;
     font-size: 1.2rem;
     font-weight: bold;
@@ -40,19 +50,23 @@ const MenuItemStyle = styled.div`
     font-weight: 400;
     font-size: 16px;
     line-height: 19px;
-    color: #8e919c;
     cursor: pointer;
     &:hover {
       background: #14a800;
-      border-radius: 4px;
       color: white;
     }
+
     & p {
       padding: 0;
       margin: 0;
     }
   }
- 
+  .text-active {
+    color: white;
+  }
+  .text-inactive {
+    color: #8e919c;
+  }
 `;
 
 export default MenuItem;
