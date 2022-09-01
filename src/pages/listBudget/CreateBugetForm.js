@@ -1,33 +1,27 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Layout from "../../components/dashboardSidebar/Layout";
+// import Layout from "../../components/dashboardSidebar/Layout";
 import FormInputComponent from "../../components/InputComponent";
 import Select from "react-dropdown-select";
-import GoBack from "../../components/Goback";
+// import GoBack from "../../components/Goback";
 import { Formik } from "formik";
 import * as yup from "yup";
 import MyButton from "../../components/Button";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import request from "../../utils/apiHelper";
+import FormTitleSection from "../../components/modal/FormTitleSection";
 
-const CreateBudget = () => {
+const CreateBudget = ({ closeModal }) => {
   const timerBeforeRedirect = () => {
     setTimeout(() => {
       window.location.href = "/home";
-
     }, 2000);
-  }
+  };
   const createBudgetValidationSchema = yup.object().shape({
-    title: yup
-      .string()
-      .required("Title is required"),
-    amount: yup
-      .number()
-      .required("Amount is required"),
-    period: yup 
-      .string()
-      .required("Period is required"),
+    title: yup.string().required("Title is required"),
+    amount: yup.number().required("Amount is required"),
+    period: yup.string().required("Period is required"),
   });
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
@@ -35,41 +29,36 @@ const CreateBudget = () => {
   const changeDateFormat = (date) => {
     const splitDate = date.split("-");
     return `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
-  }
+  };
 
   const onSubmit = async (values) => {
-    
     values.budgetStartDate = changeDateFormat(values.budgetStartDate);
     values.budgetEndDate = changeDateFormat(values.budgetEndDate);
     values.amount = parseInt(values.amount);
-    if (values.period ==="DAILY"){
- /* eslint-disable */
+    if (values.period === "DAILY") {
+      /* eslint-disable */
       values.budgetEndDate = values.budgetStartDate;
-    }
-    else if (values.period ==="CUSTOM"){
+    } else if (values.period === "CUSTOM") {
       values.budgetEndDate = values.budgetEndDate;
-    }
-    else{
-      values.budgetEndDate = ""
+    } else {
+      values.budgetEndDate = "";
     }
     try {
       await request.post(`budgets`, values, {
         headers: {
           "Content-Type": "application/json",
-          'DVC_KY_HDR': 2,
-          'Authorization': `Bearer ${token}`
+          DVC_KY_HDR: 2,
+          Authorization: `Bearer ${token}`,
         },
-      }
-      );
+      });
       toast.success("Budget created successfully");
       setLoading(false);
-      timerBeforeRedirect()
+      timerBeforeRedirect();
     } catch (error) {
       toast.error(error.response.status);
       setLoading(false);
       console.log(error);
     }
-    
   };
   const options = [
     { value: "1", label: "Annual" },
@@ -101,7 +90,7 @@ const CreateBudget = () => {
     { value: "11", label: "November" },
     { value: "12", label: "December" },
   ];
-  
+
   // const dispatch = useDispatch();
   const [annual, setAnnual] = React.useState(false);
   const [monthly, setMonthly] = React.useState(false);
@@ -118,7 +107,6 @@ const CreateBudget = () => {
       setWeekly(false);
       setDaily(false);
       setCustom(false);
-
     } else if (valueOfE[0] === "2") {
       setAnnual(false);
       setMonthly(true);
@@ -151,8 +139,9 @@ const CreateBudget = () => {
   //   )
   // }, [annual, monthly, weekly, daily, custom])
   return (
-    <Layout>
-      <StyledHome>
+    <StyledHome>
+      <div className="container">
+        <FormTitleSection title="Create Budget" onClick={closeModal} />
         <Formik
           validationSchema={createBudgetValidationSchema}
           initialValues={{
@@ -170,7 +159,6 @@ const CreateBudget = () => {
             setLoading(true);
             onSubmit(values);
             console.log(values);
-
           }}
         >
           {({
@@ -182,14 +170,6 @@ const CreateBudget = () => {
             isValid,
           }) => (
             <div className="form_wrap">
-              <div className="form__container">
-                <div className="header_wrapper">
-                  <GoBack 
-                  />
-                  <h4 className="header_style">Create Budget</h4>
-                </div>
-              </div>
-
               <div className="form__wrapper">
                 <FormInputComponent
                   placeholder="Enter Title"
@@ -198,7 +178,7 @@ const CreateBudget = () => {
                   name="title"
                   value={values.title}
                   onChange={handleChange}
-                  error = {errors.title}
+                  error={errors.title}
                 />
               </div>
               <div className="form__wrapper">
@@ -209,19 +189,20 @@ const CreateBudget = () => {
                   name="amount"
                   value={values.amount}
                   onChange={handleChange}
-                  error = {errors.amount}
+                  error={errors.amount}
                 />
               </div>
-              <div>
-                <h5>Period</h5>
+              <div className="period">
+                <label>Period</label>
                 <Select
                   options={options}
                   name="period"
-                  className="fommy2"
+                  className="select"
                   placeholder="Select Frequency"
-                  error = {errors.period}
+                  error={errors.period}
                   value={values.period}
-                  onChange={(e) => {handleChange2(e)
+                  onChange={(e) => {
+                    handleChange2(e);
                     values.period = e[0].label.toUpperCase();
                   }}
 
@@ -231,11 +212,11 @@ const CreateBudget = () => {
                 />
               </div>
               {annual && (
-                <div className="fommy">
+                <div className="mt-2">
                   <Select
                     options={years}
                     name="years"
-                    className="fommy2"
+                    className="select"
                     placeholder="Select Year"
                     value={values.year}
                     onChange={(e) => {
@@ -246,11 +227,11 @@ const CreateBudget = () => {
                 </div>
               )}
               {monthly && (
-                <div className="fommy">
+                <div className="mt-2">
                   <Select
                     options={years}
                     name="year"
-                    className="fommy2"
+                    className="select mt-2"
                     placeholder="Select Year"
                     value={values.year}
                     onChange={(e) => {
@@ -263,7 +244,7 @@ const CreateBudget = () => {
                     name="month"
                     value={values.month}
                     placeholder="Select Month"
-                    className="fommy2"
+                    className="select mt-2"
                     onChange={(e) => {
                       console.log(e[0].label);
                       values.month = parseInt(e[0].value);
@@ -272,7 +253,7 @@ const CreateBudget = () => {
                 </div>
               )}
               {weekly && (
-                <div className="fommy3">
+                <div className="mt-2">
                   <FormInputComponent
                     placeholder="Start Date"
                     label="Start Date"
@@ -299,15 +280,12 @@ const CreateBudget = () => {
                     type="date"
                     value={values.budgetStartDate}
                     name="budgetStartDate"
-                    onChange={
-                      handleChange
-                    }
-                    
+                    onChange={handleChange}
                   />
                 </div>
               )}
               {custom && (
-                <div className="fommy3">
+                <div className="mt-2">
                   <FormInputComponent
                     placeholder="Start Date"
                     label="Start Date"
@@ -327,7 +305,7 @@ const CreateBudget = () => {
                 </div>
               )}
 
-              <div className="form__wrapper2">
+              <div className="form__wrapper2 mt-2">
                 <FormInputComponent
                   placeholder="Enter Description here..."
                   label="Description"
@@ -342,7 +320,7 @@ const CreateBudget = () => {
                   type="submit"
                   value="Create Budget"
                   disabled={!isValid}
-                  className="form__button"
+                  className="form__wrapper2"
                   onClick={handleSubmit}
                 >
                   {loading ? (
@@ -355,8 +333,8 @@ const CreateBudget = () => {
             </div>
           )}
         </Formik>
-      </StyledHome>
-    </Layout>
+      </div>
+    </StyledHome>
   );
 };
 
@@ -366,20 +344,15 @@ const StyledHome = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
+  /* height: 100vh; */
   background-color: "white";
-  h1 {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #333;
-    text-transform: uppercase;
-  }
-  .form__wrapper2 {
-    margin-top: 30px;
+  
+  .container {
+    width: 100%;
   }
   .form_wrap {
-    width: 50%;
-    margin-top: 50px;
+    width: 100%;
+    /* margin-top: 50px; */
     border-radius: 5px;
   }
   .btn_wrapper {
@@ -389,30 +362,18 @@ const StyledHome = styled.div`
     padding: 4px;
     border-radius: 10px;
   }
-  .form__container {
-    display: flex;
+  .select {
+    height: 2.5rem;
+    font-size: 1rem;
+  }
+  label{
+    margin-bottom:-5px;
+    font-size: 1rem;
+  }
+  .mt-2{
+    margin-top:15px;
+  }
+  .form__wrapper2 {
     width: 100%;
-    align-items: center;
-  }
-  .header_style {
-    justify-content: center;
-    align-items: center;
-    align-self: center;
-    display: flex;
-  }
-  .header_wrapper {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 10px;
-  }
-  .fommy {
-    margin-top: 20px;
-  }
-  .fommy2 {
-    height: 50px;
-  }
-  .fommy3 {
-    margin-top: 40px;
   }
 `;

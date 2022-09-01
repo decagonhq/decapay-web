@@ -17,19 +17,19 @@ const FormSelectComponent = ({label, error, name, options, readOnly, value, onCh
     )
 }
 const StyledFormSelectComponent = styled.div`
-    margin-bottom: 2.4rem;
+    margin-bottom: 1rem;
     .select-field{
-        height: 3.0rem;
-        border: 1px solid rgba(33, 51, 79, 0.15);
+        height: 2.5rem;
+        /* border: 1px solid rgba(33, 51, 79, 0.15); */
         /* padding: 1.5rem 0.5rem 1.5rem 0.5rem; */
     }
     select{
         display: inline-block;
-        font-size: 1.2rem;
+        font-size: 14px;
         color: rgba(33, 51, 79, 0.8);
         width: 100%; 
         background: none;
-        height: 3.0rem;
+        height: 2.5rem;
         padding: 0rem 0.5rem;
     }
    select:focus {

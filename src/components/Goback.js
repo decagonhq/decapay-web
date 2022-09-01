@@ -26,12 +26,12 @@ function Goback(props) {
   );
 }
 
-const GoBack =() => {
+const GoBack =({onClick, text}) => {
   const navigate = useNavigate();
   return (
-    <GoBackStyle onClick={()=>navigate.goBack()} >
+    <GoBackStyle onClick={onClick ? onClick : ()=>navigate(-1)} >
       <Goback width="0.8em" height="0.8em" />
-      <p>Back</p>
+      <p>{text?text:"Back"}</p>
     </GoBackStyle>
   )
 }
@@ -52,7 +52,7 @@ const GoBackStyle = styled.div`
   padding: 10px;
   gap:5px;
   p{
-    font-size:10px;
+    font-size:14px;
     margin-top:15px;
   }
 `;

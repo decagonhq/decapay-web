@@ -1,39 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import MenuItem from "./MenuItem";
-import {  MdOutlineLogout } from "react-icons/md";
-import {TbLayoutDashboard} from "react-icons/tb";
-import {AiOutlineDollar} from "react-icons/ai";
-import {MdListAlt} from "react-icons/md";
+import { MdOutlineLogout } from "react-icons/md";
+import { TbLayoutDashboard } from "react-icons/tb";
+import { AiOutlineDollar } from "react-icons/ai";
+import { MdListAlt } from "react-icons/md";
 import Logo from "../LogoComponent";
-import request from "../../utils/apiHelper"
-import {toast} from "react-toastify"
+import request from "../../utils/apiHelper";
+import { toast } from "react-toastify";
 
 const SidebarDemo = () => {
+  const [homeActive, setHomeActive] = useState(false);
+  const [budgetActive, setBudgetActive] = useState(false);
+  const [catActive, setCatActive] = useState(false);
 
-
-  const logout = async() => {
+  const logout = async () => {
     let token = localStorage.getItem("token");
-    let payload={
-      token: token
-    }
-    try{
+    let payload = {
+      token: token,
+    };
+    try {
       await request.post("signout", payload, {
         headers: {
-          'DVC_KY_HDR': 2,
-          'Authorization':`Bearer ${token}`,
-        }
+          DVC_KY_HDR: 2,
+          Authorization: `Bearer ${token}`,
+        },
       });
       localStorage.clear();
       window.location.href = `/login`;
       toast.success("Logout successful");
       return;
-    }
-    catch(err){
+    } catch (err) {
       console.log(err);
       toast.error(err.message);
     }
   };
+  // get window.location
+  const page = window.location.pathname.split("/")[1];
+  useEffect(() => {
+    if (page === "home") {
+      setHomeActive(true);
+    } else if (page === "budgets" || page === "budgetDetail") {
+      setBudgetActive(true);
+    } else if (page === "budgetCategory") {
+      setCatActive(true);
+    }
+  }, [page, homeActive, budgetActive, catActive]);
 
   return (
     <MenuStyle>
@@ -45,24 +57,24 @@ const SidebarDemo = () => {
           label="Dashboard"
           Icon={TbLayoutDashboard}
           to="/home"
-          // active={}
+          active={homeActive}
         />
         <MenuItem
           // key={index}
-          label={"Budget"}
+          label={"Budgets"}
           Icon={AiOutlineDollar}
-          // active={}
-          to={"/createBudget"}
+          to={"/budgets"}
+          active={budgetActive}
         />
         <MenuItem
           label="Budget Category"
           Icon={MdListAlt}
-          to="/home"
-          // active={}
+          to="/budgetCategory"
+          active={catActive}
         />
-        <div  className="logout">
+        <div className="logout">
           <MdOutlineLogout />
-          <p onClick={()=>logout()}>Logout</p>
+          <p onClick={() => logout()}>Logout</p>
         </div>
       </div>
     </MenuStyle>
@@ -78,7 +90,7 @@ const MenuStyle = styled.div`
   /* box-shadow: 0px 0px 10px #e6e6e6; */
   /* z-index: 1; */
   width: 200px;
-  background: #FFFFFF;
+  background: #ffffff;
   background-size: contain;
   overflow-y: auto;
   ::-webkit-scrollbar {

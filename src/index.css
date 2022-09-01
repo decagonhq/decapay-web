@@ -11,3 +11,43 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.confirm--delete {
+  background-color: #ef5350 !important;
+}
+.cancel-delete {
+  color: white;
+  text-decoration: none;
+  letter-spacing: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0;
+  width: 8.1rem;
+  height: 3.2rem;
+  font-weight: 400;
+  font-size: 16px;
+  border: none;
+  text-align: center;
+  background: linear-gradient(96.67deg, #34a853 0%, #b8d344 100%);
+  white-space: nowrap;
+  border: none;
+}
+
+.swal-button {
+  color: white;
+  text-decoration: none;
+  letter-spacing: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0;
+  width: 8.1rem;
+  height: 3.2rem;
+  font-weight: 400;
+  font-size: 16px;
+  border: none;
+  text-align: center;
+  white-space: nowrap;
+  border: none;
+  
+}
