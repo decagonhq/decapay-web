@@ -309,7 +309,7 @@ const Index = () => {
           <Goback
             text="Budgets"
             onClick={() =>
-              navigate(`../home`, {
+              navigate(`../budgets`, {
                 replace: true,
               })
             }
