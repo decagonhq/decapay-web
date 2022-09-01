@@ -42,11 +42,11 @@ const Index = () => {
   return (
     <Layout>
       <BudgetSyle>
-        {/* <div className="header-wrapper">
-          <div className="">
-            <p style={{ fontWeight: "bold", fontSize: "20px" }}>Current budget</p>
+        <div className="">
+          <div style={{display:"flex", justifyContent:"center", alignItems:"center",}}>
+            <p style={{ fontWeight: "bold", fontSize: "20px" }}> TO BE COMPLETED</p>
           </div>
-        </div> */}
+        </div>
 
         <div className="header page">
         <div className="">
