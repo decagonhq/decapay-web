@@ -1,4 +1,4 @@
-import React, { useState,useEffect,Fragment,useRef } from "react";
+import React, { useState, useEffect, Fragment, useRef } from "react";
 import styled from "styled-components";
 // import GoBack from "../../components/Goback";
 import Layout from "../../components/dashboardSidebar/Layout";
@@ -36,28 +36,42 @@ const Index = () => {
     }
   };
 
-  
   const navigate = useNavigate();
-  
+
   return (
     <Layout>
       <BudgetSyle>
         <div className="">
-          <div style={{display:"flex", justifyContent:"center", alignItems:"center",}}>
-            <p style={{ fontWeight: "bold", fontSize: "20px" }}> TO BE COMPLETED</p>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <p style={{ fontWeight: "bold", fontSize: "20px" }}>
+              {" "}
+              TO BE COMPLETED
+            </p>
           </div>
         </div>
 
         <div className="header page">
-        <div className="">
-            <p style={{ fontWeight: "bold", fontSize: "20px" }}>Current budget</p>
+          <div className="">
+            <p style={{ fontWeight: "bold", fontSize: "20px" }}>
+              Current budget
+            </p>
           </div>
-          <p onClick={() =>
-                    navigate(`../budgets/`, {
-                      replace: true,
-                    })
-                  } style={{color:"green", cursor:"pointer"}}>See all budgets</p>
-          
+          <p
+            onClick={() =>
+              navigate(`../budgets/`, {
+                replace: true,
+              })
+            }
+            style={{ color: "green", cursor: "pointer" }}
+          >
+            See all budgets
+          </p>
         </div>
 
         {/* Custom table starts here */}
@@ -107,7 +121,6 @@ const Index = () => {
                   {idOfBudget === item.id ? (
                     <Fragment>
                       <span ref={ref} className="popup">
-                       
                         <p
                           onClick={() =>
                             navigate(`../budgetDetail/${item.id}`, {
@@ -125,11 +138,20 @@ const Index = () => {
               </div>
             ))
           ) : (
-            <p>There are no budget category</p>
+            <div className="empty">
+              <img
+                className="empty-img"
+                src="/images/dashboard.svg"
+                alt="empty"
+              />
+              <h3>No Budget yet</h3>
+              <p>
+                You’ve not created any budget list yet. Click on the + sign icon
+                below to create a budget.
+              </p>
+            </div>
           )}
         </div>
-       
-        
       </BudgetSyle>
     </Layout>
   );
@@ -181,6 +203,17 @@ const BudgetSyle = styled.div`
     flex-direction: column;
     box-sizing: border-box;
     gap: 15px;
+  }
+  .empty {
+    width:221px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .empty-img {
+    width: 221px;
+    height: 221px;
   }
   .pagination-container {
     display: flex;
