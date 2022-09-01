@@ -13,6 +13,8 @@ const Layout = ({ children, hasBackground }) => {
     setGroup(group);
   };
 
+  
+
   return (
     <Wrapper
       className={"dashboard-layout"}

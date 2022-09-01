@@ -25,7 +25,7 @@ const Index = () => {
   const fetchData = async () => {
     try {
       const response = await request.get(
-        `budgets?size=8&page=1&state=current`,
+        `budgets?size=10&page=1&state=current`,
         headers
       );
       console.log(response.data);
