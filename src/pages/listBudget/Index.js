@@ -21,7 +21,7 @@ const Index = () => {
   const [budgetTitle, setBudgetTitle] = useState("");
   const [currentTableData, setCurrentTableData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [budgetState,setBudgetState] = useState("current")
+  const [budgetState,setBudgetState] = useState("")
 
   // eslint-disable-next-line
   const [dataInfo, setDataInfo] = useState([]);
@@ -109,7 +109,7 @@ const Index = () => {
         </div>
 
         <div className="header page">
-          <p>Most recent</p>
+          {/* <p>Most recent</p> */}
           <p>
             Showing {currentPage} of {Math.ceil(totalCount / pageSize)}
           </p>
