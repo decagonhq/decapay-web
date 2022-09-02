@@ -21,6 +21,12 @@ import useDialog from "../../hooks/useDialog";
 import LogExpenseResuable from "../../components/modal/formModalForLog";
 import Goback from "../../components/Goback";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
+import { dateFormats } from "../../constants";
+import {
+  stripCommaAndConvertToNumber,
+  disableDateInputFieldBasedOnStartDateToCurrentDate,
+} from "../../utils/utils";
 
 const Index = () => {
   const [data, setData] = useState([]);
@@ -50,7 +56,9 @@ const Index = () => {
     return {
       amount: "",
       description: "",
-      transactionDate: new Date().toISOString().substring(0, 10),
+      transactionDate: moment(
+        new Date().toISOString().substring(0, 10)
+      ).toDate(),
     };
   };
   const [createLogExpense, setCreateLogExpense] = useState(initLogData());
@@ -69,14 +77,13 @@ const Index = () => {
     fetchCategory();
     // eslint-disable-next-line
   }, []);
-  const changeDateFormat = (date) => {
-    const splitDate = date.split("-");
-    return `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
-  };
+  
   const postLogExpense = async () => {
     let payload = {
       amount: stripCommaAndConvertToNumber(createLogExpense.amount),
-      transactionDate: changeDateFormat(createLogExpense.transactionDate),
+      transactionDate: moment(createLogExpense.transactionDate).format(
+        dateFormats
+      ),
       description: createLogExpense.description,
     };
     setLoading(true);
@@ -105,19 +112,7 @@ const Index = () => {
       });
     }
   };
-  const stripCommaAndConvertToNumber = (amount) => {
-    if (amount === "" || amount === null || amount === undefined) {
-      return "";
-    } else if (typeof amount === "number") {
-      return amount;
-    } else {
-      let splitAmount = amount.split(",");
-      let joinBackAmount = splitAmount.join("");
-      let splitByNairaSign = joinBackAmount.split("₦");
-      let joinBackAmountByNairaSign = splitByNairaSign.join("");
-      return parseInt(joinBackAmountByNairaSign);
-    }
-  };
+  
   const fetchCategory = async () => {
     try {
       const response = await request.get(`budget_categories`, headers);
@@ -191,23 +186,8 @@ const Index = () => {
       [value]: e.target.value,
     });
   };
-  const handleOnChangeDate = (e, value) => {
-    if (e.target.value > endDate) {
-      toast.error("Date cannot be greater than end date", {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
-    } else if (e.target.value < startDate) {
-      toast.error("Date cannot be less than start date", {
-        autoClose: 3000,
-        onClose: dismissToast,
-      });
-    } else {
-      setCreateLogExpense({
-        ...createLogExpense,
-        [value]: e.target.value,
-      });
-    }
+  const handleOnChangeDate = (value) => {
+    setCreateLogExpense({ ...createLogExpense, transactionDate: value });
   };
   const { id } = useParams();
 
@@ -300,6 +280,15 @@ const Index = () => {
       });
     }
   };
+  const checkIfEndDateIsLessThanToday = () => {
+    let today = new Date();
+    let endDate = new Date(data?.endDate);
+    if (today > endDate) {
+      return endDate;
+    } else {
+      return today;
+    }
+  }
 
   return (
     <Layout>
@@ -515,12 +504,20 @@ const Index = () => {
               inputValue={createLogExpense.description}
               inputNameDate="transactionDate"
               valueCurrency={createLogExpense.amount}
+              selectedDate={createLogExpense.transactionDate}
               inputName="description"
               currencyName="amount"
+              minDate={moment(startDate).toDate()}
+              maxDate={moment(
+                checkIfEndDateIsLessThanToday()
+              ).toDate()}
               onClick={postLogExpense}
-              onChangeInputDate={(e) => {
-                handleOnChangeDate(e, "transactionDate");
+              handleChangeDate={(e) => {
+                handleOnChangeDate(e);
               }}
+              disabled={disableDateInputFieldBasedOnStartDateToCurrentDate(
+                startDate
+              )}
               onChangeCurrency={(e) => {
                 handleOnChangeCreatLog(e, "amount");
               }}
