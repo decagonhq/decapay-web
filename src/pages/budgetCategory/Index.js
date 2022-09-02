@@ -231,7 +231,7 @@ const ListStyle = styled.div`
     gap: 10px;
   }
   .category {
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
@@ -265,7 +265,7 @@ const ListStyle = styled.div`
     white-space: nowrap;
     border: none;
     :hover {
-      cursor: pointer;
+      cursor: poSofia Pro;
       background: #14a800;
     }
   }
@@ -284,7 +284,7 @@ const ListStyle = styled.div`
     z-index: 3;
     border-radius: 10px;
     z-index: 100;
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;

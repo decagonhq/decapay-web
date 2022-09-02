@@ -341,6 +341,7 @@ const CreateBudget = ({ closeModal }) => {
 export default CreateBudget;
 
 const StyledHome = styled.div`
+  font-family:"Sofia Pro";
   display: flex;
   flex-direction: column;
   align-items: center;

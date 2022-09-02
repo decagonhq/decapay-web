@@ -30,6 +30,8 @@ const ImageWrapper = styled.div`
     align-items: center;
 
 `
-const IconHeader = styled.h2`
-    margin-left: 10px;
+const IconHeader = styled.p`
+    margin-top: 15px;
+    font-weight:800;
+    font-size:20px;
 `

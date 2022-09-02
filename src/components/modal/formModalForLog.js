@@ -76,12 +76,10 @@ const LogExpenseResuable = ({
           disabled={disabled}
         />
       </div>
-
-      <div className="btn">
+        <br />
         <MyButton type="submit" className="form__button" onClick={onClick}>
           {loading ? <ClipLoader color="white" size="40px" /> : "Save"}
         </MyButton>
-      </div>
     </StyledHome>
   );
 };

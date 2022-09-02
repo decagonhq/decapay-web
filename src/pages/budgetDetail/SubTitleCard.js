@@ -51,7 +51,7 @@ const ListStyle = styled.div`
     /* background-color: red; */
   }
   .amt {
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     font-style: normal;
     font-weight: 700;
     font-size: 24px;

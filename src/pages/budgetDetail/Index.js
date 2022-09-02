@@ -33,6 +33,7 @@ const Index = () => {
   const [categories, setCategories] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  
   const [editModal, setEditModal] = useState(false);
   const [idOfLineItem, setIdOfLineItem] = useState(-1);
   const [projectedAmount, setProjectedAmount] = useState(0);
@@ -191,12 +192,26 @@ const Index = () => {
   };
   const { id } = useParams();
 
+  let today = new Date().toISOString().slice(0, 10)
   const fetchData = async () => {
+    
     try {
       const response = await request.get(`budgets/${id}`, headers);
       setData(response.data.data);
-      setStartDate(response.data.data.startDate);
-      setEndDate(response.data.data.endDate);
+      let s = response.data.data.startDate
+      let e =response.data.data.endDate
+      if(today > s & today > e){
+        setStartDate(s);
+        setEndDate(e)
+      }
+      if(today <= s & today >= endDate ){
+        setStartDate(today)
+        setEndDate(today)
+      }
+      if(s > today & e > today){
+        setStartDate("")
+        endDate("")
+      }
     } catch (error) {
       toast.error(error.response.data.message, {
         autoClose: 3000,
@@ -204,6 +219,10 @@ const Index = () => {
       });
     }
   };
+
+  useEffect(()=>{
+
+  },[])
 
   const getLineItem = () => {
     let item = data?.lineItems?.find(
@@ -290,6 +309,7 @@ const Index = () => {
     }
   }
 
+
   return (
     <Layout>
       <DetailStyle>
@@ -324,7 +344,13 @@ const Index = () => {
 
         <div className="budget-summary">
           <div className="title">
-            <TitleCard amount={data?.displayProjectedAmount} />
+            <TitleCard 
+            title={data?.title} 
+            startDate={data?.startDate} 
+            endDate={data?.endDate} 
+            period={data?.budgetPeriod}
+            amount={data?.displayProjectedAmount} 
+            />
 
             <div className="sub_container general mt-2 mb-2">
               <SubTitleCard
@@ -344,7 +370,11 @@ const Index = () => {
 
           {startDate && endDate ? (
             <div className="calender">
-              <Calendar startDate={startDate} endDate={endDate} />
+              <Calendar 
+              startDate={startDate} 
+              endDate={endDate} 
+              today={today}
+              />
             </div>
           ) : null}
         </div>
@@ -535,6 +565,7 @@ const Index = () => {
 export default Index;
 
 const DetailStyle = styled.div`
+  font-family: "Sofia Pro";
   display: flex;
   flex-direction: column;
   margin: 0 auto;
@@ -612,7 +643,7 @@ const DetailStyle = styled.div`
     }
   }
   .line-item-container {
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     padding: 5px;
     width: 100%;
     height: 108px;
@@ -653,7 +684,7 @@ const DetailStyle = styled.div`
       border-radius: 4px;
     }
     .log {
-      font-family: "Inter";
+      font-family: "Sofia Pro";
       font-style: normal;
       font-weight: bold;
       font-size: 16px;
@@ -688,7 +719,7 @@ const DetailStyle = styled.div`
     z-index: 3;
     border-radius: 10px;
     z-index: 100;
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;

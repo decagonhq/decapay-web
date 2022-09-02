@@ -49,11 +49,10 @@ const BudgetLineItemResuable = ({
           onChange={onChangeCurrency}
         />
       </div>
-      <div className="btn">
-        <MyButton type="submit" className="form__button" onClick={onClick}>
+      <br />
+        <MyButton type="submit"  onClick={onClick}>
           {loading ? <ClipLoader color="white" size="40px" /> : "Save"}
         </MyButton>
-      </div>
     </StyledHome>
   );
 };
@@ -65,6 +64,7 @@ const StyledHome = styled.div`
     border-radius: 5px;
   }
   .btn {
+    min-width:100% ;
     display: flex;
     justify-content: center;
     align-items: center;
