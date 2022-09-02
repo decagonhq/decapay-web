@@ -31,11 +31,23 @@ const StyledHome = styled.div`
 
   .modal-body {
     background: white;
-    max-width: 35%;
+    max-width: 40%;
     max-height: 90vh;
     border-radius: 10px;
     overflow: auto;
     padding: 20px;
     /* print */
+  }
+  @media only screen and (max-width: 768px) {
+    .modal-body {
+    max-width: 80%;
+    /* print */
+  }
+  }
+  @media only screen and (max-width: 540px) {
+    .modal-body {
+    max-width: 95%;
+    /* print */
+  }
   }
 `;

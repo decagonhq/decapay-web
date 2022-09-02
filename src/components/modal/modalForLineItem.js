@@ -4,7 +4,8 @@ import MyButton from "../../components/Button";
 import ClipLoader from "react-spinners/ClipLoader";
 import FormTitleSection from "../../components/modal/FormTitleSection";
 import CurrencyFormat from "react-currency-format";
-import FormSelectComponent from "../../components/selectComponent";
+// import FormSelectComponent from "../../components/selectComponent";
+import { NavLink } from "react-router-dom";
 
 const BudgetLineItemResuable = ({
   closeModal,
@@ -23,18 +24,37 @@ const BudgetLineItemResuable = ({
 }) => {
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
+
   return (
     <StyledHome>
       <FormTitleSection title={formTitle} onClick={closeModal} />
-      
+
       <div className="form__wrapper">
-        <FormSelectComponent
+        {/* <FormSelectComponent
           name={selectName}
           options={options}
           value={selectValue}
           onChange={onChangeSelect}
           placeholder={placeholderSelect}
-        />
+        /> */}
+        {options && options.length > 0 ? (
+          <select
+            name={selectName}
+            options={options}
+            value={selectValue}
+            onChange={onChangeSelect}
+            placeholder={placeholderSelect}
+          >
+            {options.map((option, index) => (
+                option.value === "" ?  <option key={index} defaultValue value={option.value} >{option.label}</option> : 
+                <option key={index} value={option.value}>{option.label}</option>
+                ))}
+          </select>
+        ) : (
+          <div className="empty">
+            <NavLink to={"/budgetCategory"}>Create budget category</NavLink>
+          </div>
+        )}
       </div>
       <div className="form__wrapper">
         <CurrencyFormat
@@ -50,9 +70,9 @@ const BudgetLineItemResuable = ({
         />
       </div>
       <br />
-        <MyButton type="submit"  onClick={onClick}>
-          {loading ? <ClipLoader color="white" size="40px" /> : "Save"}
-        </MyButton>
+      <MyButton type="submit" onClick={onClick}>
+        {loading ? <ClipLoader color="white" size="40px" /> : "Save"}
+      </MyButton>
     </StyledHome>
   );
 };
@@ -63,11 +83,45 @@ const StyledHome = styled.div`
     width: 100%;
     border-radius: 5px;
   }
-  .btn {
-    min-width:100% ;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
+  select {
+    display: inline-block;
+    font-size: 14px;
+    color: rgba(33, 51, 79, 0.8);
+    width: 100%;
+    background: none;
+    height: 2.5rem;
+    padding: 0rem 0.5rem;
+  }
+  select:focus {
+    border: 0.8px solid #34a853;
+  }
+  select:active {
+    border: 0.8px solid #34a853;
+  }
+  @media only screen and (max-width: 405px) {
+    select {
+      width: 100%;
+    }
+  }
+  .empty {
+    display: inline-block;
+    font-size: 14px;
+    color: rgba(33, 51, 79, 0.8);
+    width: 100%;
+    background: none;
+    height: 2.5rem;
+    padding: 0rem 0.5rem;
+    border: 1px solid black;
+    padding: 10px;
+  }
+  a {
+    color: rgba(33, 51, 79, 0.8);
+    text-decoration: none;
+    font-size: 14px;
+  }
+  @media only screen and (max-width: 405px) {
+    .empty {
+      width: 100%;
+    }
   }
 `;

@@ -117,15 +117,21 @@ const Index = () => {
   const fetchCategory = async () => {
     try {
       const response = await request.get(`budget_categories`, headers);
-      let res = response?.data?.data.map((category) => {
-        return {
-          value: category.id,
-          label: category.title,
-        };
-      });
-      // add select to res
-      res.unshift({ value: "", label: "Select Category" });
-      setCategories(res);
+      let res = response?.data?.data
+      if(res.length > 0){
+       let options = res?.map((category) => {
+          return {
+            value: category.id,
+            label: category.title,
+          };
+        });
+        // add select to res
+        options.unshift({ value: "", label: "Select Category" });
+        setCategories(options);
+      } else{
+        setCategories([])
+      }
+      
     } catch (error) {
       toast.error(error.response.data.message, {
         autoClose: 3000,
@@ -232,7 +238,7 @@ const Index = () => {
     setProjectedAmount(item?.projectedAmount);
     setCategoryName(item?.category);
   };
-// console.log(data)
+
   useEffect(() => {
     // eslint-disable-next-line
     getLineItem();

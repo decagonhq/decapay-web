@@ -117,7 +117,7 @@ const LoginPage = () => {
 export default LoginPage;
 
 const StyledHome = styled.div`
-  font-family: "Sofia Pro";
+  font-family: "Inter";
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -130,7 +130,7 @@ const StyledHome = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 600px;
+    width: 500px;
     border: 1px solid #e6e6e6;
     @media (max-width: 768px) {
       width: 100%;
@@ -146,12 +146,12 @@ const StyledHome = styled.div`
   }
 
   .form__wrapper {
-    width: 70%;
+    width: 85%;
     /* margin-bottom: -30px; */
     border-radius: 5px;
   }
   .bottom__text {
-    font-family: "Sofia Pro";
+    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -167,17 +167,14 @@ const StyledHome = styled.div`
     text-align: center;
     color: rgba(0, 156, 244, 1);
   }
-  .to-register {
-    color: rgba(20, 168, 0, 1);
+  
   
   .remember-me{
-    display:flex;
-    align-self:flex-start;
-    gap:5px;
-    margin-left:90px;
-    gap : 5px;
-    align-items:center;
+    margin-left: 0px;
+    gap:15px;
     padding: 10px;
+    align-self:baseline;
+    margin-left:30px;
     @media (max-width: 768px) {
       margin-left: 0px;
       justify-content: center;
@@ -185,11 +182,5 @@ const StyledHome = styled.div`
       align-self: center;
     }
   }
-  .remember-me input {
-    width: 20px;
-    height: 20px;
-  
-  input[type="checkbox"] {
-    border-radius: 10px;
-  }
+
 `;
