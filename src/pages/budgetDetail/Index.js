@@ -208,17 +208,17 @@ const Index = () => {
     try {
       const response = await request.get(`budgets/${id}`, headers);
       setData(response.data.data);
-      let s = response.data.data.startDate
-      let e =response.data.data.endDate
-      if(today > s & today > e){
-        setStartDate(s);
-        setEndDate(e)
+      let remoteStartDate = response.data.data.startDate
+      let remoteEndDate =response.data.data.endDate
+      if(today > remoteStartDate & today > remoteEndDate){
+        setStartDate(remoteStartDate);
+        setEndDate(remoteEndDate)
       }
-      if(s>=today & e >= today){
+      if(remoteStartDate>=today & remoteEndDate >= today){
         setStartDate(today)
         setEndDate(today)
       }
-      if(s > today & e > today){
+      if(remoteStartDate > today & remoteEndDate > today){
         setStartDate("")
         endDate("")
       }

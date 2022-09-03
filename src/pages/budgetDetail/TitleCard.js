@@ -2,30 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const TitleCard = ({ title, amount, startDate, endDate,period }) => {
-  const dateConverter = (created_at) => {
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    let current_datetime = new Date(created_at);
-    let formatted_date =
-      current_datetime.getDate() +
-      " " +
-      months[current_datetime.getMonth()] +
-      ", " +
-      current_datetime.getFullYear();
-    return formatted_date;
-  };
+  
   return (
     <ListStyle>
       <div>
