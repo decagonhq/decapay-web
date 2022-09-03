@@ -133,7 +133,6 @@ const CreateBudget = ({ closeModal }) => {
       setCustom(true);
     }
   };
-  console.log(annual);
   // useEffect(() => {
   //   handleChange(
   //   )

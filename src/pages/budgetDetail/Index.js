@@ -23,6 +23,7 @@ import Goback from "../../components/Goback";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { dateFormats } from "../../constants";
+import format from "date-fns/format";
 import {
   stripCommaAndConvertToNumber,
   disableDateInputFieldBasedOnStartDateToCurrentDate,
@@ -31,8 +32,12 @@ import {
 const Index = () => {
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+
+  let t = new Date()
+  let today = format(t, "yyyy-MM-dd")
+
+  const [startDate, setStartDate] = useState(today);
+  const [endDate, setEndDate] = useState(today);
   
   const [editModal, setEditModal] = useState(false);
   const [idOfLineItem, setIdOfLineItem] = useState(-1);
@@ -197,8 +202,7 @@ const Index = () => {
     setCreateLogExpense({ ...createLogExpense, transactionDate: value });
   };
   const { id } = useParams();
-
-  let today = new Date().toISOString().slice(0, 10)
+  
   const fetchData = async () => {
     
     try {
@@ -210,7 +214,7 @@ const Index = () => {
         setStartDate(s);
         setEndDate(e)
       }
-      if(today <= s & today >= endDate ){
+      if(s>=today & e >= today){
         setStartDate(today)
         setEndDate(today)
       }
@@ -225,10 +229,6 @@ const Index = () => {
       });
     }
   };
-
-  useEffect(()=>{
-
-  },[])
 
   const getLineItem = () => {
     let item = data?.lineItems?.find(
@@ -315,6 +315,7 @@ const Index = () => {
     }
   }
 
+  
 
   return (
     <Layout>

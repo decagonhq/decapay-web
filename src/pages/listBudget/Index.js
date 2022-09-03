@@ -45,7 +45,6 @@ const Index = () => {
         `budgets?size=${pageSize}&page=${currentPage}&state=${budgetState}`,
         headers
       );
-      console.log(response.data);
       setCurrentTableData(response.data.data.content);
       setTotalCount(response.data.data.totalElements);
       setDataInfo(response.data.data.pageable);
