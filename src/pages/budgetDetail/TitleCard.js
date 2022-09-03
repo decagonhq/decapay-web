@@ -34,8 +34,8 @@ const TitleCard = ({ title, amount, startDate, endDate,period }) => {
       </div>
       <div>
         <p className="bg-title transform">{period} Budget</p>
-        <p className="bg-title">Start date: {dateConverter(startDate)}</p>
-        <p className="bg-title">End date: {dateConverter(endDate)}</p>
+        <p className="bg-title">Start date: {startDate}</p>
+        <p className="bg-title">End date: {endDate}</p>
       </div>
     </ListStyle>
   );

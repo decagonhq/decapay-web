@@ -202,7 +202,7 @@ const Index = () => {
     setCreateLogExpense({ ...createLogExpense, transactionDate: value });
   };
   const { id } = useParams();
-  
+
   const fetchData = async () => {
     
     try {
@@ -353,8 +353,8 @@ const Index = () => {
           <div className="title">
             <TitleCard 
             title={data?.title} 
-            startDate={data?.startDate} 
-            endDate={data?.endDate} 
+            startDate={data?.displayStartDate} 
+            endDate={data?.displayEndDate} 
             period={data?.budgetPeriod}
             amount={data?.displayProjectedAmount} 
             />
