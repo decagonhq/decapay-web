@@ -11,6 +11,7 @@ import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
 import FormSelectComponent from "../../components/selectComponent";
 // import { Link } from "react-router-dom";
+import {hundredPercent} from "../../constants";
 
 let pageSize = 6;
 const Index = () => {
@@ -145,7 +146,7 @@ const Index = () => {
                 <p className="category-title">
                   {item.displayTotalAmountSpentSoFar}
                 </p>
-                <p className="category-title">
+                <p className={item?.percentageSpentSoFar > hundredPercent ?"category-title red" : "category-title"}>
                   {item.displayPercentageSpentSoFar}
                 </p>
                 <p
@@ -463,5 +464,8 @@ const BudgetSyle = styled.div`
       padding: 0px;
       font-size: 10px;
     }
+  }
+  .red{
+    color:red;
   }
 `;
