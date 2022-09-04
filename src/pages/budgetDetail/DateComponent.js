@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 // import DatePicker from "react-dater";
 import "react-dater/dist/index.css";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { Calendar } from "react-date-range";
-import format from "date-fns/format";
+// import format from "date-fns/format";
 import "../../styles/styles.css";
 import styled from "styled-components"
 
@@ -31,25 +31,17 @@ const CalendarWrapper = styled.div`
 
   `;
 
-const Datething = ({startDate, endDate, today}) => {
+const Datething = ({startDate, endDate, calendar, handleSelect}) => {
 
   // eslint-disable-next-line
-  const [calendar, setCalendar] = useState("");
+  
   // const [disabled,setDisabled] = useState(false)
 
-  useEffect(() => {
-    setCalendar(format(new Date(), "MM/dd/yyyy"));
-  
-  }, []);
-
-  function handleSelect(date) {
-    setCalendar(format(date, "MM/dd/yyyy"));
-  }
 
 
   return (
     <CalendarWrapper>
-      {/* <input value={calendar} readOnly className="inputBox" /> */}
+      <input type="hidden" value={calendar} readOnly className="inputBox" />
       <Calendar
         onChange={handleSelect}
         className="calenderElement"

@@ -73,6 +73,7 @@ const LogExpenseResuable = ({
           onChange={handleChangeDate}
           minDate={minDate}
           maxDate={maxDate}
+          
           disabled={disabled}
         />
       </div>

@@ -46,6 +46,17 @@ const Index = () => {
   const [categoryId, setCategoryId] = useState(-1);
   const [loading, setLoading] = useState(false);
   const [getCategordId, setGetCategordId] = useState(-1);
+  const [calendar, setCalendar] = useState("");
+
+  useEffect(() => {
+    setCalendar(format(new Date(), "MM/dd/yyyy"));
+  
+  }, []);
+
+  function handleSelect(date) {
+    setCalendar(format(date, "MM/dd/yyyy"));
+  }
+  // console.log(calendar)
   const headers = {
     headers: {
       "Content-Type": "application/json",
@@ -59,12 +70,13 @@ const Index = () => {
   });
 
   const initLogData = () => {
+    let newCalender = moment(
+      new Date().toISOString().substring(0, 10)
+    ).toDate()
     return {
       amount: "",
       description: "",
-      transactionDate: moment(
-        new Date().toISOString().substring(0, 10)
-      ).toDate(),
+      transactionDate:newCalender,
     };
   };
   const [createLogExpense, setCreateLogExpense] = useState(initLogData());
@@ -307,7 +319,6 @@ const Index = () => {
     }
   }
 
-  
 
   return (
     <Layout>
@@ -370,6 +381,8 @@ const Index = () => {
           {startDate && endDate ? (
             <div className="calender">
               <Calendar 
+              handleSelect={handleSelect}
+              calendar={calendar}
               startDate={startDate} 
               endDate={endDate} 
               today={today}
