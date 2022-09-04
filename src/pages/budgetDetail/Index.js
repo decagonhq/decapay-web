@@ -22,7 +22,7 @@ import LogExpenseResuable from "../../components/modal/formModalForLog";
 import Goback from "../../components/Goback";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import { dateFormats } from "../../constants";
+// import { dateFormats } from "../../constants";
 import format from "date-fns/format";
 import {
   stripCommaAndConvertToNumber,
@@ -48,15 +48,15 @@ const Index = () => {
   const [getCategordId, setGetCategordId] = useState(-1);
   const [calendar, setCalendar] = useState("");
 
+  console.log("seleecte", calendar);
   useEffect(() => {
-    setCalendar(format(new Date(), "MM/dd/yyyy"));
+    setCalendar(format(new Date(), "dd/MM/yyyy"));
   
   }, []);
 
   function handleSelect(date) {
-    setCalendar(format(date, "MM/dd/yyyy"));
+    setCalendar(format(date, "dd/MM/yyyy"));
   }
-  // console.log(calendar)
   const headers = {
     headers: {
       "Content-Type": "application/json",
@@ -70,13 +70,10 @@ const Index = () => {
   });
 
   const initLogData = () => {
-    let newCalender = moment(
-      new Date().toISOString().substring(0, 10)
-    ).toDate()
     return {
       amount: "",
       description: "",
-      transactionDate:newCalender,
+      transactionDate: calendar,
     };
   };
   const [createLogExpense, setCreateLogExpense] = useState(initLogData());
@@ -99,9 +96,10 @@ const Index = () => {
   const postLogExpense = async () => {
     let payload = {
       amount: stripCommaAndConvertToNumber(createLogExpense.amount),
-      transactionDate: moment(createLogExpense.transactionDate).format(
-        dateFormats
-      ),
+      transactionDate:calendar,
+      //  moment(createLogExpense.transactionDate).format(
+      //   dateFormats
+      // ),
       description: createLogExpense.description,
     };
     setLoading(true);
@@ -211,7 +209,7 @@ const Index = () => {
     });
   };
   const handleOnChangeDate = (value) => {
-    setCreateLogExpense({ ...createLogExpense, transactionDate: value });
+    setCalendar(format(value, "dd/MM/yyyy"));
   };
   const { id } = useParams();
 
@@ -543,6 +541,7 @@ const Index = () => {
               inputDateType="date"
               inputType="text"
               inputDateValue={createLogExpense.transactionDate}
+              defaultValue={calendar}
               inputValue={createLogExpense.description}
               inputNameDate="transactionDate"
               valueCurrency={createLogExpense.amount}

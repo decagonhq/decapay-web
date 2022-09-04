@@ -47,7 +47,7 @@ const ListStyle = styled.div`
     p{
       margin:0;
       padding:0;
-      
+
     }
     }
   .detail {

@@ -49,7 +49,7 @@ const Datething = ({startDate, endDate, calendar, handleSelect}) => {
         showSelectionPreview={true}
         minDate={new Date(startDate)}
         maxDate={new Date(endDate)}
-        moveRangeOnFirstSelection={true}
+        // moveRangeOnFirstSelection={true}
         shownDate={new Date(startDate)}
       />
     </CalendarWrapper>
