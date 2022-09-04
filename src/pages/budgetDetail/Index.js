@@ -23,6 +23,7 @@ import Goback from "../../components/Goback";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 // import { dateFormats } from "../../constants";
+import {dateFormats2,dateFormats3,hundredPercent} from "../../constants";
 import format from "date-fns/format";
 import {
   stripCommaAndConvertToNumber,
@@ -34,7 +35,7 @@ const Index = () => {
   const [categories, setCategories] = useState([]);
 
   let t = new Date()
-  let today = format(t, "yyyy-MM-dd")
+  let today = format(t, dateFormats3)
 
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
@@ -50,12 +51,12 @@ const Index = () => {
 
   console.log("seleecte", calendar);
   useEffect(() => {
-    setCalendar(format(new Date(), "dd/MM/yyyy"));
+    setCalendar(format(new Date(), dateFormats2));
   
   }, []);
 
   function handleSelect(date) {
-    setCalendar(format(date, "dd/MM/yyyy"));
+    setCalendar(format(date, dateFormats2));
   }
   const headers = {
     headers: {
@@ -209,7 +210,7 @@ const Index = () => {
     });
   };
   const handleOnChangeDate = (value) => {
-    setCalendar(format(value, "dd/MM/yyyy"));
+    setCalendar(format(value, dateFormats2));
   };
   const { id } = useParams();
 
@@ -369,6 +370,7 @@ const Index = () => {
               />
               <SubTitleCard
                 title="Percentage spent so far"
+                percent={data?.percentageSpentSoFar}
                 alt=""
                 amount={data?.displayPercentageSpentSoFar}
                 src="/images/percent.svg"
@@ -419,7 +421,7 @@ const Index = () => {
                       <FiArrowUpRight className="icon" />
                     </span>
                   </p>
-                  <p className={item.percentageSpentSoFar > 100 ? "red": "link"}>{item.displayPercentageSpentSoFar}</p>
+                  <p className={item.percentageSpentSoFar > hundredPercent ? "red": "link"}>{item.displayPercentageSpentSoFar}</p>
                 </div>
                 <p
                   onClick={() => openPopup(index, item.categoryId)}
@@ -598,6 +600,19 @@ const DetailStyle = styled.div`
     gap: 20px;
     /* justify-content: space-around; */
   }
+  @media only screen and (max-width: 991px) {
+    .title {
+    width: 100%;
+    margin-top: 20px;
+  }
+    .budget-summary{
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      justify-content:center ;
+    }
+  }
+  
 
   .general {
     width: 100%;

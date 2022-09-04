@@ -1,14 +1,15 @@
 import React from "react";
 import styled from "styled-components";
+import {hundredPercent} from "../../constants";
 
-const SubTitleCard = ({ title,src, amount,alt}) => {
+const SubTitleCard = ({ title,src, amount,alt,percent}) => {
   return (
     <ListStyle>
       <p >{title}</p>
       <div className="image">
         <img src={src} alt={alt}/>
       </div>
-      <p className="amt">{amount}</p>
+      <p className={percent > hundredPercent ? "amt red":"amt green"}>{amount}</p>
     </ListStyle>
   );
 };
@@ -49,8 +50,8 @@ const ListStyle = styled.div`
     margin:0;
     margin-top:-10px;
     padding:0;
-    /* background-color: red; */
   }
+  
   .amt {
     font-family: "Sofia Pro";
     font-style: normal;
@@ -60,6 +61,22 @@ const ListStyle = styled.div`
     display: flex;
     align-items: center;
     margin-top:-15px;
+    
+  }
+  .green{
     color: #21334f;
+  }
+  .red{
+    color:red;
+  }
+  @media only screen and (max-width: 991px) {
+    padding:5px;
+    .image{
+      display:none;
+      margin-top:0;
+    }
+    .amt{
+      margin-top:0;
+    }
   }
 `;
