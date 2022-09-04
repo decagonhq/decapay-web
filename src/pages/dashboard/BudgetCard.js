@@ -33,7 +33,7 @@ const ListStyle = styled.div`
   height: 150px;
   background: rgba(0, 0, 0, 0.04);
   padding: 10px;
-  font-family: "Inter";
+  font-family: "Sofia Pro";
   font-style: normal;
   line-height: 19px;
   @media only screen and (max-width: 379px) {

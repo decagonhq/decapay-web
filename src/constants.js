@@ -28,3 +28,9 @@ export const Months = [
   ];
 
 export const dateFormats = "DD/MM/YYYY";
+export const dateFormats2 = "dd/MM/yyyy";
+export const dateFormats3 = "yyyy-MM-dd";
+
+export const hundredPercent = 100;
+
+

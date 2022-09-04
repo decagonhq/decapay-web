@@ -22,7 +22,9 @@ import LogExpenseResuable from "../../components/modal/formModalForLog";
 import Goback from "../../components/Goback";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import { dateFormats } from "../../constants";
+// import { dateFormats } from "../../constants";
+import {dateFormats2,dateFormats3,hundredPercent} from "../../constants";
+import format from "date-fns/format";
 import {
   stripCommaAndConvertToNumber,
   disableDateInputFieldBasedOnStartDateToCurrentDate,
@@ -31,8 +33,13 @@ import {
 const Index = () => {
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+
+  let t = new Date()
+  let today = format(t, dateFormats3)
+
+  const [startDate, setStartDate] = useState(today);
+  const [endDate, setEndDate] = useState(today);
+  
   const [editModal, setEditModal] = useState(false);
   const [idOfLineItem, setIdOfLineItem] = useState(-1);
   const [projectedAmount, setProjectedAmount] = useState(0);
@@ -40,6 +47,17 @@ const Index = () => {
   const [categoryId, setCategoryId] = useState(-1);
   const [loading, setLoading] = useState(false);
   const [getCategordId, setGetCategordId] = useState(-1);
+  const [calendar, setCalendar] = useState("");
+
+  console.log("seleecte", calendar);
+  useEffect(() => {
+    setCalendar(format(new Date(), dateFormats2));
+  
+  }, []);
+
+  function handleSelect(date) {
+    setCalendar(format(date, dateFormats2));
+  }
   const headers = {
     headers: {
       "Content-Type": "application/json",
@@ -56,9 +74,7 @@ const Index = () => {
     return {
       amount: "",
       description: "",
-      transactionDate: moment(
-        new Date().toISOString().substring(0, 10)
-      ).toDate(),
+      transactionDate: calendar,
     };
   };
   const [createLogExpense, setCreateLogExpense] = useState(initLogData());
@@ -81,9 +97,10 @@ const Index = () => {
   const postLogExpense = async () => {
     let payload = {
       amount: stripCommaAndConvertToNumber(createLogExpense.amount),
-      transactionDate: moment(createLogExpense.transactionDate).format(
-        dateFormats
-      ),
+      transactionDate:calendar,
+      //  moment(createLogExpense.transactionDate).format(
+      //   dateFormats
+      // ),
       description: createLogExpense.description,
     };
     setLoading(true);
@@ -116,15 +133,21 @@ const Index = () => {
   const fetchCategory = async () => {
     try {
       const response = await request.get(`budget_categories`, headers);
-      let res = response?.data?.data.map((category) => {
-        return {
-          value: category.id,
-          label: category.title,
-        };
-      });
-      // add select to res
-      res.unshift({ value: "", label: "Select Category" });
-      setCategories(res);
+      let res = response?.data?.data
+      if(res.length > 0){
+       let options = res?.map((category) => {
+          return {
+            value: category.id,
+            label: category.title,
+          };
+        });
+        // add select to res
+        options.unshift({ value: "", label: "Select Category" });
+        setCategories(options);
+      } else{
+        setCategories([])
+      }
+      
     } catch (error) {
       toast.error(error.response.data.message, {
         autoClose: 3000,
@@ -187,16 +210,21 @@ const Index = () => {
     });
   };
   const handleOnChangeDate = (value) => {
-    setCreateLogExpense({ ...createLogExpense, transactionDate: value });
+    setCalendar(format(value, dateFormats2));
   };
   const { id } = useParams();
 
   const fetchData = async () => {
+    
     try {
       const response = await request.get(`budgets/${id}`, headers);
       setData(response.data.data);
-      setStartDate(response.data.data.startDate);
-      setEndDate(response.data.data.endDate);
+      let remoteStartDate = response.data.data.startDate
+      let remoteEndDate =response.data.data.endDate
+      let validEndDate=today>remoteEndDate?remoteEndDate:today
+      // console.log("Valid Date",validEndDate)
+        setStartDate(remoteStartDate);
+        setEndDate(validEndDate)
     } catch (error) {
       toast.error(error.response.data.message, {
         autoClose: 3000,
@@ -213,7 +241,7 @@ const Index = () => {
     setProjectedAmount(item?.projectedAmount);
     setCategoryName(item?.category);
   };
-// console.log(data)
+
   useEffect(() => {
     // eslint-disable-next-line
     getLineItem();
@@ -290,6 +318,7 @@ const Index = () => {
     }
   }
 
+
   return (
     <Layout>
       <DetailStyle>
@@ -324,17 +353,24 @@ const Index = () => {
 
         <div className="budget-summary">
           <div className="title">
-            <TitleCard amount={data?.displayProjectedAmount} />
+            <TitleCard 
+            title={data?.title} 
+            startDate={data?.displayStartDate} 
+            endDate={data?.displayEndDate} 
+            period={data?.budgetPeriod}
+            amount={data?.displayProjectedAmount} 
+            />
 
             <div className="sub_container general mt-2 mb-2">
               <SubTitleCard
-                title="Total Amount spent"
+                title="Total Amount spent so far"
                 alt=""
                 amount={data?.displayTotalAmountSpentSoFar}
                 src="/images/money-2.svg"
               />
               <SubTitleCard
-                title="Percent"
+                title="Percentage spent so far"
+                percent={data?.percentageSpentSoFar}
                 alt=""
                 amount={data?.displayPercentageSpentSoFar}
                 src="/images/percent.svg"
@@ -344,7 +380,13 @@ const Index = () => {
 
           {startDate && endDate ? (
             <div className="calender">
-              <Calendar startDate={startDate} endDate={endDate} />
+              <Calendar 
+              handleSelect={handleSelect}
+              calendar={calendar}
+              startDate={startDate} 
+              endDate={endDate} 
+              today={today}
+              />
             </div>
           ) : null}
         </div>
@@ -379,7 +421,7 @@ const Index = () => {
                       <FiArrowUpRight className="icon" />
                     </span>
                   </p>
-                  <p className="link">{item.displayPercentageSpentSoFar}</p>
+                  <p className={item.percentageSpentSoFar > hundredPercent ? "red": "link"}>{item.displayPercentageSpentSoFar}</p>
                 </div>
                 <p
                   onClick={() => openPopup(index, item.categoryId)}
@@ -501,6 +543,7 @@ const Index = () => {
               inputDateType="date"
               inputType="text"
               inputDateValue={createLogExpense.transactionDate}
+              defaultValue={calendar}
               inputValue={createLogExpense.description}
               inputNameDate="transactionDate"
               valueCurrency={createLogExpense.amount}
@@ -535,6 +578,7 @@ const Index = () => {
 export default Index;
 
 const DetailStyle = styled.div`
+  font-family: "Sofia Pro";
   display: flex;
   flex-direction: column;
   margin: 0 auto;
@@ -556,6 +600,19 @@ const DetailStyle = styled.div`
     gap: 20px;
     /* justify-content: space-around; */
   }
+  @media only screen and (max-width: 991px) {
+    .title {
+    width: 100%;
+    margin-top: 20px;
+  }
+    .budget-summary{
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      justify-content:center ;
+    }
+  }
+  
 
   .general {
     width: 100%;
@@ -612,7 +669,7 @@ const DetailStyle = styled.div`
     }
   }
   .line-item-container {
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     padding: 5px;
     width: 100%;
     height: 108px;
@@ -653,7 +710,7 @@ const DetailStyle = styled.div`
       border-radius: 4px;
     }
     .log {
-      font-family: "Inter";
+      font-family: "Sofia Pro";
       font-style: normal;
       font-weight: bold;
       font-size: 16px;
@@ -688,7 +745,7 @@ const DetailStyle = styled.div`
     z-index: 3;
     border-radius: 10px;
     z-index: 100;
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -709,5 +766,9 @@ const DetailStyle = styled.div`
   }
   .btn-wrapper {
     margin-top: 20px;
+  }
+  .red{
+    text-decoration: none;
+    color: red;
   }
 `;

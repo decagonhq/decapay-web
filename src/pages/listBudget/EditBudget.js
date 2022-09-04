@@ -355,6 +355,7 @@ const EditBudget = ({ closeModal,id,title }) => {
 export default EditBudget;
 
 const StyledHome = styled.div`
+font-family:"Sofia Pro";
   display: flex;
   flex-direction: column;
   align-items: center;

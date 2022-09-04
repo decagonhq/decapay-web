@@ -299,6 +299,7 @@ const BudgetCategory = () => {
 export default BudgetCategory;
 
 const ListStyle = styled.div`
+  font-family:"Sofia Pro";
   width: 100%;
   display: flex;
   flex-direction: column;

@@ -20,7 +20,7 @@ function App() {
     <div className="App">
       <ToastContainer limit={1} style={{ fontSize: "16px" }} />
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<LoginPage />} />
         <Route
           path="/budgetDetail/expenses"
           element={

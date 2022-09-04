@@ -33,7 +33,7 @@ const Budget = ({ item, amount, soFar, percent }) => {
 export default Budget;
 
 const ListStyle = styled.div`
-  font-family: "Inter";
+  font-family: "Sofia Pro";
   width: 100%;
   height: 108px;
   background: rgba(0, 156, 244, 0.05);
@@ -72,7 +72,7 @@ const ListStyle = styled.div`
     border-radius: 4px;
   }
   .log {
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     font-style: normal;
     font-weight: bold;
     font-size: 16px;

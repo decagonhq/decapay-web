@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 // import DatePicker from "react-dater";
 import "react-dater/dist/index.css";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { Calendar } from "react-date-range";
-import format from "date-fns/format";
+// import format from "date-fns/format";
 import "../../styles/styles.css";
 import styled from "styled-components"
 
 // custom styles for the calendar
 const CalendarWrapper = styled.div`
   width: 100%;
-  font-family: "Inter";
+  font-family: "Sofia Pro";
   font-style: normal;
   line-height: 19px;
   display: flex;
@@ -21,11 +21,9 @@ const CalendarWrapper = styled.div`
   .calenderElement {
     max-width: 100% !important;
     height: 100%;
-    /* padding: 20px; */
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     font-style: normal;
-    line-height: 19px;
-    /* margin:0 auto; */
+    line-height: 25px;
     @media only screen and (max-width: 379px) {
       height: 180px;
     }
@@ -33,22 +31,17 @@ const CalendarWrapper = styled.div`
 
   `;
 
-const Datething = ({startDate, endDate}) => {
+const Datething = ({startDate, endDate, calendar, handleSelect}) => {
 
   // eslint-disable-next-line
-  const [calendar, setCalendar] = useState("");
+  
+  // const [disabled,setDisabled] = useState(false)
 
-  useEffect(() => {
-    setCalendar(format(new Date(), "MM/dd/yyyy"));
-  }, []);
 
-  function handleSelect(date) {
-    setCalendar(format(date, "MM/dd/yyyy"));
-  }
 
   return (
     <CalendarWrapper>
-      {/* <input value={calendar} readOnly className="inputBox" /> */}
+      <input type="hidden" value={calendar} readOnly className="inputBox" />
       <Calendar
         onChange={handleSelect}
         className="calenderElement"
@@ -56,7 +49,7 @@ const Datething = ({startDate, endDate}) => {
         showSelectionPreview={true}
         minDate={new Date(startDate)}
         maxDate={new Date(endDate)}
-        moveRangeOnFirstSelection={true}
+        // moveRangeOnFirstSelection={true}
         shownDate={new Date(startDate)}
       />
     </CalendarWrapper>

@@ -23,6 +23,7 @@ const MenuItem = ({ label, onClick, Icon, active, to }) => {
 };
 
 const MenuItemStyle = styled.div`
+font-family:"Sofia Pro";
   .p-items {
     display: flex;
     cursor: pointer;

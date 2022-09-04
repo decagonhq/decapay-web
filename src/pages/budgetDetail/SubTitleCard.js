@@ -1,14 +1,15 @@
 import React from "react";
 import styled from "styled-components";
+import {hundredPercent} from "../../constants";
 
-const SubTitleCard = ({ title,src, amount,alt}) => {
+const SubTitleCard = ({ title,src, amount,alt,percent}) => {
   return (
     <ListStyle>
       <p >{title}</p>
       <div className="image">
         <img src={src} alt={alt}/>
       </div>
-      <p className="amt">{amount}</p>
+      <p className={percent > hundredPercent ? "amt red":"amt green"}>{amount}</p>
     </ListStyle>
   );
 };
@@ -19,10 +20,10 @@ const ListStyle = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  gap: 10px;
+  padding: 15px 30px;
+  /* gap: 10px; */
   width: 100%;
-  height: 113px;
+  /* height: 113px; */
   background: rgba(20, 168, 0, 0.03);
   border: 1px solid rgba(20, 168, 0, 0.03);
   overflow: hidden;
@@ -35,7 +36,8 @@ const ListStyle = styled.div`
   }
   p{
     box-sizing: border-box;
-    font-size: 16px;
+    font-size: 18px;
+    font-weight: 500;
     margin:0;
     padding:0;
   }
@@ -48,17 +50,33 @@ const ListStyle = styled.div`
     margin:0;
     margin-top:-10px;
     padding:0;
-    /* background-color: red; */
   }
+  
   .amt {
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     font-style: normal;
     font-weight: 700;
     font-size: 24px;
     line-height: 29px;
     display: flex;
     align-items: center;
-    margin-top:-10px;
+    margin-top:-15px;
+    
+  }
+  .green{
     color: #21334f;
+  }
+  .red{
+    color:red;
+  }
+  @media only screen and (max-width: 991px) {
+    padding:5px;
+    .image{
+      display:none;
+      margin-top:0;
+    }
+    .amt{
+      margin-top:0;
+    }
   }
 `;

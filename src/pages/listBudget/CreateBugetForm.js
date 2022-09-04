@@ -15,7 +15,7 @@ import FormTitleSection from "../../components/modal/FormTitleSection";
 const CreateBudget = ({ closeModal }) => {
   const timerBeforeRedirect = () => {
     setTimeout(() => {
-      window.location.href = "/home";
+      window.location.href = "/budgets";
     }, 2000);
   };
   const createBudgetValidationSchema = yup.object().shape({
@@ -133,7 +133,6 @@ const CreateBudget = ({ closeModal }) => {
       setCustom(true);
     }
   };
-  console.log(annual);
   // useEffect(() => {
   //   handleChange(
   //   )
@@ -341,6 +340,7 @@ const CreateBudget = ({ closeModal }) => {
 export default CreateBudget;
 
 const StyledHome = styled.div`
+  font-family:"Sofia Pro";
   display: flex;
   flex-direction: column;
   align-items: center;

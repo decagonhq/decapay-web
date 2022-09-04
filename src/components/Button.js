@@ -20,7 +20,7 @@ const MyButton = ({
   return (
     <StyledButton
       width={width}
-      className={className || "btn btn-component"}
+      // className={className || "btn btn-component"}
       white={white}
       green={green}
       min={min}
@@ -39,6 +39,7 @@ const MyButton = ({
   );
 };
 const StyledButton = styled.button`
+  padding: 5px;
   color: white;
   text-decoration: none;
   letter-spacing: 1px;
@@ -46,7 +47,7 @@ const StyledButton = styled.button`
   justify-content: center;
   align-items: center;
   border-radius: 0;
-  width: 100%;
+  width: 100% !important;
   height: ${({ height }) => (height ? height : "2.5rem")};
   font-weight: 400;
   font-size: 16px;
