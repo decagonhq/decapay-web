@@ -19,10 +19,10 @@ const ListStyle = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  gap: 10px;
+  padding: 15px 30px;
+  /* gap: 10px; */
   width: 100%;
-  height: 113px;
+  /* height: 113px; */
   background: rgba(20, 168, 0, 0.03);
   border: 1px solid rgba(20, 168, 0, 0.03);
   overflow: hidden;
@@ -35,7 +35,8 @@ const ListStyle = styled.div`
   }
   p{
     box-sizing: border-box;
-    font-size: 16px;
+    font-size: 18px;
+    font-weight: 500;
     margin:0;
     padding:0;
   }
@@ -58,7 +59,7 @@ const ListStyle = styled.div`
     line-height: 29px;
     display: flex;
     align-items: center;
-    margin-top:-10px;
+    margin-top:-15px;
     color: #21334f;
   }
 `;

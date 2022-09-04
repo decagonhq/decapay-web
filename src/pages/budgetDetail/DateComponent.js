@@ -49,7 +49,7 @@ const Datething = ({startDate, endDate, today}) => {
 
   return (
     <CalendarWrapper>
-      <input value={calendar} readOnly className="inputBox" />
+      {/* <input value={calendar} readOnly className="inputBox" /> */}
       <Calendar
         onChange={handleSelect}
         className="calenderElement"

@@ -5,14 +5,14 @@ const TitleCard = ({ title, amount, startDate, endDate,period }) => {
   
   return (
     <ListStyle>
-      <div>
-        <p className="bg-title-amount">{title}</p>
-        <p className="bg-title">{amount}</p>
+      <div className="title">
+        <p className="bg-title-amount">Budget Title: {title}</p>
+        <p className="bg-title-amount">Projected Amount: {amount}</p>
       </div>
-      <div>
-        <p className="bg-title transform">{period} Budget</p>
-        <p className="bg-title">Start date: {startDate}</p>
-        <p className="bg-title">End date: {endDate}</p>
+      <div className="detail">
+        <p className="bg-title transform">Budget Period: {period}</p>
+        <p className="bg-title">Start Date: {startDate}</p>
+        <p className="bg-title">End Date: {endDate}</p>
       </div>
     </ListStyle>
   );
@@ -22,27 +22,49 @@ export default TitleCard;
 
 const ListStyle = styled.div`
   width: 100%;
-  height: 10em;
   background: #14a800;
-  padding: 20px;
+  padding: 10px 30px;
   font-family: "Sofia Pro";
   font-style: normal;
-  line-height: 19px;
+  /* line-height: 19px; */
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
   @media only screen and (max-width: 379px) {
     height: 180px;
   }
   @media only screen and (max-width: 299px) {
     height: 200px;
   }
-
+  .title {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items: center;
+    padding:0;
+    margin:0;
+    gap: 0px;
+    p{
+      margin:0;
+      padding:0;
+      
+    }
+    }
+  .detail {
+    display: flex;
+    justify-content: space-between;
+    gap:5px;
+    p{
+      color: yellow;
+      padding: 5px 10px;
+    }
+  }
   .bg-title {
     font-family: "Sofia Pro";
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 16px;
-    line-height: 19px;
+    /* line-height: 19px; */
     display: flex;
     align-items: center;
 
@@ -51,17 +73,9 @@ const ListStyle = styled.div`
   .bg-title-amount {
     font-family: "Sofia Pro";
     font-style: normal;
-    font-weight: 800;
-    font-size: 32px;
-    line-height: 39px;
-    /* identical to box height */
-
-    display: flex;
-    align-items: center;
+    font-weight: 500;
+    font-size: 25px;
 
     color: #ffffff;
-  }
-  .transform{
-    text-transform: uppercase;
   }
 `;

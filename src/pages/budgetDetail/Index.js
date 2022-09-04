@@ -210,18 +210,10 @@ const Index = () => {
       setData(response.data.data);
       let remoteStartDate = response.data.data.startDate
       let remoteEndDate =response.data.data.endDate
-      if(today > remoteStartDate & today > remoteEndDate){
+      let validEndDate=today>remoteEndDate?remoteEndDate:today
+      // console.log("Valid Date",validEndDate)
         setStartDate(remoteStartDate);
-        setEndDate(remoteEndDate)
-      }
-      if(remoteStartDate>=today & remoteEndDate >= today){
-        setStartDate(today)
-        setEndDate(today)
-      }
-      if(remoteStartDate > today & remoteEndDate > today){
-        setStartDate("")
-        endDate("")
-      }
+        setEndDate(validEndDate)
     } catch (error) {
       toast.error(error.response.data.message, {
         autoClose: 3000,
@@ -361,13 +353,13 @@ const Index = () => {
 
             <div className="sub_container general mt-2 mb-2">
               <SubTitleCard
-                title="Total Amount spent"
+                title="Total Amount spent so far"
                 alt=""
                 amount={data?.displayTotalAmountSpentSoFar}
                 src="/images/money-2.svg"
               />
               <SubTitleCard
-                title="Percent"
+                title="Percentage spent so far"
                 alt=""
                 amount={data?.displayPercentageSpentSoFar}
                 src="/images/percent.svg"
@@ -416,7 +408,7 @@ const Index = () => {
                       <FiArrowUpRight className="icon" />
                     </span>
                   </p>
-                  <p className="link">{item.displayPercentageSpentSoFar}</p>
+                  <p className={item.percentageSpentSoFar > 100 ? "red": "link"}>{item.displayPercentageSpentSoFar}</p>
                 </div>
                 <p
                   onClick={() => openPopup(index, item.categoryId)}
@@ -747,5 +739,9 @@ const DetailStyle = styled.div`
   }
   .btn-wrapper {
     margin-top: 20px;
+  }
+  .red{
+    text-decoration: none;
+    color: red;
   }
 `;
