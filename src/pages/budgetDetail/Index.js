@@ -49,12 +49,6 @@ const Index = () => {
   const [getCategordId, setGetCategordId] = useState(-1);
   const [calendar, setCalendar] = useState("");
 
-  console.log("seleecte", calendar);
-  useEffect(() => {
-    setCalendar(format(new Date(), dateFormats2));
-  
-  }, []);
-
   function handleSelect(date) {
     setCalendar(format(date, dateFormats2));
   }
