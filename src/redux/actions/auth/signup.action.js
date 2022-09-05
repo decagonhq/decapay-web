@@ -17,7 +17,9 @@ const signup = (payload) => async (dispatch) => {
 
   try {
     const res = await request.post("register", payload, headers);
-      toast.success("Signup Successful and verifcation email sent");
+      toast.success(res.data.message,{
+        autoClose: 2000,
+      });
       return dispatch(signupSuccess(res.message));
   } catch (error) {
     toast.error(retrieveErrMessage(error.response.data.message));

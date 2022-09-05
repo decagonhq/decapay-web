@@ -37,13 +37,7 @@ const CreateBudget = ({ closeModal }) => {
     budgetStartDate: "",
     budgetEndDate: "",
   });
-  const options = [
-    { value: "1", label: "Annual" },
-    { value: "2", label: "Monthly" },
-    { value: "3", label: "Weekly" },
-    { value: "4", label: "Daily" },
-    { value: "5", label: "custom" },
-  ];
+  
   const createBudgetValidationSchema = yup.object().shape({
     title: yup.string().required("Title is required"),
     amount: yup.number().required("Amount is required"),
@@ -168,7 +162,6 @@ const CreateBudget = ({ closeModal }) => {
   const handleOnChangeDate = (date, name) => {
     setCalendar({ ...calendar, [name]: date });
   };
-  console.log(calendar);
   // useEffect(() => {
   //   handleChange(
   //   )
