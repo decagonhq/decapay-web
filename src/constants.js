@@ -33,4 +33,13 @@ export const dateFormats3 = "yyyy-MM-dd";
 
 export const hundredPercent = 100;
 
+export const generateYearsFromCurrentYear = () => {
+  let currentYear = new Date().getFullYear();
+  let years = [];
+  for (let i = currentYear; i < currentYear + 10; i++) {
+    years.push({ value: i, label: i });
+  }
+  return years;
+};
+
 
