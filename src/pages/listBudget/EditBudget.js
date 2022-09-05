@@ -75,9 +75,7 @@ const EditBudget = ({ closeModal, id, title }) => {
   const fetchData = async () => {
     try {
       const response = await request.get(`budgets/edit/${id}`, headers);
-      // console.log(response.data);
       setNewId(id);
-      console.log(response.data.data.period);
       setCollectData({
         ...collectData,
         title: response.data.data.title,
@@ -107,7 +105,6 @@ const EditBudget = ({ closeModal, id, title }) => {
       });
     }
   };
-  console.log(newId);
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line
@@ -140,7 +137,6 @@ const EditBudget = ({ closeModal, id, title }) => {
           ? changeDateFormat(collectData.budgetStartDate)
           : changeDateFormat(collectData.budgetEndDate),
     };
-    console.log(payload);
     try {
       const response = await request.put(`budgets/${newId}`, payload, {
         headers: {
@@ -156,7 +152,6 @@ const EditBudget = ({ closeModal, id, title }) => {
       setLoading(false);
       timerBeforeRedirect();
     } catch (error) {
-      console.log(error);
       toast.error(error.response.status, {
         autoClose: 3000,
         onClose: dismissToast,

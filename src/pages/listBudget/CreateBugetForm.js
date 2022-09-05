@@ -88,7 +88,6 @@ const CreateBudget = ({ closeModal }) => {
         onClose: dismissToast,
       });
       setLoading(false);
-      console.log(error);
     }
   };
 
@@ -103,7 +102,6 @@ const CreateBudget = ({ closeModal }) => {
   });
   const handleChange2 = (e) => {
     let valueOfE = e.map((item) => item.value);
-    console.log(valueOfE);
     if (valueOfE[0] === ANNUAL) {
       setPeriod({
         ...period,
@@ -181,7 +179,6 @@ const CreateBudget = ({ closeModal }) => {
           onSubmit={(values) => {
             setLoading(true);
             onSubmit(values);
-            console.log(values);
           }}
         >
           {({
@@ -241,7 +238,6 @@ const CreateBudget = ({ closeModal }) => {
                     placeholder="Select Year"
                     value={values.year}
                     onChange={(e) => {
-                      console.log(e[0].label);
                       values.year = parseInt(e[0].label);
                     }}
                   />
@@ -256,7 +252,6 @@ const CreateBudget = ({ closeModal }) => {
                     placeholder="Select Year"
                     value={values.year}
                     onChange={(e) => {
-                      console.log(e.value);
                       values.year = parseInt(e[0].label);
                     }}
                   />
@@ -267,7 +262,6 @@ const CreateBudget = ({ closeModal }) => {
                     placeholder="Select Month"
                     className="select mt-2"
                     onChange={(e) => {
-                      console.log(e[0].label);
                       values.month = parseInt(e[0].value);
                     }}
                   />
