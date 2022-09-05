@@ -13,7 +13,7 @@ import request from "../../utils/apiHelper";
 import FormTitleSection from "../../components/modal/FormTitleSection";
 import DatePicker from "react-datepicker";
 import format from "date-fns/format";
-import { dateFormats2, dateFormats3, hundredPercent } from "../../constants";
+import { dateFormats2 } from "../../constants";
 import {
   generateYearsFromCurrentYear,
   Options,
@@ -23,6 +23,7 @@ import {
   DAILY,
   WEEKLY,
   CUSTOM,
+  changeDateFormat,
 } from "../../constants";
 // import "react-datepicker/dist/react-datepicker.css";
 
@@ -36,6 +37,13 @@ const CreateBudget = ({ closeModal }) => {
     budgetStartDate: "",
     budgetEndDate: "",
   });
+  const options = [
+    { value: "1", label: "Annual" },
+    { value: "2", label: "Monthly" },
+    { value: "3", label: "Weekly" },
+    { value: "4", label: "Daily" },
+    { value: "5", label: "custom" },
+  ];
   const createBudgetValidationSchema = yup.object().shape({
     title: yup.string().required("Title is required"),
     amount: yup.number().required("Amount is required"),
@@ -44,21 +52,25 @@ const CreateBudget = ({ closeModal }) => {
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
 
-  const changeDateFormat = (date) => {
-    const splitDate = date.split("-");
-    return `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
-  };
+  
   const dismissToast = () => {
     toast.dismiss();
   };
   const onSubmit = async (values) => {
-    values.budgetStartDate = format(calendar.budgetStartDate, dateFormats2);
-    values.budgetEndDate = format(calendar.budgetEndDate, dateFormats2);
+    if (values.period === CUSTOM) {
+      values.budgetStartDate = format(calendar.budgetStartDate, dateFormats2);
+      values.budgetEndDate = format(calendar.budgetEndDate, dateFormats2);
+    }
+    else {
+      values.budgetStartDate = changeDateFormat(values.budgetStartDate);
+      values.budgetEndDate = changeDateFormat(values.budgetEndDate);
+    }
+
     values.amount = parseInt(values.amount);
-    if (values.period === "DAILY") {
+    if (values.period === DAILY) {
       /* eslint-disable */
       values.budgetEndDate = values.budgetStartDate;
-    } else if (values.period === "CUSTOM") {
+    } else if (values.period === CUSTOM) {
       values.budgetEndDate = values.budgetEndDate;
     } else {
       values.budgetEndDate = "";
@@ -88,11 +100,7 @@ const CreateBudget = ({ closeModal }) => {
   };
 
   // const dispatch = useDispatch();
-  const [annual, setAnnual] = React.useState(false);
-  const [monthly, setMonthly] = React.useState(false);
-  const [weekly, setWeekly] = React.useState(false);
-  const [daily, setDaily] = React.useState(false);
-  const [custom, setCustom] = React.useState(false);
+
   const [period, setPeriod] = React.useState({
     weekly: false,
     monthly: false,
@@ -107,13 +115,13 @@ const CreateBudget = ({ closeModal }) => {
     if (valueOfE[0] === ANNUAL) {
       setPeriod({
         ...period,
-        weekly: true,
+        weekly: false,
         monthly: false,
-        annual: false,
+        annual: true,
         daily: false,
         custom: false,
       });
-    } else if (valueOfE[0] === "2") {
+    } else if (valueOfE[0] === MONTHLY) {
       setPeriod({
         ...period,
         weekly: false,
@@ -122,16 +130,16 @@ const CreateBudget = ({ closeModal }) => {
         daily: false,
         custom: false,
       });
-    } else if (valueOfE[0] === "3") {
+    } else if (valueOfE[0] === WEEKLY) {
       setPeriod({
         ...period,
-        weekly: false,
+        weekly: true,
         monthly: false,
-        annual: true,
+        annual: false,
         daily: false,
         custom: false,
       });
-    } else if (valueOfE[0] === "4") {
+    } else if (valueOfE[0] === DAILY) {
       setPeriod({
         ...period,
         weekly: false,
@@ -140,7 +148,7 @@ const CreateBudget = ({ closeModal }) => {
         daily: true,
         custom: false,
       });
-    } else if (valueOfE[0] === "5") {
+    } else if (valueOfE[0] === CUSTOM) {
       setPeriod({
         ...period,
         weekly: false,
@@ -238,7 +246,7 @@ const CreateBudget = ({ closeModal }) => {
                   // }}
                 />
               </div>
-              {annual && (
+              {period.annual && (
                 <div className="mt-2">
                   <Select
                     options={generateYearsFromCurrentYear()}
@@ -253,7 +261,7 @@ const CreateBudget = ({ closeModal }) => {
                   />
                 </div>
               )}
-              {monthly && (
+              {period.monthly && (
                 <div className="mt-2">
                   <Select
                     options={generateYearsFromCurrentYear()}
@@ -279,7 +287,7 @@ const CreateBudget = ({ closeModal }) => {
                   />
                 </div>
               )}
-              {weekly && (
+              {period.weekly && (
                 <div className="mt-2">
                   <FormInputComponent
                     placeholder="Start Date"
@@ -299,7 +307,7 @@ const CreateBudget = ({ closeModal }) => {
                   />
                 </div>
               )}
-              {daily && (
+              {period.daily && (
                 <div className="fommy3">
                   <FormInputComponent
                     placeholder="Start Date"
@@ -311,7 +319,7 @@ const CreateBudget = ({ closeModal }) => {
                   />
                 </div>
               )}
-              {custom && (
+              {period.custom && (
                 <div className="mt-2">
                   {/* <FormInputComponent
                     placeholder="Start Date"
