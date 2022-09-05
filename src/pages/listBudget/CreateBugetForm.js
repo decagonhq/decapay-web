@@ -319,7 +319,7 @@ const CreateBudget = ({ closeModal }) => {
                   />
                   <div className="form_wrapper3">
                     <h7>Select Date</h7>
-                    {/* <DatePicker
+                    <DatePicker
                       onChange={(e) => {
                         handleOnChangeDate(e);
                       }}
@@ -331,9 +331,9 @@ const CreateBudget = ({ closeModal }) => {
                       // disabled={
                       //   disableEndDateBasedOnStartDate(values.budgetStartDate)
                       // }
-                    /> */}
+                    />
                   </div>
-                  {/* <DatePicker
+                  <DatePicker
                     onChange={(e) => {
                       handleOnChangeDate(e);
                     }}
@@ -346,7 +346,7 @@ const CreateBudget = ({ closeModal }) => {
                     disabled={disableEndDateBasedOnStartDate(
                       calendar.budgetStartDate
                     )}
-                  /> */}
+                  />
                 </div>
               )}
 
