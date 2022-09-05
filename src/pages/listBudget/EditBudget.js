@@ -95,6 +95,7 @@ const EditBudget = ({ closeModal, id, title }) => {
         budgetStartDate: moment(
           formatDate(response.data.data.budgetStartDate)
         ).toDate(),
+        
         budgetEndDate: moment(
           formatDate(response.data.data.budgetEndDate)
         ).toDate(),
@@ -139,6 +140,7 @@ const EditBudget = ({ closeModal, id, title }) => {
           ? changeDateFormat(collectData.budgetStartDate)
           : changeDateFormat(collectData.budgetEndDate),
     };
+    console.log(payload);
     try {
       const response = await request.put(`budgets/${newId}`, payload, {
         headers: {
@@ -186,14 +188,12 @@ const EditBudget = ({ closeModal, id, title }) => {
   const handleOnChangeDate = (date, name) => {
     setCalendar({ ...calendar, [name]: date });
   };
-  console.log(calendar);
   const disableEndDateBasedOnStartDate = (date, budgetStartDate) => {
     if (date > budgetStartDate) {
       return true;
     }
     return false;
   };
-  // console.log(newId)
   return (
     // <Layout>
     <StyledHome>

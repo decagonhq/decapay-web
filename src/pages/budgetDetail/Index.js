@@ -92,8 +92,8 @@ const Index = () => {
     let payload = {
       amount: stripCommaAndConvertToNumber(createLogExpense.amount),
       transactionDate:calendar,
-      //  moment(createLogExpense.transactionDate).format(
-      //   dateFormats
+      //  (createLogExpense.transactionDate).format(
+      //   dateFormatmoments
       // ),
       description: createLogExpense.description,
     };
