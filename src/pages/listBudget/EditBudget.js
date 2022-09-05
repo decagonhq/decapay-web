@@ -314,22 +314,7 @@ const EditBudget = ({ closeModal, id, title }) => {
         )}
         {collectData.period === CUSTOM && (
           <div className="">
-            {/* <FormInputComponent
-              placeholder="Start Date"
-              label="Start Date"
-              type="date"
-              value={collectData.budgetStartDate}
-              name="budgetStartDate"
-              onChange={(e) => handleChange(e)}
-            />
-            <FormInputComponent
-              placeholder="End Date"
-              label="End Date"
-              type="date"
-              value={collectData.budgetEndDate}
-              name="budgetEndDate"
-              onChange={(e) => handleChange(e)}
-            /> */}
+            
             <div className="form_wrapper3">
               <h7>Start Date</h7>
               <DatePicker

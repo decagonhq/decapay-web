@@ -25,7 +25,6 @@ import {
   CUSTOM,
   changeDateFormat,
 } from "../../constants";
-// import "react-datepicker/dist/react-datepicker.css";
 
 const CreateBudget = ({ closeModal }) => {
   const timerBeforeRedirect = () => {
@@ -93,7 +92,7 @@ const CreateBudget = ({ closeModal }) => {
     }
   };
 
-  // const dispatch = useDispatch();
+
 
   const [period, setPeriod] = React.useState({
     weekly: false,
@@ -103,7 +102,6 @@ const CreateBudget = ({ closeModal }) => {
     custom: false,
   });
   const handleChange2 = (e) => {
-    // if(!e.value || !e.label) return;
     let valueOfE = e.map((item) => item.value);
     console.log(valueOfE);
     if (valueOfE[0] === ANNUAL) {
@@ -162,10 +160,7 @@ const CreateBudget = ({ closeModal }) => {
   const handleOnChangeDate = (date, name) => {
     setCalendar({ ...calendar, [name]: date });
   };
-  // useEffect(() => {
-  //   handleChange(
-  //   )
-  // }, [annual, monthly, weekly, daily, custom])
+ 
   return (
     <StyledHome>
       <div className="container">
@@ -234,9 +229,7 @@ const CreateBudget = ({ closeModal }) => {
                     values.period = e[0].label.toUpperCase();
                   }}
 
-                  // onChange={(e) => {
-                  //
-                  // }}
+                  
                 />
               </div>
               {period.annual && (
@@ -314,22 +307,6 @@ const CreateBudget = ({ closeModal }) => {
               )}
               {period.custom && (
                 <div className="mt-2">
-                  {/* <FormInputComponent
-                    placeholder="Start Date"
-                    label="Start Date"
-                    type="date"
-                    value={values.budgetStartDate}
-                    name="budgetStartDate"
-                    onChange={handleChange}
-                  />
-                  <FormInputComponent
-                    placeholder="End Date"
-                    label="End Date"
-                    type="date"
-                    value={values.budgetEndDate}
-                    name="budgetEndDate"
-                    onChange={handleChange}
-                  /> */}
                   <div className="form_wrapper3">
                     <h7>Start Date</h7>
                     <DatePicker
