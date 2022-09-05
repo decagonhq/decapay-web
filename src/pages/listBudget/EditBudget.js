@@ -16,6 +16,7 @@ import DatePicker from "react-datepicker";
 import moment from "moment";
 import format from "date-fns/format";
 import { dateFormats2 } from "../../constants";
+import { stripCommaAndConvertToNumber } from "../../utils/utils";
 import {
   ANNUAL,
   MONTHLY,
@@ -25,6 +26,7 @@ import {
   Options,
   Months,
   changeDateFormat,
+  formatDate,
 } from "../../constants";
 import FormSelectComponent from "../../components/selectComponent";
 
@@ -46,31 +48,8 @@ const EditBudget = ({ closeModal, id, title }) => {
   });
   const [newId, setNewId] = React.useState(-1);
 
-  const formatDate = (date) => {
-    if (date === "" || date === null || date === undefined) {
-      return "";
-    } else {
-      let splitDate = date.split("/");
-      let joinDateFromBehind = splitDate.reverse().join("-");
-      return joinDateFromBehind;
-    }
-  };
-
   // const { id } = useParams();
-  const stripCommaAndConvertToNumber = (amount) => {
-    if (amount === "" || amount === null || amount === undefined) {
-      return "";
-    } else if (typeof amount === "number") {
-      return amount;
-    } else {
-      let splitAmount = amount.split(",");
-      let joinBackAmount = splitAmount.join("");
-      let removeNairaandConvertToNumber = parseInt(
-        joinBackAmount.replace("₦", "")
-      );
-      return removeNairaandConvertToNumber;
-    }
-  };
+
 
   const initialValues = {
     newId: newId,
@@ -98,7 +77,7 @@ const EditBudget = ({ closeModal, id, title }) => {
       const response = await request.get(`budgets/edit/${id}`, headers);
       // console.log(response.data);
       setNewId(id);
-      console.log(response.data.data.period)
+      console.log(response.data.data.period);
       setCollectData({
         ...collectData,
         title: response.data.data.title,
@@ -118,8 +97,7 @@ const EditBudget = ({ closeModal, id, title }) => {
         ).toDate(),
         budgetEndDate: moment(
           formatDate(response.data.data.budgetEndDate)
-          ).toDate(),
-
+        ).toDate(),
       });
     } catch (error) {
       toast.error(error, {
@@ -146,16 +124,20 @@ const EditBudget = ({ closeModal, id, title }) => {
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
 
-  
-
- 
   const onSubmit = async () => {
-    
     let payload = {
       ...collectData,
       amount: stripCommaAndConvertToNumber(collectData.amount),
-      budgetStartDate: collectData.period === CUSTOM ? format(calendar.budgetStartDate, dateFormats2) : changeDateFormat(collectData.budgetStartDate),
-      budgetEndDate: collectData.period === CUSTOM ? format(calendar.budgetEndDate, dateFormats2) : collectData.period ===DAILY?changeDateFormat(collectData.budgetStartDate): changeDateFormat(collectData.budgetEndDate),
+      budgetStartDate:
+        collectData.period === CUSTOM
+          ? format(calendar.budgetStartDate, dateFormats2)
+          : changeDateFormat(collectData.budgetStartDate),
+      budgetEndDate:
+        collectData.period === CUSTOM
+          ? format(calendar.budgetEndDate, dateFormats2)
+          : collectData.period === DAILY
+          ? changeDateFormat(collectData.budgetStartDate)
+          : changeDateFormat(collectData.budgetEndDate),
     };
     try {
       const response = await request.put(`budgets/${newId}`, payload, {
@@ -183,10 +165,7 @@ const EditBudget = ({ closeModal, id, title }) => {
   const formik = useFormik({
     initialValues,
     createBudgetValidationSchema,
-    onSubmit(values) {
-      setLoading(true);
-      onSubmit(values);
-    }
+    onSubmit,
   });
 
   const generateYearsFromCurrentYear = () => {
