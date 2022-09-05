@@ -40,6 +40,7 @@ export const formatPrice = (number) => {
       return parseInt(joinBackAmountByNairaSign);
     }
   };
+  
   export const disableDateInputFieldBasedOnStartDateToCurrentDate = (date, startDate) => {
     if (date > moment(new Date().toISOString().substring(0, 10)).toDate()) {
       return true;

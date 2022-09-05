@@ -11,13 +11,32 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import request from "../../utils/apiHelper";
 import FormTitleSection from "../../components/modal/FormTitleSection";
+import DatePicker from "react-datepicker";
+import format from "date-fns/format";
+import { dateFormats2 } from "../../constants";
+import {
+  generateYearsFromCurrentYear,
+  Options,
+  Months,
+  ANNUAL,
+  MONTHLY,
+  DAILY,
+  WEEKLY,
+  CUSTOM,
+  changeDateFormat,
+} from "../../constants";
 
 const CreateBudget = ({ closeModal }) => {
   const timerBeforeRedirect = () => {
     setTimeout(() => {
       window.location.href = "/budgets";
-    }, 2000);
+    }, 1000);
   };
+  const [calendar, setCalendar] = useState({
+    budgetStartDate: "",
+    budgetEndDate: "",
+  });
+  
   const createBudgetValidationSchema = yup.object().shape({
     title: yup.string().required("Title is required"),
     amount: yup.number().required("Amount is required"),
@@ -26,117 +45,120 @@ const CreateBudget = ({ closeModal }) => {
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
 
-  const changeDateFormat = (date) => {
-    const splitDate = date.split("-");
-    return `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
+  
+  const dismissToast = () => {
+    toast.dismiss();
   };
-
   const onSubmit = async (values) => {
-    values.budgetStartDate = changeDateFormat(values.budgetStartDate);
-    values.budgetEndDate = changeDateFormat(values.budgetEndDate);
+    if (values.period === CUSTOM) {
+      values.budgetStartDate = format(calendar.budgetStartDate, dateFormats2);
+      values.budgetEndDate = format(calendar.budgetEndDate, dateFormats2);
+    }
+    else {
+      values.budgetStartDate = changeDateFormat(values.budgetStartDate);
+      values.budgetEndDate = changeDateFormat(values.budgetEndDate);
+    }
+
     values.amount = parseInt(values.amount);
-    if (values.period === "DAILY") {
+    if (values.period === DAILY) {
       /* eslint-disable */
       values.budgetEndDate = values.budgetStartDate;
-    } else if (values.period === "CUSTOM") {
+    } else if (values.period === CUSTOM) {
       values.budgetEndDate = values.budgetEndDate;
     } else {
       values.budgetEndDate = "";
     }
     try {
-      await request.post(`budgets`, values, {
+      const response = await request.post(`budgets`, values, {
         headers: {
           "Content-Type": "application/json",
           DVC_KY_HDR: 2,
           Authorization: `Bearer ${token}`,
         },
       });
-      toast.success("Budget created successfully");
+      toast.success(response.data.message, {
+        autoClose: 2000,
+        onClose: dismissToast,
+      });
       setLoading(false);
       timerBeforeRedirect();
     } catch (error) {
-      toast.error(error.response.status);
+      toast.error(error.response.status, {
+        autoClose: 2000,
+        onClose: dismissToast,
+      });
       setLoading(false);
-      console.log(error);
     }
   };
-  const options = [
-    { value: "1", label: "Annual" },
-    { value: "2", label: "Monthly" },
-    { value: "3", label: "Weekly" },
-    { value: "4", label: "Daily" },
-    { value: "5", label: "custom" },
-  ];
-  const years = [
-    { value: "1", label: "2022" },
-    { value: "2", label: "2023" },
-    { value: "3", label: "2024" },
-    { value: "4", label: "2025" },
-    { value: "5", label: "2026" },
-    { value: "6", label: "2027" },
-    { value: "7", label: "2028" },
-  ];
-  const months = [
-    { value: "1", label: "January" },
-    { value: "2", label: "February" },
-    { value: "3", label: "March" },
-    { value: "4", label: "April" },
-    { value: "5", label: "May" },
-    { value: "6", label: "June" },
-    { value: "7", label: "July" },
-    { value: "8", label: "August" },
-    { value: "9", label: "September" },
-    { value: "10", label: "October" },
-    { value: "11", label: "November" },
-    { value: "12", label: "December" },
-  ];
 
-  // const dispatch = useDispatch();
-  const [annual, setAnnual] = React.useState(false);
-  const [monthly, setMonthly] = React.useState(false);
-  const [weekly, setWeekly] = React.useState(false);
-  const [daily, setDaily] = React.useState(false);
-  const [custom, setCustom] = React.useState(false);
+
+
+  const [period, setPeriod] = React.useState({
+    weekly: false,
+    monthly: false,
+    annual: false,
+    daily: false,
+    custom: false,
+  });
   const handleChange2 = (e) => {
-    // if(!e.value || !e.label) return;
     let valueOfE = e.map((item) => item.value);
-    console.log(valueOfE);
-    if (valueOfE[0] === "1") {
-      setAnnual(true);
-      setMonthly(false);
-      setWeekly(false);
-      setDaily(false);
-      setCustom(false);
-    } else if (valueOfE[0] === "2") {
-      setAnnual(false);
-      setMonthly(true);
-      setWeekly(false);
-      setDaily(false);
-      setCustom(false);
-    } else if (valueOfE[0] === "3") {
-      setAnnual(false);
-      setMonthly(false);
-      setWeekly(true);
-      setDaily(false);
-      setCustom(false);
-    } else if (valueOfE[0] === "4") {
-      setAnnual(false);
-      setMonthly(false);
-      setWeekly(false);
-      setDaily(true);
-      setCustom(false);
-    } else if (valueOfE[0] === "5") {
-      setAnnual(false);
-      setMonthly(false);
-      setWeekly(false);
-      setDaily(false);
-      setCustom(true);
+    if (valueOfE[0] === ANNUAL) {
+      setPeriod({
+        ...period,
+        weekly: false,
+        monthly: false,
+        annual: true,
+        daily: false,
+        custom: false,
+      });
+    } else if (valueOfE[0] === MONTHLY) {
+      setPeriod({
+        ...period,
+        weekly: false,
+        monthly: true,
+        annual: false,
+        daily: false,
+        custom: false,
+      });
+    } else if (valueOfE[0] === WEEKLY) {
+      setPeriod({
+        ...period,
+        weekly: true,
+        monthly: false,
+        annual: false,
+        daily: false,
+        custom: false,
+      });
+    } else if (valueOfE[0] === DAILY) {
+      setPeriod({
+        ...period,
+        weekly: false,
+        monthly: false,
+        annual: false,
+        daily: true,
+        custom: false,
+      });
+    } else if (valueOfE[0] === CUSTOM) {
+      setPeriod({
+        ...period,
+        weekly: false,
+        monthly: false,
+        annual: false,
+        daily: false,
+        custom: true,
+      });
     }
   };
-  // useEffect(() => {
-  //   handleChange(
-  //   )
-  // }, [annual, monthly, weekly, daily, custom])
+  const disableEndDateBasedOnStartDate = (date, budgetStartDate) => {
+    if (date > budgetStartDate) {
+      return true;
+    }
+    return false;
+  };
+  const handleOnChangeDate = (date, name) => {
+    setCalendar({ ...calendar, [name]: date });
+  };
+ 
   return (
     <StyledHome>
       <div className="container">
@@ -157,7 +179,6 @@ const CreateBudget = ({ closeModal }) => {
           onSubmit={(values) => {
             setLoading(true);
             onSubmit(values);
-            console.log(values);
           }}
         >
           {({
@@ -194,7 +215,7 @@ const CreateBudget = ({ closeModal }) => {
               <div className="period">
                 <label>Period</label>
                 <Select
-                  options={options}
+                  options={Options}
                   name="period"
                   className="select"
                   placeholder="Select Frequency"
@@ -205,53 +226,48 @@ const CreateBudget = ({ closeModal }) => {
                     values.period = e[0].label.toUpperCase();
                   }}
 
-                  // onChange={(e) => {
-                  //
-                  // }}
+                  
                 />
               </div>
-              {annual && (
+              {period.annual && (
                 <div className="mt-2">
                   <Select
-                    options={years}
+                    options={generateYearsFromCurrentYear()}
                     name="years"
                     className="select"
                     placeholder="Select Year"
                     value={values.year}
                     onChange={(e) => {
-                      console.log(e[0].label);
                       values.year = parseInt(e[0].label);
                     }}
                   />
                 </div>
               )}
-              {monthly && (
+              {period.monthly && (
                 <div className="mt-2">
                   <Select
-                    options={years}
+                    options={generateYearsFromCurrentYear()}
                     name="year"
                     className="select mt-2"
                     placeholder="Select Year"
                     value={values.year}
                     onChange={(e) => {
-                      console.log(e.value);
                       values.year = parseInt(e[0].label);
                     }}
                   />
                   <Select
-                    options={months}
+                    options={Months}
                     name="month"
                     value={values.month}
                     placeholder="Select Month"
                     className="select mt-2"
                     onChange={(e) => {
-                      console.log(e[0].label);
                       values.month = parseInt(e[0].value);
                     }}
                   />
                 </div>
               )}
-              {weekly && (
+              {period.weekly && (
                 <div className="mt-2">
                   <FormInputComponent
                     placeholder="Start Date"
@@ -271,7 +287,7 @@ const CreateBudget = ({ closeModal }) => {
                   />
                 </div>
               )}
-              {daily && (
+              {period.daily && (
                 <div className="fommy3">
                   <FormInputComponent
                     placeholder="Start Date"
@@ -283,24 +299,31 @@ const CreateBudget = ({ closeModal }) => {
                   />
                 </div>
               )}
-              {custom && (
+              {period.custom && (
                 <div className="mt-2">
-                  <FormInputComponent
-                    placeholder="Start Date"
-                    label="Start Date"
-                    type="date"
-                    value={values.budgetStartDate}
-                    name="budgetStartDate"
-                    onChange={handleChange}
-                  />
-                  <FormInputComponent
-                    placeholder="End Date"
-                    label="End Date"
-                    type="date"
-                    value={values.budgetEndDate}
-                    name="budgetEndDate"
-                    onChange={handleChange}
-                  />
+                  <div className="form_wrapper3">
+                    <h7>Start Date</h7>
+                    <DatePicker
+                      onChange={(e) => {
+                        handleOnChangeDate(e, "budgetStartDate");
+                      }}
+                      selected={calendar.budgetStartDate}
+                    />
+                  </div>
+                  <div className="form_wrapper3">
+                    <h7>End Date</h7>
+                    <DatePicker
+                      onChange={(e) => {
+                        handleOnChangeDate(e, "budgetEndDate");
+                      }}
+                      selected={calendar.budgetEndDate}
+                      minDate={calendar.budgetStartDate}
+                      name="budgetEndDate"
+                      disabled={disableEndDateBasedOnStartDate(
+                        calendar.budgetStartDate
+                      )}
+                    />
+                  </div>
                 </div>
               )}
 
@@ -340,13 +363,31 @@ const CreateBudget = ({ closeModal }) => {
 export default CreateBudget;
 
 const StyledHome = styled.div`
-  font-family:"Sofia Pro";
+  font-family: "Sofia Pro";
   display: flex;
   flex-direction: column;
   align-items: center;
   /* height: 100vh; */
   background-color: "white";
-  
+  .form_wrapper3 {
+    width: 100%;
+    border-radius: 5px;
+    .react-datepicker__navigation--next {
+      width: 30px;
+    }
+    .react-datepicker__navigation--previous {
+      width: 30px;
+    }
+    .react-datepicker-wrapper,
+    .react-datepicker__input-container,
+    .react-datepicker__input-container input {
+      display: block;
+      width: 100%;
+      height: 39px;
+      margin-top: 5px;
+    }
+  }
+
   .container {
     width: 100%;
   }
@@ -366,12 +407,12 @@ const StyledHome = styled.div`
     height: 2.5rem;
     font-size: 1rem;
   }
-  label{
-    margin-bottom:-5px;
+  label {
+    margin-bottom: -5px;
     font-size: 1rem;
   }
-  .mt-2{
-    margin-top:15px;
+  .mt-2 {
+    margin-top: 15px;
   }
   .form__wrapper2 {
     width: 100%;

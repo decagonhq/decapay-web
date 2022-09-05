@@ -1,3 +1,6 @@
+import moment from "moment";
+
+
 export const ANNUAL = "ANNUAL";
 export const MONTHLY = "MONTHLY";
 export const WEEKLY = "WEEKLY";
@@ -33,4 +36,25 @@ export const dateFormats3 = "yyyy-MM-dd";
 
 export const hundredPercent = 100;
 
+export const generateYearsFromCurrentYear = () => {
+  let currentYear = new Date().getFullYear();
+  let years = [];
+  for (let i = currentYear; i < currentYear + 10; i++) {
+    years.push({ value: i, label: i });
+  }
+  return years;
+};
+
+export const changeDateFormat = (date) => {
+  return moment(date).format(dateFormats);
+};
+export const formatDate = (date) => {
+  if (date === "" || date === null || date === undefined) {
+    return "";
+  } else {
+    let splitDate = date.split("/");
+    let joinDateFromBehind = splitDate.reverse().join("-");
+    return joinDateFromBehind;
+  }
+};
 

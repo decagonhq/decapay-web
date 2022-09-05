@@ -12,6 +12,11 @@ import request from "../../utils/apiHelper";
 import CurrencyFormat from "react-currency-format";
 import FormTitleSection from "../../components/modal/FormTitleSection";
 import { useFormik } from "formik";
+import DatePicker from "react-datepicker";
+import moment from "moment";
+import format from "date-fns/format";
+import { dateFormats2 } from "../../constants";
+import { stripCommaAndConvertToNumber } from "../../utils/utils";
 import {
   ANNUAL,
   MONTHLY,
@@ -20,10 +25,12 @@ import {
   CUSTOM,
   Options,
   Months,
+  changeDateFormat,
+  formatDate,
 } from "../../constants";
 import FormSelectComponent from "../../components/selectComponent";
 
-const EditBudget = ({ closeModal,id,title }) => {
+const EditBudget = ({ closeModal, id, title }) => {
   const [collectData, setCollectData] = React.useState({
     year: "",
     title: "",
@@ -35,33 +42,14 @@ const EditBudget = ({ closeModal,id,title }) => {
     budgetEndDate: "",
     period: "",
   });
+  const [calendar, setCalendar] = useState({
+    budgetStartDate: "",
+    budgetEndDate: "",
+  });
   const [newId, setNewId] = React.useState(-1);
 
-  const formatDate = (date) => {
-    if (date === "" || date === null || date === undefined) {
-      return "";
-    } else {
-      let splitDate = date.split("/");
-      let joinDateFromBehind = splitDate.reverse().join("-");
-      return joinDateFromBehind;
-    }
-  };
-
   // const { id } = useParams();
-  const stripCommaAndConvertToNumber = (amount) => {
-    if (amount === "" || amount === null || amount === undefined) {
-      return "";
-    } else if (typeof amount === "number") {
-      return amount;
-    } else {
-      let splitAmount = amount.split(",");
-      let joinBackAmount = splitAmount.join("");
-      let removeNairaandConvertToNumber = parseInt(
-        joinBackAmount.replace("₦", "")
-      );
-      return removeNairaandConvertToNumber;
-    }
-  };
+
 
   const initialValues = {
     newId: newId,
@@ -87,7 +75,6 @@ const EditBudget = ({ closeModal,id,title }) => {
   const fetchData = async () => {
     try {
       const response = await request.get(`budgets/edit/${id}`, headers);
-      // console.log(response.data);
       setNewId(id);
       setCollectData({
         ...collectData,
@@ -101,6 +88,16 @@ const EditBudget = ({ closeModal,id,title }) => {
         month: response.data.data.month,
         duration: response.data.data.duration,
       });
+      setCalendar({
+        ...calendar,
+        budgetStartDate: moment(
+          formatDate(response.data.data.budgetStartDate)
+        ).toDate(),
+        
+        budgetEndDate: moment(
+          formatDate(response.data.data.budgetEndDate)
+        ).toDate(),
+      });
     } catch (error) {
       toast.error(error, {
         autoClose: 3000,
@@ -108,14 +105,13 @@ const EditBudget = ({ closeModal,id,title }) => {
       });
     }
   };
-  console.log(newId)
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line
   }, []);
   const timerBeforeRedirect = () => {
     setTimeout(() => {
-      window.location.href = "/home";
+      window.location.href = "/budgets";
     }, 2000);
   };
   const createBudgetValidationSchema = yup.object().shape({
@@ -126,18 +122,18 @@ const EditBudget = ({ closeModal,id,title }) => {
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
 
-  const changeDateFormat = (date) => {
-    const splitDate = date.split("-");
-    return `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
-  };
-
   const onSubmit = async () => {
     let payload = {
       ...collectData,
       amount: stripCommaAndConvertToNumber(collectData.amount),
-      budgetStartDate: changeDateFormat(collectData.budgetStartDate),
+      budgetStartDate:
+        collectData.period === CUSTOM
+          ? format(calendar.budgetStartDate, dateFormats2)
+          : changeDateFormat(collectData.budgetStartDate),
       budgetEndDate:
-        collectData.period === "DAILY"
+        collectData.period === CUSTOM
+          ? format(calendar.budgetEndDate, dateFormats2)
+          : collectData.period === DAILY
           ? changeDateFormat(collectData.budgetStartDate)
           : changeDateFormat(collectData.budgetEndDate),
     };
@@ -156,7 +152,6 @@ const EditBudget = ({ closeModal,id,title }) => {
       setLoading(false);
       timerBeforeRedirect();
     } catch (error) {
-      console.log(error);
       toast.error(error.response.status, {
         autoClose: 3000,
         onClose: dismissToast,
@@ -185,7 +180,15 @@ const EditBudget = ({ closeModal,id,title }) => {
   const handleSelect = (e, name) => {
     setCollectData({ ...collectData, [name]: e.target.value });
   };
-  // console.log(newId)
+  const handleOnChangeDate = (date, name) => {
+    setCalendar({ ...calendar, [name]: date });
+  };
+  const disableEndDateBasedOnStartDate = (date, budgetStartDate) => {
+    if (date > budgetStartDate) {
+      return true;
+    }
+    return false;
+  };
   return (
     // <Layout>
     <StyledHome>
@@ -197,7 +200,7 @@ const EditBudget = ({ closeModal,id,title }) => {
               <h4 className="header_style">Edit Budget</h4>
             </div>
           </div> */}
-          <input type="hidden" name="newId"   value={newId} />
+        <input type="hidden" name="newId" value={newId} />
 
         <div className="form__wrapper">
           <FormInputComponent
@@ -306,22 +309,32 @@ const EditBudget = ({ closeModal,id,title }) => {
         )}
         {collectData.period === CUSTOM && (
           <div className="">
-            <FormInputComponent
-              placeholder="Start Date"
-              label="Start Date"
-              type="date"
-              value={collectData.budgetStartDate}
-              name="budgetStartDate"
-              onChange={(e) => handleChange(e)}
-            />
-            <FormInputComponent
-              placeholder="End Date"
-              label="End Date"
-              type="date"
-              value={collectData.budgetEndDate}
-              name="budgetEndDate"
-              onChange={(e) => handleChange(e)}
-            />
+            
+            <div className="form_wrapper3">
+              <h7>Start Date</h7>
+              <DatePicker
+                onChange={(e) => {
+                  handleOnChangeDate(e, "budgetStartDate");
+                }}
+                value={calendar.budgetStartDate}
+                selected={calendar.budgetStartDate}
+              />
+            </div>
+            <div className="form_wrapper3">
+              <h7>End Date</h7>
+              <DatePicker
+                onChange={(e) => {
+                  handleOnChangeDate(e, "budgetEndDate");
+                }}
+                value={calendar.budgetEndDate}
+                selected={calendar.budgetEndDate}
+                minDate={calendar.budgetStartDate}
+                name="budgetEndDate"
+                disabled={disableEndDateBasedOnStartDate(
+                  calendar.budgetStartDate
+                )}
+              />
+            </div>
           </div>
         )}
 
@@ -355,7 +368,7 @@ const EditBudget = ({ closeModal,id,title }) => {
 export default EditBudget;
 
 const StyledHome = styled.div`
-font-family:"Sofia Pro";
+  font-family: "Sofia Pro";
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -399,16 +412,34 @@ font-family:"Sofia Pro";
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 10px;
   }
-  .mt-2{
-    margin-top:15px;
+  .form_wrapper3 {
+    width: 100%;
+    border-radius: 5px;
+    .react-datepicker__navigation--next {
+      width: 30px;
+    }
+    .react-datepicker__navigation--previous {
+      width: 30px;
+    }
+    .react-datepicker-wrapper,
+    .react-datepicker__input-container,
+    .react-datepicker__input-container input {
+      display: block;
+      width: 100%;
+      height: 39px;
+      margin-top: 5px;
+    }
+  }
+  .mt-2 {
+    margin-top: 15px;
   }
   .form__wrapper4 {
     width: 100%;
     height: 2.5rem;
     margin-bottom: 20px;
   }
-  label{
-    margin-bottom:-5px;
+  label {
+    margin-bottom: -5px;
     font-size: 1rem;
   }
 `;
