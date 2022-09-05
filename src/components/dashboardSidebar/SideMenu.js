@@ -27,7 +27,7 @@ const SidebarDemo = () => {
         },
       });
       localStorage.clear();
-      window.location.href = `/login`;
+      window.location.href = `/`;
       toast.success("Logout successful");
       return;
     } catch (err) {
@@ -85,6 +85,7 @@ export default SidebarDemo;
 
 const MenuStyle = styled.div`
   /* width: 15rem ; */
+  font-family:"Sofia Pro" ;
   height: 100vh;
   padding: 5px;
   /* box-shadow: 0px 0px 10px #e6e6e6; */

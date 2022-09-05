@@ -75,7 +75,7 @@ function ForgotPassword() {
 export default ForgotPassword;
 
 const StyledHome = styled.div`
-  font-family: "Inter";
+  font-family: "Sofia Pro";
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -112,7 +112,7 @@ const StyledHome = styled.div`
     border-radius: 5px;
   }
   .bottom__text {
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     font-style: normal;
     font-weight: 400;
     font-size: 16px;

@@ -19,25 +19,19 @@ const CreateBudgetCategory = ({ closeModal }) => {
           name="budgetCategory"
         />
       </div>
-      <div className="btn">
-        <MyButton type="submit" className="form__button">
+      <br />
+        <MyButton type="submit" >
           {loading ? <ClipLoader color="white" size="40px" /> : "Save"}
         </MyButton>
-      </div>
     </StyledHome>
   );
 };
 export default CreateBudgetCategory;
 
 const StyledHome = styled.div`
+font-family:"Sofia Pro";
   .form__wrapper {
     width: 100%;
     border-radius: 5px;
-  }
-  .btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
   }
 `;

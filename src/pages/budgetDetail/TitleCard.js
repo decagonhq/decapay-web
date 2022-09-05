@@ -1,14 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 
-const TitleCard = ({ amount }) => {
+const TitleCard = ({ title, amount, startDate, endDate, period }) => {
   return (
     <ListStyle>
-        <p className="bg-title">My Budget</p>
-        <p className="bg-title-amount">{
-          amount
-        }</p>
-    
+      <div className="title-wrapper">
+        <div>
+          <p className="bg-title-amount">{title}</p>
+          <p className="bg-title-amount">{amount}</p>
+        </div>
+        <div>
+          <p className="bg-title transform">Budget Period: {period}</p>
+          <p className="bg-title">Start Date: {startDate}</p>
+          <p className="bg-title">End Date: {endDate}</p>
+        </div>
+      </div>
     </ListStyle>
   );
 };
@@ -17,41 +23,62 @@ export default TitleCard;
 
 const ListStyle = styled.div`
   width: 100%;
-  height: 7em;
   background: #14a800;
-  padding: 20px;
-  font-family: "Inter";
+  padding: 20px 30px;
+  font-family: "Sofia Pro";
   font-style: normal;
-  line-height: 19px;
-  @media only screen and (max-width: 379px) {
-    height: 180px;
+  .title-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: -20px;
+  }
+  
+  
+  @media only screen and (max-width: 991px) {
+    padding: 20px;
+
+    .title-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr ;
+      margin-bottom: -20px;
+    }
+    .bg-title {
+      line-height: 0.4;
+    }
+    .bg-title-amount {
+      line-height: 0.6;
+    }
   }
   @media only screen and (max-width: 299px) {
-    height: 200px;
   }
 
   .bg-title {
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     font-style: normal;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 16px;
-    line-height: 19px;
+    /* line-height: 19px; */
     display: flex;
     align-items: center;
 
     color: #ffffff;
   }
   .bg-title-amount {
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     font-style: normal;
-    font-weight: 800;
-    font-size: 32px;
-    line-height: 39px;
+    font-weight: 600;
+    font-size: 30px;
     /* identical to box height */
 
     display: flex;
     align-items: center;
 
     color: #ffffff;
+  }
+  .transform {
+    /* text-transform: uppercase; */
   }
 `;

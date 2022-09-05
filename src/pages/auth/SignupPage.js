@@ -150,7 +150,7 @@ const Home = () => {
           <p className="bottom__text">
             Already have an account?
             <span>
-              <Link to="/login"> Login</Link>{" "}
+              <Link to="/"> Login</Link>{" "}
             </span>
           </p>
         </div>
@@ -160,7 +160,7 @@ const Home = () => {
 };
 export default Home;
 const StyledHome = styled.div`
-  font-family: "Inter";
+  font-family: "Sofia Pro";
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -192,7 +192,7 @@ const StyledHome = styled.div`
     /* margin-bottom: -30px; */
   }
   .bottom__text {
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     font-style: normal;
     font-weight: 400;
     font-size: 16px;

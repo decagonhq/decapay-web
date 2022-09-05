@@ -177,7 +177,7 @@ const BudgetSyle = styled.div`
     font-size: 16px;
   }
   .page {
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -232,7 +232,7 @@ const BudgetSyle = styled.div`
     height: 150px;
     background: rgba(0, 0, 0, 0.04);
     padding: 10px;
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     font-style: normal;
     line-height: 19px;
     @media only screen and (max-width: 379px) {
@@ -285,7 +285,7 @@ const BudgetSyle = styled.div`
     z-index: 3;
     border-radius: 10px;
     z-index: 100;
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -349,7 +349,7 @@ const BudgetSyle = styled.div`
   }
 
   .category {
-    font-family: "Inter";
+    font-family: "Sofia Pro";
     font-style: normal;
 
     width: 100%;

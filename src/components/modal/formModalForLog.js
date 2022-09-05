@@ -36,6 +36,7 @@ const LogExpenseResuable = ({
   maxDate,
   disabled,
   inputLabel,
+  defaultValue,
 }) => {
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
@@ -69,19 +70,18 @@ const LogExpenseResuable = ({
       <div className="form__wrapper">
         <h7>Select Date</h7>
         <DatePicker
-          selected={selectedDate}
+          // selected={selectedDate}
           onChange={handleChangeDate}
           minDate={minDate}
           maxDate={maxDate}
+          value={defaultValue}
           disabled={disabled}
         />
       </div>
-
-      <div className="btn">
+        <br />
         <MyButton type="submit" className="form__button" onClick={onClick}>
           {loading ? <ClipLoader color="white" size="40px" /> : "Save"}
         </MyButton>
-      </div>
     </StyledHome>
   );
 };
