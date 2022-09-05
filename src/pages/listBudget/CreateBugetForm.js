@@ -11,6 +11,8 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import request from "../../utils/apiHelper";
 import FormTitleSection from "../../components/modal/FormTitleSection";
+import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
 
 const CreateBudget = ({ closeModal }) => {
   const timerBeforeRedirect = () => {
@@ -18,6 +20,10 @@ const CreateBudget = ({ closeModal }) => {
       window.location.href = "/budgets";
     }, 2000);
   };
+  const [calendar, setCalendar] = useState({
+    budgetStartDate: "",
+    budgetEndDate: "",
+  });
   const createBudgetValidationSchema = yup.object().shape({
     title: yup.string().required("Title is required"),
     amount: yup.number().required("Amount is required"),
@@ -133,6 +139,16 @@ const CreateBudget = ({ closeModal }) => {
       setCustom(true);
     }
   };
+  const disableEndDateBasedOnStartDate = (date, budgetStartDate) => {
+    if (date > budgetStartDate) {
+      return true;
+    }
+    return false;
+  };
+  const handleOnChangeDate = (date) => {
+    setCalendar({ ...calendar, budgetStartDate: date });
+  };
+  console.log(calendar);
   // useEffect(() => {
   //   handleChange(
   //   )
@@ -301,6 +317,36 @@ const CreateBudget = ({ closeModal }) => {
                     name="budgetEndDate"
                     onChange={handleChange}
                   />
+                  <div className="form_wrapper3">
+                    <h7>Select Date</h7>
+                    <DatePicker
+                      onChange={(e) => {
+                        handleOnChangeDate(e);
+                      }}
+                      // value={calendar.budgetStartDate}
+                      selected={calendar.budgetStartDate}
+                      // minDate={new Date()}
+                      // name="budgetStartDate"
+                      // maxDate={new Date(2021, 11, 31)}
+                      // disabled={
+                      //   disableEndDateBasedOnStartDate(values.budgetStartDate)
+                      // }
+                    />
+                  </div>
+                  <DatePicker
+                    onChange={(e) => {
+                      handleOnChangeDate(e);
+                    }}
+                    // value={values.budgetEndDate}
+                    selected={calendar.budgetEndDate}
+                    // minDate={new Date()}
+                    minDate={calendar.budgetStartDate}
+                    name="budgetEndDate"
+                    // maxDate={new Date(2021, 11, 31)}
+                    disabled={disableEndDateBasedOnStartDate(
+                      calendar.budgetStartDate
+                    )}
+                  />
                 </div>
               )}
 
@@ -340,13 +386,31 @@ const CreateBudget = ({ closeModal }) => {
 export default CreateBudget;
 
 const StyledHome = styled.div`
-  font-family:"Sofia Pro";
+  font-family: "Sofia Pro";
   display: flex;
   flex-direction: column;
   align-items: center;
   /* height: 100vh; */
   background-color: "white";
-  
+  .form_wrapper3 {
+    width: 100%;
+    border-radius: 5px;
+    .react-datepicker__navigation--next {
+      width: 30px;
+    }
+    .react-datepicker__navigation--previous {
+      width: 30px;
+    }
+    .react-datepicker-wrapper,
+    .react-datepicker__input-container,
+    .react-datepicker__input-container input {
+      display: block;
+      width: 100%;
+      height: 39px;
+    }
+    
+  }
+
   .container {
     width: 100%;
   }
@@ -366,12 +430,12 @@ const StyledHome = styled.div`
     height: 2.5rem;
     font-size: 1rem;
   }
-  label{
-    margin-bottom:-5px;
+  label {
+    margin-bottom: -5px;
     font-size: 1rem;
   }
-  .mt-2{
-    margin-top:15px;
+  .mt-2 {
+    margin-top: 15px;
   }
   .form__wrapper2 {
     width: 100%;
