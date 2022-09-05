@@ -114,7 +114,7 @@ const EditBudget = ({ closeModal, id, title }) => {
   }, []);
   const timerBeforeRedirect = () => {
     setTimeout(() => {
-      window.location.href = "/home";
+      window.location.href = "/budgets";
     }, 2000);
   };
   const createBudgetValidationSchema = yup.object().shape({
