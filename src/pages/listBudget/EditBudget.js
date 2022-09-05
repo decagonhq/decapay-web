@@ -12,6 +12,10 @@ import request from "../../utils/apiHelper";
 import CurrencyFormat from "react-currency-format";
 import FormTitleSection from "../../components/modal/FormTitleSection";
 import { useFormik } from "formik";
+import DatePicker from "react-datepicker";
+import moment from "moment";
+import format from "date-fns/format";
+import { dateFormats2 } from "../../constants";
 import {
   ANNUAL,
   MONTHLY,
@@ -20,10 +24,11 @@ import {
   CUSTOM,
   Options,
   Months,
+  changeDateFormat,
 } from "../../constants";
 import FormSelectComponent from "../../components/selectComponent";
 
-const EditBudget = ({ closeModal,id,title }) => {
+const EditBudget = ({ closeModal, id, title }) => {
   const [collectData, setCollectData] = React.useState({
     year: "",
     title: "",
@@ -34,6 +39,10 @@ const EditBudget = ({ closeModal,id,title }) => {
     duration: "",
     budgetEndDate: "",
     period: "",
+  });
+  const [calendar, setCalendar] = useState({
+    budgetStartDate: "",
+    budgetEndDate: "",
   });
   const [newId, setNewId] = React.useState(-1);
 
@@ -89,6 +98,7 @@ const EditBudget = ({ closeModal,id,title }) => {
       const response = await request.get(`budgets/edit/${id}`, headers);
       // console.log(response.data);
       setNewId(id);
+      console.log(response.data.data.period)
       setCollectData({
         ...collectData,
         title: response.data.data.title,
@@ -101,6 +111,16 @@ const EditBudget = ({ closeModal,id,title }) => {
         month: response.data.data.month,
         duration: response.data.data.duration,
       });
+      setCalendar({
+        ...calendar,
+        budgetStartDate: moment(
+          formatDate(response.data.data.budgetStartDate)
+        ).toDate(),
+        budgetEndDate: moment(
+          formatDate(response.data.data.budgetEndDate)
+          ).toDate(),
+
+      });
     } catch (error) {
       toast.error(error, {
         autoClose: 3000,
@@ -108,7 +128,7 @@ const EditBudget = ({ closeModal,id,title }) => {
       });
     }
   };
-  console.log(newId)
+  console.log(newId);
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line
@@ -126,20 +146,19 @@ const EditBudget = ({ closeModal,id,title }) => {
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
 
+  
   const changeDateFormat = (date) => {
     const splitDate = date.split("-");
     return `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
   };
-
+ 
   const onSubmit = async () => {
+    
     let payload = {
       ...collectData,
       amount: stripCommaAndConvertToNumber(collectData.amount),
-      budgetStartDate: changeDateFormat(collectData.budgetStartDate),
-      budgetEndDate:
-        collectData.period === "DAILY"
-          ? changeDateFormat(collectData.budgetStartDate)
-          : changeDateFormat(collectData.budgetEndDate),
+      budgetStartDate: collectData.period === CUSTOM ? format(calendar.budgetStartDate, dateFormats2) : changeDateFormat(collectData.budgetStartDate),
+      budgetEndDate: collectData.period === CUSTOM ? format(calendar.budgetEndDate, dateFormats2) : collectData.period ===DAILY?changeDateFormat(collectData.budgetStartDate): changeDateFormat(collectData.budgetEndDate),
     };
     try {
       const response = await request.put(`budgets/${newId}`, payload, {
@@ -167,7 +186,10 @@ const EditBudget = ({ closeModal,id,title }) => {
   const formik = useFormik({
     initialValues,
     createBudgetValidationSchema,
-    onSubmit,
+    onSubmit(values) {
+      setLoading(true);
+      onSubmit(values);
+    }
   });
 
   const generateYearsFromCurrentYear = () => {
@@ -185,6 +207,16 @@ const EditBudget = ({ closeModal,id,title }) => {
   const handleSelect = (e, name) => {
     setCollectData({ ...collectData, [name]: e.target.value });
   };
+  const handleOnChangeDate = (date, name) => {
+    setCalendar({ ...calendar, [name]: date });
+  };
+  console.log(calendar);
+  const disableEndDateBasedOnStartDate = (date, budgetStartDate) => {
+    if (date > budgetStartDate) {
+      return true;
+    }
+    return false;
+  };
   // console.log(newId)
   return (
     // <Layout>
@@ -197,7 +229,7 @@ const EditBudget = ({ closeModal,id,title }) => {
               <h4 className="header_style">Edit Budget</h4>
             </div>
           </div> */}
-          <input type="hidden" name="newId"   value={newId} />
+        <input type="hidden" name="newId" value={newId} />
 
         <div className="form__wrapper">
           <FormInputComponent
@@ -306,7 +338,7 @@ const EditBudget = ({ closeModal,id,title }) => {
         )}
         {collectData.period === CUSTOM && (
           <div className="">
-            <FormInputComponent
+            {/* <FormInputComponent
               placeholder="Start Date"
               label="Start Date"
               type="date"
@@ -321,7 +353,32 @@ const EditBudget = ({ closeModal,id,title }) => {
               value={collectData.budgetEndDate}
               name="budgetEndDate"
               onChange={(e) => handleChange(e)}
-            />
+            /> */}
+            <div className="form_wrapper3">
+              <h7>Start Date</h7>
+              <DatePicker
+                onChange={(e) => {
+                  handleOnChangeDate(e, "budgetStartDate");
+                }}
+                value={calendar.budgetStartDate}
+                selected={calendar.budgetStartDate}
+              />
+            </div>
+            <div className="form_wrapper3">
+              <h7>End Date</h7>
+              <DatePicker
+                onChange={(e) => {
+                  handleOnChangeDate(e, "budgetEndDate");
+                }}
+                value={calendar.budgetEndDate}
+                selected={calendar.budgetEndDate}
+                minDate={calendar.budgetStartDate}
+                name="budgetEndDate"
+                disabled={disableEndDateBasedOnStartDate(
+                  calendar.budgetStartDate
+                )}
+              />
+            </div>
           </div>
         )}
 
@@ -355,7 +412,7 @@ const EditBudget = ({ closeModal,id,title }) => {
 export default EditBudget;
 
 const StyledHome = styled.div`
-font-family:"Sofia Pro";
+  font-family: "Sofia Pro";
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -399,16 +456,34 @@ font-family:"Sofia Pro";
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 10px;
   }
-  .mt-2{
-    margin-top:15px;
+  .form_wrapper3 {
+    width: 100%;
+    border-radius: 5px;
+    .react-datepicker__navigation--next {
+      width: 30px;
+    }
+    .react-datepicker__navigation--previous {
+      width: 30px;
+    }
+    .react-datepicker-wrapper,
+    .react-datepicker__input-container,
+    .react-datepicker__input-container input {
+      display: block;
+      width: 100%;
+      height: 39px;
+      margin-top: 5px;
+    }
+  }
+  .mt-2 {
+    margin-top: 15px;
   }
   .form__wrapper4 {
     width: 100%;
     height: 2.5rem;
     margin-bottom: 20px;
   }
-  label{
-    margin-bottom:-5px;
+  label {
+    margin-bottom: -5px;
     font-size: 1rem;
   }
 `;
