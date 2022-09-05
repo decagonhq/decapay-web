@@ -12,6 +12,8 @@ import { toast } from "react-toastify";
 import request from "../../utils/apiHelper";
 import FormTitleSection from "../../components/modal/FormTitleSection";
 import DatePicker from "react-datepicker";
+import format from "date-fns/format";
+import {dateFormats2,dateFormats3,hundredPercent} from "../../constants";
 // import "react-datepicker/dist/react-datepicker.css";
 
 const CreateBudget = ({ closeModal }) => {
@@ -38,8 +40,8 @@ const CreateBudget = ({ closeModal }) => {
   };
 
   const onSubmit = async (values) => {
-    values.budgetStartDate = changeDateFormat(values.budgetStartDate);
-    values.budgetEndDate = changeDateFormat(values.budgetEndDate);
+    values.budgetStartDate = format(calendar.budgetStartDate, dateFormats2);
+    values.budgetEndDate = format(calendar.budgetEndDate, dateFormats2);
     values.amount = parseInt(values.amount);
     if (values.period === "DAILY") {
       /* eslint-disable */
@@ -145,8 +147,8 @@ const CreateBudget = ({ closeModal }) => {
     }
     return false;
   };
-  const handleOnChangeDate = (date) => {
-    setCalendar({ ...calendar, budgetStartDate: date });
+  const handleOnChangeDate = (date, name) => {
+    setCalendar({ ...calendar, [name]: date });
   };
   console.log(calendar);
   // useEffect(() => {
@@ -301,7 +303,7 @@ const CreateBudget = ({ closeModal }) => {
               )}
               {custom && (
                 <div className="mt-2">
-                  <FormInputComponent
+                  {/* <FormInputComponent
                     placeholder="Start Date"
                     label="Start Date"
                     type="date"
@@ -316,37 +318,31 @@ const CreateBudget = ({ closeModal }) => {
                     value={values.budgetEndDate}
                     name="budgetEndDate"
                     onChange={handleChange}
-                  />
+                  /> */}
                   <div className="form_wrapper3">
-                    <h7>Select Date</h7>
+                    <h7>Start Date</h7>
                     <DatePicker
                       onChange={(e) => {
-                        handleOnChangeDate(e);
+                        handleOnChangeDate(e, "budgetStartDate");
                       }}
-                      // value={calendar.budgetStartDate}
                       selected={calendar.budgetStartDate}
-                      // minDate={new Date()}
-                      // name="budgetStartDate"
-                      // maxDate={new Date(2021, 11, 31)}
-                      // disabled={
-                      //   disableEndDateBasedOnStartDate(values.budgetStartDate)
-                      // }
+                      
                     />
                   </div>
+                  <div className="form_wrapper3">
+                  <h7>End Date</h7>
                   <DatePicker
                     onChange={(e) => {
-                      handleOnChangeDate(e);
+                      handleOnChangeDate(e, "budgetEndDate");
                     }}
-                    // value={values.budgetEndDate}
                     selected={calendar.budgetEndDate}
-                    // minDate={new Date()}
                     minDate={calendar.budgetStartDate}
                     name="budgetEndDate"
-                    // maxDate={new Date(2021, 11, 31)}
                     disabled={disableEndDateBasedOnStartDate(
                       calendar.budgetStartDate
                     )}
                   />
+                  </div>
                 </div>
               )}
 
@@ -407,6 +403,7 @@ const StyledHome = styled.div`
       display: block;
       width: 100%;
       height: 39px;
+      margin-top: 5px;
     }
     
   }
