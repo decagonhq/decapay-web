@@ -39,13 +39,18 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
 
   const countries = useMemo(() => countryList().getData(), []);
-  const [language, setLanguage] = useState("");
-  const [currency, setCurrency] = useState("");
-  const [country, setCountry] = useState("");
-  const [countryCodeError, setCountryCodeError] = useState("Country is required");
-  const [currencyCodeError, setCurrencyCodeError] = useState("Currency code is required");
-  const [languageCodeError, setLanguageCodeError] = useState("Language Code is required");
-
+  const [language, setLanguage] = useState({ value: "en", label: "English" });
+  const [currency, setCurrency] = useState({ value: "NGN", label: "Naira" });
+  const [country, setCountry] = useState({ value: "NG", label: "Nigeria" });
+  const [countryCodeError, setCountryCodeError] = useState(
+    "Country is required"
+  );
+  const [currencyCodeError, setCurrencyCodeError] = useState(
+    "Currency code is required"
+  );
+  const [languageCodeError, setLanguageCodeError] = useState(
+    "Language Code is required"
+  );
 
   const languageChange = (value) => {
     if (value) {
@@ -61,7 +66,7 @@ const Home = () => {
     }
   };
   const countryChange = (value) => {
-   if (value) {
+    if (value) {
       setCountry(value);
       setCountryCodeError("");
     }
@@ -81,8 +86,11 @@ const Home = () => {
   };
 
   const onSubmit = (values) => {
-    
-    if(country.value === "" || currency.value === "" || language.value === ""){
+    if (
+      country.value === "" ||
+      currency.value === "" ||
+      language.value === ""
+    ) {
       return;
     }
     setLoading(true);
@@ -107,73 +115,80 @@ const Home = () => {
       <div className="form__container">
         <p className="header">Create an account</p>
         <form onSubmit={formik.handleSubmit}>
-          <div className="form__wrapper">
-            <FormInputComponent
-              placeholder="Enter your first name"
-              label="First Name"
-              name="firstName"
-              type="text"
-              value={formik.values.firstName}
-              onChange={formik.handleChange}
-              error={formik.errors.firstName}
-            />
+          <div className="two-column">
+            <div className="form__wrapper">
+              <FormInputComponent
+                placeholder="Enter your first name"
+                // label="First Name"
+                name="firstName"
+                type="text"
+                value={formik.values.firstName}
+                onChange={formik.handleChange}
+                error={formik.errors.firstName}
+              />
+            </div>
+            <div className="form__wrapper">
+              <FormInputComponent
+                placeholder="Enter your last name"
+                // label="Last Name"
+                name="lastName"
+                type="text"
+                value={formik.values.lastName}
+                onChange={formik.handleChange}
+                error={formik.errors.lastName}
+              />
+            </div>
           </div>
-          <div className="form__wrapper">
-            <FormInputComponent
-              placeholder="Enter your last name"
-              label="Last Name"
-              name="lastName"
-              type="text"
-              value={formik.values.lastName}
-              onChange={formik.handleChange}
-              error={formik.errors.lastName}
-            />
+          <div className="two-column">
+            <div className="form__wrapper">
+              <FormInputComponent
+                placeholder="Enter your email"
+                // label="Email"
+                type="email"
+                name="email"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                error={formik.errors.email}
+              />
+            </div>
+
+            <div className="form__wrapper">
+              <FormInputComponent
+                placeholder="Enter your phone number"
+                // label="Phone Number"
+                type="text"
+                name="phoneNumber"
+                value={formik.values.phoneNumber}
+                onChange={formik.handleChange}
+                error={formik.errors.phoneNumber}
+              />
+            </div>
           </div>
-          <div className="form__wrapper">
-            <FormInputComponent
-              placeholder="Enter your email"
-              label="Email"
-              type="email"
-              name="email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              error={formik.errors.email}
-            />
+          <div className="two-column">
+            <div className="form__wrapper">
+              <FormInputComponent
+                type="password"
+                placeholder="password"
+                // label="Password"
+                name="password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={formik.errors.password}
+              />
+            </div>
+            <div className="form__wrapper">
+              <FormInputComponent
+                placeholder="Confirm password"
+                // label="Confirm Password"
+                type="password"
+                name="confirmPassword"
+                value={formik.values.confirmPassword}
+                onChange={formik.handleChange}
+                error={formik.errors.confirmPassword}
+              />
+            </div>
           </div>
 
-          <div className="form__wrapper">
-            <FormInputComponent
-              placeholder="Enter your phone number"
-              label="Phone Number"
-              type="text"
-              name="phoneNumber"
-              value={formik.values.phoneNumber}
-              onChange={formik.handleChange}
-              error={formik.errors.phoneNumber}
-            />
-          </div>
-          <div className="form__wrapper">
-            <FormInputComponent
-              type="password"
-              placeholder="password"
-              label="Password"
-              name="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              error={formik.errors.password}
-            />
-          </div>
-          <div className="form__wrapper">
-            <FormInputComponent
-              placeholder="Confirm password"
-              label="Confirm Password"
-              type="password"
-              name="confirmPassword"
-              value={formik.values.confirmPassword}
-              onChange={formik.handleChange}
-              error={formik.errors.confirmPassword}
-            />
-          </div>
           <div className="form__wrapper padding">
             <label>Select Country</label>
             <Select
@@ -183,7 +198,7 @@ const Home = () => {
               name="countryCode"
               className="select"
             />
-            {countryCodeError  && (
+            {country.value === "" && (
               <p className="error">{countryCodeError}</p>
             )}
           </div>
@@ -196,7 +211,7 @@ const Home = () => {
               onChange={languageChange}
               className="select"
             />
-            {languageCodeError  && (
+            {language.value === "" && (
               <p className="error">{languageCodeError}</p>
             )}
           </div>
@@ -209,7 +224,7 @@ const Home = () => {
               onChange={currencyChange}
               className="select"
             />
-            {currencyCodeError  && (
+            {currency.label === "" && (
               <p className="error">{currencyCodeError}</p>
             )}
           </div>
@@ -240,7 +255,6 @@ const StyledHome = styled.div`
   justify-content: center;
   box-sizing: border-box;
   overflow: auto;
-  padding: 20px;
   .form__container {
     display: flex;
     flex-direction: column;
@@ -259,10 +273,14 @@ const StyledHome = styled.div`
     line-height: 39px;
     color: #21334f;
   }
-
+  .two-column {
+    width: 90%;
+    display: flex;
+    gap: 10px;
+  }
+  
   .form__wrapper {
-    width: 70%;
-    /* margin-bottom: -30px; */
+    width: 90% !important;
   }
   .bottom__text {
     font-family: "Sofia Pro";
@@ -280,7 +298,7 @@ const StyledHome = styled.div`
     }
   }
   .padding {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
   form {
     width: 100%;
@@ -291,14 +309,22 @@ const StyledHome = styled.div`
   }
   .select {
     height: 2.5rem;
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
   label {
     margin-bottom: -5px;
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
   .error {
     color: red;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+  }
+  @media only screen and (max-width: 600px) {
+    .two-column {
+      flex-direction: column;
+    }
+    .select {
+      width: 90%;
+    }
   }
 `;
