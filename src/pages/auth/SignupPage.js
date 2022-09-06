@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import FormInputComponent from "../../components/InputComponent";
-import LogoComponent from "../../components/LogoComponent";
+// import LogoComponent from "../../components/LogoComponent";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -12,6 +12,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import Select from "react-select";
 import countryList from "react-select-country-list";
 import { Language, Currency } from "./Locale";
+import Layout from "../../components/NavigationBar/Layout";
 
 const Home = () => {
   const phoneRegExp = /^\d*(\+\d+)?$/;
@@ -109,8 +110,9 @@ const Home = () => {
   });
 
   return (
+    <Layout>
     <StyledHome>
-      <LogoComponent />
+      {/* <LogoComponent /> */}
 
       <div className="form__container">
         <p className="header">Create an account</p>
@@ -238,12 +240,13 @@ const Home = () => {
           <p className="bottom__text">
             Already have an account?
             <span>
-              <Link to="/"> Login</Link>{" "}
+              <Link to="/login"> Login</Link>{" "}
             </span>
           </p>
         </div>
       </div>
     </StyledHome>
+    </Layout>
   );
 };
 export default Home;
