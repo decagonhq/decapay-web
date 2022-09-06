@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import FormInputComponent from "../../components/InputComponent";
@@ -6,10 +6,12 @@ import LogoComponent from "../../components/LogoComponent";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-// import Layout from "../../components/dashboardSidebar/Layout";
 import { useDispatch } from "react-redux";
 import registerUser from "../../redux/actions/auth/signup.action";
 import ClipLoader from "react-spinners/ClipLoader";
+import Select from "react-select";
+import countryList from "react-select-country-list";
+import { Language, Currency } from "./Locale";
 
 const Home = () => {
   const phoneRegExp = /^\d*(\+\d+)?$/;
@@ -30,10 +32,41 @@ const Home = () => {
       .matches(phoneRegExp, "Phone Number is not valid")
       .min(11, "Phone Number cannot be less than 11 digits")
       .max(14, "Phone Number must be more than digits"),
+    // countryCode: Yup.string().required("Country Code is required"),
+    // currencyCode: Yup.string().required("Currency Code is required"),
+    // languageCode: Yup.string().required("Language Code is required"),
   });
   const [loading, setLoading] = useState(false);
-  // const loading = useSelector((state) => state.signup.loading);
-  // console.log(loading);
+
+  const countries = useMemo(() => countryList().getData(), []);
+  const [language, setLanguage] = useState("");
+  const [currency, setCurrency] = useState("");
+  const [country, setCountry] = useState("");
+  const [countryCodeError, setCountryCodeError] = useState("Country is required");
+  const [currencyCodeError, setCurrencyCodeError] = useState("Currency code is required");
+  const [languageCodeError, setLanguageCodeError] = useState("Language Code is required");
+
+
+  const languageChange = (value) => {
+    if (value) {
+      setLanguage(value);
+      setLanguageCodeError("");
+    }
+    setLanguage(value);
+  };
+  const currencyChange = (value) => {
+    if (value) {
+      setCurrency(value);
+      setCurrencyCodeError("");
+    }
+  };
+  const countryChange = (value) => {
+   if (value) {
+      setCountry(value);
+      setCountryCodeError("");
+    }
+  };
+
   const dispatch = useDispatch();
   const initialValues = {
     email: "",
@@ -42,10 +75,20 @@ const Home = () => {
     lastName: "",
     firstName: "",
     phoneNumber: "",
+    countryCode: "",
+    currencyCode: "",
+    languageCode: "",
   };
 
   const onSubmit = (values) => {
+    
+    if(country.value === "" || currency.value === "" || language.value === ""){
+      return;
+    }
     setLoading(true);
+    values.countryCode = country.value;
+    values.currencyCode = currency.value;
+    values.languageCode = language.value;
     delete values.confirmPassword;
     dispatch(registerUser(values));
     setLoading(false);
@@ -73,7 +116,6 @@ const Home = () => {
               value={formik.values.firstName}
               onChange={formik.handleChange}
               error={formik.errors.firstName}
-              
             />
           </div>
           <div className="form__wrapper">
@@ -133,16 +175,47 @@ const Home = () => {
             />
           </div>
           <div className="form__wrapper padding">
-            <Button
-              // loading={loading}
-              onClick={formik.handleSubmit}
-              type="submit"
-            >
-              {loading ? (
-                <ClipLoader color="white" size="40px"  />
-              ) : (
-                "Sign Up"
-              )}
+            <label>Select Country</label>
+            <Select
+              options={countries}
+              value={country}
+              onChange={countryChange}
+              name="countryCode"
+              className="select"
+            />
+            {countryCodeError  && (
+              <p className="error">{countryCodeError}</p>
+            )}
+          </div>
+          <div className="form__wrapper padding">
+            <label>Select Language</label>
+            <Select
+              name="languageCode"
+              options={Language}
+              value={language}
+              onChange={languageChange}
+              className="select"
+            />
+            {languageCodeError  && (
+              <p className="error">{languageCodeError}</p>
+            )}
+          </div>
+          <div className="form__wrapper padding">
+            <label>Select Currency</label>
+            <Select
+              name="currencyCode"
+              options={Currency}
+              value={currency}
+              onChange={currencyChange}
+              className="select"
+            />
+            {currencyCodeError  && (
+              <p className="error">{currencyCodeError}</p>
+            )}
+          </div>
+          <div className="form__wrapper padding">
+            <Button disabled onClick={formik.handleSubmit} type="submit">
+              {loading ? <ClipLoader color="white" size="40px" /> : "Sign Up"}
             </Button>
           </div>
         </form>
@@ -215,5 +288,17 @@ const StyledHome = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+  .select {
+    height: 2.5rem;
+    font-size: 1rem;
+  }
+  label {
+    margin-bottom: -5px;
+    font-size: 1rem;
+  }
+  .error {
+    color: red;
+    font-size: 0.8rem;
   }
 `;

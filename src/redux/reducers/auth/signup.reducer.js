@@ -7,7 +7,7 @@ const initialState = {
 }
 const timerBeforeRedirect= () => {
     setTimeout(() => {
-        window.location.href = `/login`;
+        window.location.href = `/`;
     }, 4000);
 }
 
