@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import FormInputComponent from "../../components/InputComponent";
-// import LogoComponent from "../../components/LogoComponent";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -12,7 +11,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import Select from "react-select";
 import Layout from "../../components/NavigationBar/Layout";
 import request from "../../utils/apiHelper";
-import { Language, Currency, Country } from "./Locale";
+// import { Language, Currency, Country } from "./Locale";
 
 const Home = () => {
   const phoneRegExp = /^\d*(\+\d+)?$/;
@@ -51,11 +50,12 @@ const Home = () => {
     "Language Code is required"
   );
 
-  console.log("country", Language, Currency, Country);
+  console.log("country",countryOptions);
 
   useEffect(() => {
     getReferences();
   }, []);
+
 
   const getReferences = async () => {
     try {
@@ -63,19 +63,19 @@ const Home = () => {
       let promisefulfilled = response.data.data;
       setCountryOptions(
         promisefulfilled.countries.map((country) => ({
-          value: country.id,
+          value: country.code,
           label: country.name,
         }))
       );
       setCurrencyOptions(
         promisefulfilled.currencies.map((currency) => ({
-          value: currency.id,
+          value: currency.code,
           label: currency.name,
         }))
       );
       setLanguageOptions(
         promisefulfilled.languages.map((language) => ({
-          value: language.id,
+          value: language.code,
           label: language.name,
         }))
       );
@@ -83,7 +83,7 @@ const Home = () => {
       console.log(error);
     }
   };
-  // console.log(countryOptions);
+  console.log(countryOptions);
 
   const languageChange = (value) => {
     if (value) {
@@ -225,7 +225,7 @@ const Home = () => {
             <div className="form__wrapper padding">
               <label>Select Country</label>
               <Select
-                options={Country}
+                options={countryOptions}
                 value={country}
                 onChange={countryChange}
                 name="countryCode"
@@ -239,7 +239,7 @@ const Home = () => {
               <label>Select Language</label>
               <Select
                 name="languageCode"
-                options={Language}
+                options={languageOptions}
                 value={language}
                 onChange={languageChange}
                 className="select"
@@ -252,7 +252,7 @@ const Home = () => {
               <label>Select Currency</label>
               <Select
                 name="currencyCode"
-                options={Currency}
+                options={currencyOptions}
                 value={currency}
                 onChange={currencyChange}
                 className="select"
