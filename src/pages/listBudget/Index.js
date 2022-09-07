@@ -163,7 +163,7 @@ const Index = () => {
                 </p>
                 <p className="category-title">{item.period}</p>
                 <p className="category-title">{item.displayProjectedAmount}</p>
-                <p className="category-title">
+                <p className={item.totalAmountSpentSoFar > item.projectedAmount ? "category-title red" : "category-title"}>
                   {item.displayTotalAmountSpentSoFar}
                 </p>
                 <p className={item?.percentageSpentSoFar > hundredPercent ?"category-title red" : "category-title"}>
