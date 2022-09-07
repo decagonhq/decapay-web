@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import FormInputComponent from "../../components/InputComponent";
@@ -10,9 +10,8 @@ import { useDispatch } from "react-redux";
 import registerUser from "../../redux/actions/auth/signup.action";
 import ClipLoader from "react-spinners/ClipLoader";
 import Select from "react-select";
-import countryList from "react-select-country-list";
-import { Language, Currency } from "./Locale";
 import Layout from "../../components/NavigationBar/Layout";
+import request from "../../utils/apiHelper";
 
 const Home = () => {
   const phoneRegExp = /^\d*(\+\d+)?$/;
@@ -33,16 +32,14 @@ const Home = () => {
       .matches(phoneRegExp, "Phone Number is not valid")
       .min(11, "Phone Number cannot be less than 11 digits")
       .max(14, "Phone Number must be more than digits"),
-    // countryCode: Yup.string().required("Country Code is required"),
-    // currencyCode: Yup.string().required("Currency Code is required"),
-    // languageCode: Yup.string().required("Language Code is required"),
   });
   const [loading, setLoading] = useState(false);
-
-  const countries = useMemo(() => countryList().getData(), []);
-  const [language, setLanguage] = useState({ value: "en", label: "English" });
-  const [currency, setCurrency] = useState({ value: "NGN", label: "Naira" });
-  const [country, setCountry] = useState({ value: "NG", label: "Nigeria" });
+  const [countryOptions, setCountryOptions] = useState([]);
+  const [currencyOptions, setCurrencyOptions] = useState([]);
+  const [languageOptions, setLanguageOptions] = useState([]);
+  const [language, setLanguage] = useState({ value: "1", label: "English" });
+  const [currency, setCurrency] = useState({ value: "104", label: "NGN" });
+  const [country, setCountry] = useState({ value: "155", label: "Nigeria" });
   const [countryCodeError, setCountryCodeError] = useState(
     "Country is required"
   );
@@ -52,6 +49,33 @@ const Home = () => {
   const [languageCodeError, setLanguageCodeError] = useState(
     "Language Code is required"
   );
+  
+  useEffect(() => {
+    getReferences();
+  }, []);
+
+const getReferences = async () => {
+    try{
+      const response = await request.get('references');
+      let promisefulfilled =  response.data.data;
+      setCountryOptions(promisefulfilled.countries.map((country) => ({
+        value: country.id,
+        label: country.name,
+      })));
+      setCurrencyOptions(promisefulfilled.currencies.map((currency) => ({
+        value: currency.id,
+        label: currency.name,
+      })));
+      setLanguageOptions(promisefulfilled.languages.map((language) => ({
+        value: language.id,
+        label: language.name,
+      })));
+    }catch(error){
+      console.log(error);
+    }
+  }
+  // console.log(countryOptions);
+
 
   const languageChange = (value) => {
     if (value) {
@@ -72,7 +96,6 @@ const Home = () => {
       setCountryCodeError("");
     }
   };
-
   const dispatch = useDispatch();
   const initialValues = {
     email: "",
@@ -194,7 +217,7 @@ const Home = () => {
           <div className="form__wrapper padding">
             <label>Select Country</label>
             <Select
-              options={countries}
+              options={countryOptions}
               value={country}
               onChange={countryChange}
               name="countryCode"
@@ -208,7 +231,7 @@ const Home = () => {
             <label>Select Language</label>
             <Select
               name="languageCode"
-              options={Language}
+              options={languageOptions}
               value={language}
               onChange={languageChange}
               className="select"
@@ -221,7 +244,7 @@ const Home = () => {
             <label>Select Currency</label>
             <Select
               name="currencyCode"
-              options={Currency}
+              options={currencyOptions}
               value={currency}
               onChange={currencyChange}
               className="select"

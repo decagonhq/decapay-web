@@ -70,6 +70,9 @@ const MenuItemStyle = styled.div`
     &:hover {
       color: #14A800;
     }
+    &:active {
+      color: #14A800;
+    }
 
     & p {
       padding: 0;
