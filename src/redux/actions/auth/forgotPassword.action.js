@@ -17,7 +17,9 @@ const forgotPasswordFailed = (payload) => ({
     }
 );
 
-
+const dismissToast = () => {
+    toast.dismiss();
+  };
 
 const forgotPassword = (payload) => async (dispatch) => {
     dispatch({ type: LOADING });
@@ -30,10 +32,16 @@ const forgotPassword = (payload) => async (dispatch) => {
             'DVC_KY_HDR': '2',
         }});
         
-        toast.success("Password reset link sent to your email");
+        toast.success(res.data.message, {
+            autoClose: 3000,
+            onClose: dismissToast,
+          });
         return dispatch(forgotPasswordSuccess(res.data));
     } catch (error) {
-        toast.error(retrieveErrMessage(error));
+        toast.error(error.response.data.message, {
+            autoClose: 3000,
+            onClose: dismissToast,
+          });
         console.log(error);
         return dispatch(forgotPasswordFailed(error));
     }

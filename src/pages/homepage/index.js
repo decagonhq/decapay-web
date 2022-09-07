@@ -7,8 +7,17 @@ const HomePage = () => {
   return (
     <Layout>
       <Wrapper>
+        <div className="midWrapper">
+          <div>
+            <h1>Effectively manager your budget</h1>
+          </div>
+          <div>
+            <img src="/images/homepageImage.png" alt="homepageImage" />
+          </div>
+        </div>
         <div className="container">
           <h1 className="home-title">DecaPay</h1>
+
           <p className="home-text">
             DecaPay is a budget management app that helps you to manage your
           </p>
@@ -31,5 +40,11 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+  .midWrapper{
+    /* background-color: rgba(20, 168, 0, 0.03) */
+    display: flex;
+    flex-direction: row;
+    padding: 80px
   }
 `;
