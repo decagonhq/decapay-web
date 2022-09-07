@@ -23,10 +23,30 @@ const Index = () => {
   const [currentTableData, setCurrentTableData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [budgetState,setBudgetState] = useState("current")
-
+  // const [location, setLocation] = useState();
   // eslint-disable-next-line
   const [dataInfo, setDataInfo] = useState([]);
   const ref = useRef(null);
+ 
+  // const getUserLocation = () => {
+  //   return new Promise((resolve, reject) => {
+  //     navigator.geolocation.getCurrentPosition(
+  //       (position) => {
+  //         resolve(position);
+  //       },
+  //       (error) => {
+  //         reject(error);
+  //       }
+  //     );
+  //   });
+  // };
+  // useEffect(() => {
+  //   getUserLocation().then((position) => {
+  //     setLocation(position);
+  //   });
+  // }, [currentPage,budgetState]);
+  // console.log(location);
+
 
   const headers = {
     headers: {

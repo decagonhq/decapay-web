@@ -12,6 +12,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import Select from "react-select";
 import Layout from "../../components/NavigationBar/Layout";
 import request from "../../utils/apiHelper";
+import { Language, Currency, Country } from "./Locale";
 
 const Home = () => {
   const phoneRegExp = /^\d*(\+\d+)?$/;
@@ -37,9 +38,9 @@ const Home = () => {
   const [countryOptions, setCountryOptions] = useState([]);
   const [currencyOptions, setCurrencyOptions] = useState([]);
   const [languageOptions, setLanguageOptions] = useState([]);
-  const [language, setLanguage] = useState({ value: "1", label: "English" });
-  const [currency, setCurrency] = useState({ value: "104", label: "NGN" });
-  const [country, setCountry] = useState({ value: "155", label: "Nigeria" });
+  const [language, setLanguage] = useState({ value: "en", label: "English" });
+  const [currency, setCurrency] = useState({ value: "NGN", label: "NGN" });
+  const [country, setCountry] = useState({ value: "NG", label: "Nigeria" });
   const [countryCodeError, setCountryCodeError] = useState(
     "Country is required"
   );
@@ -49,33 +50,40 @@ const Home = () => {
   const [languageCodeError, setLanguageCodeError] = useState(
     "Language Code is required"
   );
-  
+
+  console.log("country", Language, Currency, Country);
+
   useEffect(() => {
     getReferences();
   }, []);
 
-const getReferences = async () => {
-    try{
-      const response = await request.get('references');
-      let promisefulfilled =  response.data.data;
-      setCountryOptions(promisefulfilled.countries.map((country) => ({
-        value: country.id,
-        label: country.name,
-      })));
-      setCurrencyOptions(promisefulfilled.currencies.map((currency) => ({
-        value: currency.id,
-        label: currency.name,
-      })));
-      setLanguageOptions(promisefulfilled.languages.map((language) => ({
-        value: language.id,
-        label: language.name,
-      })));
-    }catch(error){
+  const getReferences = async () => {
+    try {
+      const response = await request.get("references");
+      let promisefulfilled = response.data.data;
+      setCountryOptions(
+        promisefulfilled.countries.map((country) => ({
+          value: country.id,
+          label: country.name,
+        }))
+      );
+      setCurrencyOptions(
+        promisefulfilled.currencies.map((currency) => ({
+          value: currency.id,
+          label: currency.name,
+        }))
+      );
+      setLanguageOptions(
+        promisefulfilled.languages.map((language) => ({
+          value: language.id,
+          label: language.name,
+        }))
+      );
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
   // console.log(countryOptions);
-
 
   const languageChange = (value) => {
     if (value) {
@@ -134,141 +142,141 @@ const getReferences = async () => {
 
   return (
     <Layout>
-    <StyledHome>
-      {/* <LogoComponent /> */}
+      <StyledHome>
+        {/* <LogoComponent /> */}
 
-      <div className="form__container">
-        <p className="header">Create an account</p>
-        <form onSubmit={formik.handleSubmit}>
-          <div className="two-column">
-            <div className="form__wrapper">
-              <FormInputComponent
-                placeholder="Enter your first name"
-                // label="First Name"
-                name="firstName"
-                type="text"
-                value={formik.values.firstName}
-                onChange={formik.handleChange}
-                error={formik.errors.firstName}
-              />
+        <div className="form__container">
+          <p className="header">Create an account</p>
+          <form onSubmit={formik.handleSubmit}>
+            <div className="two-column">
+              <div className="form__wrapper">
+                <FormInputComponent
+                  placeholder="Enter your first name"
+                  // label="First Name"
+                  name="firstName"
+                  type="text"
+                  value={formik.values.firstName}
+                  onChange={formik.handleChange}
+                  error={formik.errors.firstName}
+                />
+              </div>
+              <div className="form__wrapper">
+                <FormInputComponent
+                  placeholder="Enter your last name"
+                  // label="Last Name"
+                  name="lastName"
+                  type="text"
+                  value={formik.values.lastName}
+                  onChange={formik.handleChange}
+                  error={formik.errors.lastName}
+                />
+              </div>
             </div>
-            <div className="form__wrapper">
-              <FormInputComponent
-                placeholder="Enter your last name"
-                // label="Last Name"
-                name="lastName"
-                type="text"
-                value={formik.values.lastName}
-                onChange={formik.handleChange}
-                error={formik.errors.lastName}
-              />
+            <div className="two-column">
+              <div className="form__wrapper">
+                <FormInputComponent
+                  placeholder="Enter your email"
+                  // label="Email"
+                  type="email"
+                  name="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  error={formik.errors.email}
+                />
+              </div>
+
+              <div className="form__wrapper">
+                <FormInputComponent
+                  placeholder="Enter your phone number"
+                  // label="Phone Number"
+                  type="text"
+                  name="phoneNumber"
+                  value={formik.values.phoneNumber}
+                  onChange={formik.handleChange}
+                  error={formik.errors.phoneNumber}
+                />
+              </div>
             </div>
-          </div>
-          <div className="two-column">
-            <div className="form__wrapper">
-              <FormInputComponent
-                placeholder="Enter your email"
-                // label="Email"
-                type="email"
-                name="email"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                error={formik.errors.email}
-              />
+            <div className="two-column">
+              <div className="form__wrapper">
+                <FormInputComponent
+                  type="password"
+                  placeholder="password"
+                  // label="Password"
+                  name="password"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  error={formik.errors.password}
+                />
+              </div>
+              <div className="form__wrapper">
+                <FormInputComponent
+                  placeholder="Confirm password"
+                  // label="Confirm Password"
+                  type="password"
+                  name="confirmPassword"
+                  value={formik.values.confirmPassword}
+                  onChange={formik.handleChange}
+                  error={formik.errors.confirmPassword}
+                />
+              </div>
             </div>
 
-            <div className="form__wrapper">
-              <FormInputComponent
-                placeholder="Enter your phone number"
-                // label="Phone Number"
-                type="text"
-                name="phoneNumber"
-                value={formik.values.phoneNumber}
-                onChange={formik.handleChange}
-                error={formik.errors.phoneNumber}
+            <div className="form__wrapper padding">
+              <label>Select Country</label>
+              <Select
+                options={Country}
+                value={country}
+                onChange={countryChange}
+                name="countryCode"
+                className="select"
               />
+              {country.value === "" && (
+                <p className="error">{countryCodeError}</p>
+              )}
             </div>
-          </div>
-          <div className="two-column">
-            <div className="form__wrapper">
-              <FormInputComponent
-                type="password"
-                placeholder="password"
-                // label="Password"
-                name="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                error={formik.errors.password}
+            <div className="form__wrapper padding">
+              <label>Select Language</label>
+              <Select
+                name="languageCode"
+                options={Language}
+                value={language}
+                onChange={languageChange}
+                className="select"
               />
+              {language.value === "" && (
+                <p className="error">{languageCodeError}</p>
+              )}
             </div>
-            <div className="form__wrapper">
-              <FormInputComponent
-                placeholder="Confirm password"
-                // label="Confirm Password"
-                type="password"
-                name="confirmPassword"
-                value={formik.values.confirmPassword}
-                onChange={formik.handleChange}
-                error={formik.errors.confirmPassword}
+            <div className="form__wrapper padding">
+              <label>Select Currency</label>
+              <Select
+                name="currencyCode"
+                options={Currency}
+                value={currency}
+                onChange={currencyChange}
+                className="select"
               />
+              {currency.label === "" && (
+                <p className="error">{currencyCodeError}</p>
+              )}
             </div>
+            <div className="form__wrapper padding">
+              <Button disabled onClick={formik.handleSubmit} type="submit">
+                {loading ? <ClipLoader color="white" size="40px" /> : "Sign Up"}
+              </Button>
+            </div>
+          </form>
+          <div>
+            <p className="bottom__text">
+              Already have an account?
+              <span>
+                <Link to="/login"> Login</Link>{" "}
+              </span>
+            </p>
           </div>
-
-          <div className="form__wrapper padding">
-            <label>Select Country</label>
-            <Select
-              options={countryOptions}
-              value={country}
-              onChange={countryChange}
-              name="countryCode"
-              className="select"
-            />
-            {country.value === "" && (
-              <p className="error">{countryCodeError}</p>
-            )}
-          </div>
-          <div className="form__wrapper padding">
-            <label>Select Language</label>
-            <Select
-              name="languageCode"
-              options={languageOptions}
-              value={language}
-              onChange={languageChange}
-              className="select"
-            />
-            {language.value === "" && (
-              <p className="error">{languageCodeError}</p>
-            )}
-          </div>
-          <div className="form__wrapper padding">
-            <label>Select Currency</label>
-            <Select
-              name="currencyCode"
-              options={currencyOptions}
-              value={currency}
-              onChange={currencyChange}
-              className="select"
-            />
-            {currency.label === "" && (
-              <p className="error">{currencyCodeError}</p>
-            )}
-          </div>
-          <div className="form__wrapper padding">
-            <Button disabled onClick={formik.handleSubmit} type="submit">
-              {loading ? <ClipLoader color="white" size="40px" /> : "Sign Up"}
-            </Button>
-          </div>
-        </form>
-        <div>
-          <p className="bottom__text">
-            Already have an account?
-            <span>
-              <Link to="/login"> Login</Link>{" "}
-            </span>
-          </p>
         </div>
-      </div>
-    </StyledHome>
+      </StyledHome>
     </Layout>
   );
 };
@@ -304,7 +312,7 @@ const StyledHome = styled.div`
     display: flex;
     gap: 10px;
   }
-  
+
   .form__wrapper {
     width: 90% !important;
   }
