@@ -49,3 +49,10 @@ export const formatPrice = (number) => {
     }
     return false;
   };
+
+
+  export const toNumber = (e) => {
+    let regex = /[^0-9]/g;
+    let newAmount = e.replace(regex, "");
+    return newAmount
+  };

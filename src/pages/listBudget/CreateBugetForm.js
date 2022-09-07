@@ -13,7 +13,9 @@ import request from "../../utils/apiHelper";
 import FormTitleSection from "../../components/modal/FormTitleSection";
 import DatePicker from "react-datepicker";
 import format from "date-fns/format";
-import { dateFormats2 } from "../../constants";
+import CurrencyFormat from "react-currency-format";
+import { dateFormats2,currency } from "../../constants";
+
 import {
   generateYearsFromCurrentYear,
   Options,
@@ -27,6 +29,7 @@ import {
 } from "../../constants";
 
 const CreateBudget = ({ closeModal }) => {
+  const [projectedAmount, setProjectedAmount] = useState("");
   const timerBeforeRedirect = () => {
     setTimeout(() => {
       window.location.href = "/budgets";
@@ -39,7 +42,7 @@ const CreateBudget = ({ closeModal }) => {
   
   const createBudgetValidationSchema = yup.object().shape({
     title: yup.string().required("Title is required"),
-    amount: yup.number().required("Amount is required"),
+    // amount: yup.number().required("Amount is required"),
     period: yup.string().required("Period is required"),
   });
   const [loading, setLoading] = useState(false);
@@ -59,7 +62,7 @@ const CreateBudget = ({ closeModal }) => {
       values.budgetEndDate = changeDateFormat(values.budgetEndDate);
     }
 
-    values.amount = parseInt(values.amount);
+    values.amount = projectedAmount;
     if (values.period === DAILY) {
       /* eslint-disable */
       values.budgetEndDate = values.budgetStartDate;
@@ -68,6 +71,7 @@ const CreateBudget = ({ closeModal }) => {
     } else {
       values.budgetEndDate = "";
     }
+    console.log(values);
     try {
       const response = await request.post(`budgets`, values, {
         headers: {
@@ -159,6 +163,13 @@ const CreateBudget = ({ closeModal }) => {
     setCalendar({ ...calendar, [name]: date });
   };
  
+  const handleOnChange = (e) => {
+    let amount = e.target.value;
+    let regex = /[^0-9]/g;
+    let newAmount = amount.replace(regex, "");
+    setProjectedAmount(newAmount);
+  };
+
   return (
     <StyledHome>
       <div className="container">
@@ -177,6 +188,7 @@ const CreateBudget = ({ closeModal }) => {
             duration: 0,
           }}
           onSubmit={(values) => {
+            console.log(values);
             setLoading(true);
             onSubmit(values);
           }}
@@ -202,7 +214,7 @@ const CreateBudget = ({ closeModal }) => {
                 />
               </div>
               <div className="form__wrapper">
-                <FormInputComponent
+                {/* <FormInputComponent
                   placeholder="Enter Amount"
                   label="Amount"
                   type="text"
@@ -210,6 +222,17 @@ const CreateBudget = ({ closeModal }) => {
                   value={values.amount}
                   onChange={handleChange}
                   error={errors.amount}
+                /> */}
+                <CurrencyFormat
+                  placeholder="Enter Amount"
+                  label="Amount"
+                  displayType={"input"}
+                  style={{ width: "100%", height: "100%", padding: "10px" }}
+                  prefix={currency}
+                  name={currency}
+                  thousandSeparator={true}
+                  value={projectedAmount}
+                  onChange={(e) => handleOnChange(e)}
                 />
               </div>
               <div className="period">

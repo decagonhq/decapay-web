@@ -26,9 +26,10 @@ import moment from "moment";
 import {dateFormats2,dateFormats3,hundredPercent} from "../../constants";
 import format from "date-fns/format";
 import {
-  stripCommaAndConvertToNumber,
   disableDateInputFieldBasedOnStartDateToCurrentDate,
+  toNumber
 } from "../../utils/utils";
+import { currency } from "../../constants";
 
 const Index = () => {
   const [data, setData] = useState([]);
@@ -90,7 +91,7 @@ const Index = () => {
   
   const postLogExpense = async () => {
     let payload = {
-      amount: stripCommaAndConvertToNumber(createLogExpense.amount),
+      amount: toNumber(createLogExpense.amount),
       transactionDate:calendar,
       //  (createLogExpense.transactionDate).format(
       //   dateFormatmoments
@@ -169,7 +170,7 @@ const Index = () => {
   const submit = async () => {
     let payload = {
       budgetCategoryId: parseInt(collectData.budgetCategoryId),
-      amount: stripCommaAndConvertToNumber(collectData.amount),
+      amount: toNumber(collectData.amount),
     };
     try {
       const response = await request.post(
@@ -259,7 +260,7 @@ const Index = () => {
     e.preventDefault();
     setLoading(true);
     let newPayload = {
-      amount: stripCommaAndConvertToNumber(projectedAmount),
+      amount: projectedAmount,
     };
     try {
       const response = await request.put(
@@ -499,7 +500,7 @@ const Index = () => {
                     label="Projected amount"
                     displayType={"input"}
                     style={{ width: "100%", height: "100%", padding: "10px" }}
-                    prefix={"₦"}
+                    prefix={currency}
                     name="amount"
                     thousandSeparator={true}
                     value={projectedAmount}

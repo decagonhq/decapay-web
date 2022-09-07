@@ -7,6 +7,7 @@ import CurrencyFormat from "react-currency-format";
 import FormInputComponent from "../InputComponent";
 import { ToastContainer } from "react-toastify";
 import DatePicker from "react-datepicker";
+import {currency} from "../../constants";
 
 const LogExpenseResuable = ({
   closeModal,
@@ -50,7 +51,7 @@ const LogExpenseResuable = ({
           label={labelCurrency}
           displayType={"input"}
           style={{ width: "100%", height: "100%", padding: "10px" }}
-          prefix={"₦"}
+          prefix={currency}
           name={currencyName}
           thousandSeparator={true}
           value={valueCurrency}

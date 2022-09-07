@@ -57,6 +57,10 @@ export const formatDate = (date) => {
   }
 };
 
+export const country = localStorage.getItem("country") || "NG";
+export const currency = localStorage.getItem("currency") || "NGN";
+export const language = localStorage.getItem("language") || "en";
+
 
 
 
