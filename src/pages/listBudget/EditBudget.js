@@ -15,8 +15,8 @@ import { useFormik } from "formik";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import format from "date-fns/format";
-import { dateFormats2 } from "../../constants";
-import { stripCommaAndConvertToNumber } from "../../utils/utils";
+import { dateFormats2,currency } from "../../constants";
+import { toNumber } from "../../utils/utils";
 import {
   ANNUAL,
   MONTHLY,
@@ -125,7 +125,7 @@ const EditBudget = ({ closeModal, id, title }) => {
   const onSubmit = async () => {
     let payload = {
       ...collectData,
-      amount: stripCommaAndConvertToNumber(collectData.amount),
+      amount: toNumber(collectData.amount),
       budgetStartDate:
         collectData.period === CUSTOM
           ? format(calendar.budgetStartDate, dateFormats2)
@@ -219,7 +219,7 @@ const EditBudget = ({ closeModal, id, title }) => {
             label="Amount"
             displayType={"input"}
             style={{ width: "100%", height: "100%", padding: "10px" }}
-            prefix={"₦"}
+            prefix={currency}
             name="amount"
             thousandSeparator={true}
             value={collectData.amount}
