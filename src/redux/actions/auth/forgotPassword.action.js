@@ -1,5 +1,4 @@
 import { FORGOT_PASSWORD_SUCCESS, FORGOT_PASSWORD_FAILED, LOADING } from "../../action.type";
-import { retrieveErrMessage } from "../../../utils/retrieveError";
 import request from "../../../utils/apiHelper";
 import { toast } from "react-toastify";
 

@@ -23,11 +23,11 @@ import Goback from "../../components/Goback";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 // import { dateFormats } from "../../constants";
-import {dateFormats2,dateFormats3,hundredPercent} from "../../constants";
+import { dateFormats2, dateFormats3, hundredPercent } from "../../constants";
 import format from "date-fns/format";
 import {
   disableDateInputFieldBasedOnStartDateToCurrentDate,
-  toNumber
+  toNumber,
 } from "../../utils/utils";
 import { currency } from "../../constants";
 
@@ -35,12 +35,12 @@ const Index = () => {
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState([]);
 
-  let t = new Date()
-  let today = format(t, dateFormats3)
+  let t = new Date();
+  let today = format(t, dateFormats3);
 
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
-  
+
   const [editModal, setEditModal] = useState(false);
   const [idOfLineItem, setIdOfLineItem] = useState(-1);
   const [projectedAmount, setProjectedAmount] = useState(0);
@@ -88,11 +88,11 @@ const Index = () => {
     fetchCategory();
     // eslint-disable-next-line
   }, []);
-  
+
   const postLogExpense = async () => {
     let payload = {
       amount: toNumber(createLogExpense.amount),
-      transactionDate:calendar,
+      transactionDate: calendar,
       //  (createLogExpense.transactionDate).format(
       //   dateFormatmoments
       // ),
@@ -124,13 +124,13 @@ const Index = () => {
       });
     }
   };
-  
+
   const fetchCategory = async () => {
     try {
       const response = await request.get(`budget_categories`, headers);
-      let res = response?.data?.data
-      if(res.length > 0){
-       let options = res?.map((category) => {
+      let res = response?.data?.data;
+      if (res.length > 0) {
+        let options = res?.map((category) => {
           return {
             value: category.id,
             label: category.title,
@@ -139,10 +139,9 @@ const Index = () => {
         // add select to res
         options.unshift({ value: "", label: "Select Category" });
         setCategories(options);
-      } else{
-        setCategories([])
+      } else {
+        setCategories([]);
       }
-      
     } catch (error) {
       toast.error(error.response.data.message, {
         autoClose: 3000,
@@ -210,16 +209,15 @@ const Index = () => {
   const { id } = useParams();
 
   const fetchData = async () => {
-    
     try {
       const response = await request.get(`budgets/${id}`, headers);
       setData(response.data.data);
-      let remoteStartDate = response.data.data.startDate
-      let remoteEndDate =response.data.data.endDate
-      let validEndDate=today>remoteEndDate?remoteEndDate:today
+      let remoteStartDate = response.data.data.startDate;
+      let remoteEndDate = response.data.data.endDate;
+      let validEndDate = today > remoteEndDate ? remoteEndDate : today;
       // console.log("Valid Date",validEndDate)
-        setStartDate(remoteStartDate);
-        setEndDate(validEndDate)
+      setStartDate(remoteStartDate);
+      setEndDate(validEndDate);
     } catch (error) {
       toast.error(error.response.data.message, {
         autoClose: 3000,
@@ -311,8 +309,8 @@ const Index = () => {
     } else {
       return today;
     }
-  }
-
+  };
+  console.log(data?.totalAmountSpentSoFar);
 
   return (
     <Layout>
@@ -348,18 +346,20 @@ const Index = () => {
 
         <div className="budget-summary">
           <div className="title">
-            <TitleCard 
-            title={data?.title} 
-            startDate={data?.displayStartDate} 
-            endDate={data?.displayEndDate} 
-            period={data?.budgetPeriod}
-            amount={data?.displayProjectedAmount} 
+            <TitleCard
+              title={data?.title}
+              startDate={data?.displayStartDate}
+              endDate={data?.displayEndDate}
+              period={data?.budgetPeriod}
+              amount={data?.displayProjectedAmount}
             />
 
             <div className="sub_container general mt-2 mb-2">
               <SubTitleCard
                 title="Total Amount spent so far"
                 alt=""
+                spentSoFar={data?.totalAmountSpentSoFar}
+                projectedAmount={data?.projectedAmount}
                 amount={data?.displayTotalAmountSpentSoFar}
                 src="/images/money-2.svg"
               />
@@ -375,12 +375,12 @@ const Index = () => {
 
           {startDate && endDate ? (
             <div className="calender">
-              <Calendar 
-              handleSelect={handleSelect}
-              calendar={calendar}
-              startDate={startDate} 
-              endDate={endDate} 
-              today={today}
+              <Calendar
+                handleSelect={handleSelect}
+                calendar={calendar}
+                startDate={startDate}
+                endDate={endDate}
+                today={today}
               />
             </div>
           ) : null}
@@ -395,7 +395,15 @@ const Index = () => {
                   <p ref={projectAmountRef}>
                     Projected amount: {item.displayProjectedAmount}
                   </p>
-                  <p>Amount so far: {item.displayTotalAmountSpentSoFar}</p>
+                  <p
+                    className={
+                      item.projectedAmount < item.totalAmountSpentSoFar
+                        ? "red"
+                        : ""
+                    }
+                  >
+                    Amount spent so far: {item.displayTotalAmountSpentSoFar}
+                  </p>
                   <Link
                     className="link"
                     to={`/budgetDetail/expenses/?budgetId=${id}&catId=${item.categoryId}&item=${item.category}`}
@@ -416,7 +424,15 @@ const Index = () => {
                       <FiArrowUpRight className="icon" />
                     </span>
                   </p>
-                  <p className={item.percentageSpentSoFar > hundredPercent ? "red": "link"}>{item.displayPercentageSpentSoFar}</p>
+                  <p
+                    className={
+                      item.percentageSpentSoFar > hundredPercent
+                        ? "red"
+                        : "link"
+                    }
+                  >
+                    {item.displayPercentageSpentSoFar}
+                  </p>
                 </div>
                 <p
                   onClick={() => openPopup(index, item.categoryId)}
@@ -546,9 +562,7 @@ const Index = () => {
               inputName="description"
               currencyName="amount"
               minDate={moment(startDate).toDate()}
-              maxDate={moment(
-                checkIfEndDateIsLessThanToday()
-              ).toDate()}
+              maxDate={moment(checkIfEndDateIsLessThanToday()).toDate()}
               onClick={postLogExpense}
               handleChangeDate={(e) => {
                 handleOnChangeDate(e);
@@ -597,17 +611,16 @@ const DetailStyle = styled.div`
   }
   @media only screen and (max-width: 991px) {
     .title {
-    width: 100%;
-    margin-top: 20px;
-  }
-    .budget-summary{
+      width: 100%;
+      margin-top: 20px;
+    }
+    .budget-summary {
       width: 100%;
       flex-direction: column;
       align-items: center;
-      justify-content:center ;
+      justify-content: center;
     }
   }
-  
 
   .general {
     width: 100%;
@@ -762,7 +775,7 @@ const DetailStyle = styled.div`
   .btn-wrapper {
     margin-top: 20px;
   }
-  .red{
+  .red {
     text-decoration: none;
     color: red;
   }

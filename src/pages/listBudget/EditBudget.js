@@ -15,7 +15,7 @@ import { useFormik } from "formik";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import format from "date-fns/format";
-import { dateFormats2,currency } from "../../constants";
+import { dateFormats2, currency } from "../../constants";
 import { toNumber } from "../../utils/utils";
 import {
   ANNUAL,
@@ -49,7 +49,6 @@ const EditBudget = ({ closeModal, id, title }) => {
   const [newId, setNewId] = React.useState(-1);
 
   // const { id } = useParams();
-
 
   const initialValues = {
     newId: newId,
@@ -93,7 +92,7 @@ const EditBudget = ({ closeModal, id, title }) => {
         budgetStartDate: moment(
           formatDate(response.data.data.budgetStartDate)
         ).toDate(),
-        
+
         budgetEndDate: moment(
           formatDate(response.data.data.budgetEndDate)
         ).toDate(),
@@ -125,7 +124,10 @@ const EditBudget = ({ closeModal, id, title }) => {
   const onSubmit = async () => {
     let payload = {
       ...collectData,
-      amount: toNumber(collectData.amount),
+      amount:
+        typeof collectData.amount === "number"
+          ? collectData.amount
+          : toNumber(collectData.amount),
       budgetStartDate:
         collectData.period === CUSTOM
           ? format(calendar.budgetStartDate, dateFormats2)
@@ -219,7 +221,7 @@ const EditBudget = ({ closeModal, id, title }) => {
             label="Amount"
             displayType={"input"}
             style={{ width: "100%", height: "100%", padding: "10px" }}
-            prefix={currency}
+            prefix={currency + " "}
             name="amount"
             thousandSeparator={true}
             value={collectData.amount}
@@ -309,7 +311,6 @@ const EditBudget = ({ closeModal, id, title }) => {
         )}
         {collectData.period === CUSTOM && (
           <div className="">
-            
             <div className="form_wrapper3">
               <h7>Start Date</h7>
               <DatePicker

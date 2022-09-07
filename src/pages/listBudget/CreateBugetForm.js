@@ -228,7 +228,7 @@ const CreateBudget = ({ closeModal }) => {
                   label="Amount"
                   displayType={"input"}
                   style={{ width: "100%", height: "100%", padding: "10px" }}
-                  prefix={currency}
+                  prefix={currency  + " "}
                   name={currency}
                   thousandSeparator={true}
                   value={projectedAmount}

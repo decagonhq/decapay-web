@@ -233,7 +233,7 @@ const BudgetCategory = () => {
                     label="Projected amount"
                     displayType={"input"}
                     style={{ width: "100%", height: "100%", padding: "10px" }}
-                    prefix={currency}
+                    prefix={currency  + " "}
                     name="amount"
                     thousandSeparator={true}
                     onChange={(e) => {
