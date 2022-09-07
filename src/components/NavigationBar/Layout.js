@@ -26,14 +26,20 @@ const Layout = ({ children, hasBackground }) => {
       {open && (
         <div className="burger">
           <SideNav handleShow={handleShow} open={open} setOpen={setOpen} />
+          <div className="content">{children}</div>
           <Burger open={open} setOpen={setOpen} />
         </div>
       )}
-      <div className="burger">
-        <Logo />
-        <Burger open={open} setOpen={setOpen} />
-      </div>
-      <div className="content">{children}</div>
+
+      {!open && (
+        <>
+          <div className="burger">
+            <Logo />
+            <Burger open={open} setOpen={setOpen} />
+          </div>
+          <div className="content">{children}</div>
+        </>
+      )}
     </Wrapper>
   );
 };
@@ -42,18 +48,23 @@ const Wrapper = styled.div`
   .burger {
     display: none;
   }
+
+  .content {
+    margin-top: 20px;
+  }
   @media only screen and (max-width: 768px) {
     .burger {
       display: flex;
       justify-content: space-between;
       padding: 5px 25px;
+      opacity: 1;
     }
     .large {
       display: none;
     }
-  }
-  .content {
-    margin-top:20px;
+    .content {
+      margin-top: 0;
+    }
   }
 `;
 
