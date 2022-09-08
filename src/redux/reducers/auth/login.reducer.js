@@ -11,7 +11,7 @@ const initialState = {
 const timerBeforeRedirect= () => {
     setTimeout(() => {
         window.location.href = `/home`;
-    }, 4000);
+    }, 2000);
 }
 
 const LoginReducer = (state = initialState, action) => {
