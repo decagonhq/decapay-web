@@ -39,7 +39,7 @@ const Index = () => {
   return (
     <Layout>
       <BudgetSyle>
-        <div className="">
+        {/* <div className="">
           <div
             style={{
               display: "flex",
@@ -52,7 +52,7 @@ const Index = () => {
               TO BE COMPLETED
             </p>
           </div>
-        </div>
+        </div> */}
 
         <div className="header page">
           <div className="">
