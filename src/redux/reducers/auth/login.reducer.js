@@ -1,5 +1,6 @@
 import {LOGIN, LOGIN_SUCCESS, LOGIN_FAILED} from '../../action.type';
 import {toast} from "react-toastify"
+// import jwt_decode from "jwt-decode";
 
 
 const initialState = {
@@ -34,7 +35,9 @@ const LoginReducer = (state = initialState, action) => {
             
             toast.success(payload?.success || "Login Successful")
             localStorage.setItem('token', payload.data.token);
-
+            localStorage.setItem("currency", payload.data.currency);
+            localStorage.setItem("language", payload.data.language);
+            localStorage.setItem("country", payload.data.country);
             timerBeforeRedirect()
             return {
                 ...state,

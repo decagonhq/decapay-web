@@ -37,9 +37,9 @@ const Home = () => {
   const [countryOptions, setCountryOptions] = useState([]);
   const [currencyOptions, setCurrencyOptions] = useState([]);
   const [languageOptions, setLanguageOptions] = useState([]);
-  const [language, setLanguage] = useState({ value: "en", label: "English" });
-  const [currency, setCurrency] = useState({ value: "NGN", label: "NGN" });
-  const [country, setCountry] = useState({ value: "NG", label: "Nigeria" });
+  const [language, setLanguage] = useState("");
+  const [currency, setCurrency] = useState("");
+  const [country, setCountry] = useState("");
   const [countryCodeError, setCountryCodeError] = useState(
     "Country is required"
   );
@@ -50,40 +50,41 @@ const Home = () => {
     "Language Code is required"
   );
 
-  console.log("country",countryOptions);
+  console.log("country", setCurrencyOptions);
 
   useEffect(() => {
     getReferences();
   }, []);
 
-
   const getReferences = async () => {
     try {
       const response = await request.get("references");
       let promisefulfilled = response.data.data;
-      setCountryOptions(
-        promisefulfilled.countries.map((country) => ({
-          value: country.code,
-          label: country.name,
-        }))
-      );
-      setCurrencyOptions(
-        promisefulfilled.currencies.map((currency) => ({
-          value: currency.code,
-          label: currency.name,
-        }))
-      );
-      setLanguageOptions(
-        promisefulfilled.languages.map((language) => ({
-          value: language.code,
-          label: language.name,
-        }))
-      );
+      console.log("Promise",promisefulfilled);
+      let country = promisefulfilled.countries.map((country) => ({
+        value: country.code,
+        label: country.name,
+      }));
+      country.unshift({ value: "", label: "Select country" });
+      setCountryOptions(country);
+
+      let currency = promisefulfilled.currencies.map((currency) => ({
+        value: currency.code,
+        label: currency.name,
+      }));
+      currency.unshift({ value: "", label: "Select currency" });
+      setCurrencyOptions(currency);
+      let language = promisefulfilled.languages.map((language) => ({
+        value: language.code,
+        label: language.name,
+      }));
+      language.unshift({ value: "", label: "Select language" });
+      setLanguageOptions(language);
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(countryOptions);
+  // console.log(countryOptions);
 
   const languageChange = (value) => {
     if (value) {
