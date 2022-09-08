@@ -19,8 +19,10 @@ const BudgetCategory = () => {
     id: "",
   });
 
+
   const [data, setData] = useState([]);
-  console.log(data);
+
+  
 
   const ref = useRef(null);
   const handleClickOutside = (event) => {
@@ -87,7 +89,7 @@ const BudgetCategory = () => {
       [e.target.name]: e.target.value,
     });
   };
-  console.log(editCategory);
+  // console.log(editCategory);
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line

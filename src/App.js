@@ -14,13 +14,15 @@ import Budget from "./pages/listBudget/Index";
 import BudgetCategory from "./pages/budgetCategory/Index";
 import Expenses from "./pages/expenses/Expenses";
 import ListBudget from "./pages/dashboard/Index";
+import Homepage from "./pages/homepage/index";
 
 function App() {
   return (
     <div className="App">
       <ToastContainer limit={1} style={{ fontSize: "16px" }} />
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<Homepage />} />
         <Route
           path="/budgetDetail/expenses"
           element={

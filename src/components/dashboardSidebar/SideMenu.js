@@ -27,7 +27,7 @@ const SidebarDemo = () => {
         },
       });
       localStorage.clear();
-      window.location.href = `/`;
+      window.location.href = `/login`;
       toast.success("Logout successful");
       return;
     } catch (err) {

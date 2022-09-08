@@ -1,15 +1,31 @@
 import React from "react";
 import styled from "styled-components";
-import {hundredPercent} from "../../constants";
+import { hundredPercent } from "../../constants";
 
-const SubTitleCard = ({ title,src, amount,alt,percent}) => {
+const SubTitleCard = ({
+  title,
+  src,
+  amount,
+  alt,
+  percent,
+  projectedAmount,
+  spentSoFar,
+}) => {
   return (
     <ListStyle>
-      <p >{title}</p>
+      <p>{title}</p>
       <div className="image">
-        <img src={src} alt={alt}/>
+        <img src={src} alt={alt} />
       </div>
-      <p className={percent > hundredPercent ? "amt red":"amt green"}>{amount}</p>
+      <p
+        className={
+          percent > hundredPercent || spentSoFar > projectedAmount
+            ? "amt red"
+            : "amt green"
+        }
+      >
+        {amount}
+      </p>
     </ListStyle>
   );
 };
@@ -27,31 +43,31 @@ const ListStyle = styled.div`
   background: rgba(20, 168, 0, 0.03);
   border: 1px solid rgba(20, 168, 0, 0.03);
   overflow: hidden;
-  
+
   @media only screen and (max-width: 379px) {
     height: 180px;
   }
   @media only screen and (max-width: 299px) {
     height: 200px;
   }
-  p{
+  p {
     box-sizing: border-box;
     font-size: 18px;
     font-weight: 500;
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
   }
   .image {
-    display:flex;
+    display: flex;
     box-sizing: border-box;
-    justify-content:end;
+    justify-content: end;
     align-items: right;
-    float:right;
-    margin:0;
-    margin-top:-10px;
-    padding:0;
+    float: right;
+    margin: 0;
+    margin-top: -10px;
+    padding: 0;
   }
-  
+
   .amt {
     font-family: "Sofia Pro";
     font-style: normal;
@@ -60,23 +76,22 @@ const ListStyle = styled.div`
     line-height: 29px;
     display: flex;
     align-items: center;
-    margin-top:-15px;
-    
+    margin-top: -15px;
   }
-  .green{
+  .green {
     color: #21334f;
   }
-  .red{
-    color:red;
+  .red {
+    color: red;
   }
   @media only screen and (max-width: 991px) {
-    padding:5px;
-    .image{
-      display:none;
-      margin-top:0;
+    padding: 5px;
+    .image {
+      display: none;
+      margin-top: 0;
     }
-    .amt{
-      margin-top:0;
+    .amt {
+      margin-top: 0;
     }
   }
 `;

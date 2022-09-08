@@ -23,10 +23,30 @@ const Index = () => {
   const [currentTableData, setCurrentTableData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [budgetState,setBudgetState] = useState("current")
-
+  // const [location, setLocation] = useState();
   // eslint-disable-next-line
   const [dataInfo, setDataInfo] = useState([]);
   const ref = useRef(null);
+ 
+  // const getUserLocation = () => {
+  //   return new Promise((resolve, reject) => {
+  //     navigator.geolocation.getCurrentPosition(
+  //       (position) => {
+  //         resolve(position);
+  //       },
+  //       (error) => {
+  //         reject(error);
+  //       }
+  //     );
+  //   });
+  // };
+  // useEffect(() => {
+  //   getUserLocation().then((position) => {
+  //     setLocation(position);
+  //   });
+  // }, [currentPage,budgetState]);
+  // console.log(location);
+
 
   const headers = {
     headers: {
@@ -143,7 +163,7 @@ const Index = () => {
                 </p>
                 <p className="category-title">{item.period}</p>
                 <p className="category-title">{item.displayProjectedAmount}</p>
-                <p className="category-title">
+                <p className={item.totalAmountSpentSoFar > item.projectedAmount ? "category-title red" : "category-title"}>
                   {item.displayTotalAmountSpentSoFar}
                 </p>
                 <p className={item?.percentageSpentSoFar > hundredPercent ?"category-title red" : "category-title"}>

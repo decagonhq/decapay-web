@@ -6,6 +6,7 @@ import FormTitleSection from "../../components/modal/FormTitleSection";
 import CurrencyFormat from "react-currency-format";
 // import FormSelectComponent from "../../components/selectComponent";
 import { NavLink } from "react-router-dom";
+import { currency } from "../../constants";
 
 const BudgetLineItemResuable = ({
   closeModal,
@@ -62,7 +63,7 @@ const BudgetLineItemResuable = ({
           label={labelCurrency}
           displayType={"input"}
           style={{ width: "100%", height: "100%", padding: "10px" }}
-          prefix={"₦"}
+          prefix={currency  + " "}
           name={currencyName}
           thousandSeparator={true}
           value={valueCurrency}

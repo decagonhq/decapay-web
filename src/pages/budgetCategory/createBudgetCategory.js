@@ -5,6 +5,7 @@ import FormInputComponent from "../../components/InputComponent";
 import ClipLoader from "react-spinners/ClipLoader";
 import FormTitleSection from "../../components/modal/FormTitleSection";
 
+
 const CreateBudgetCategory = ({ closeModal }) => {
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
