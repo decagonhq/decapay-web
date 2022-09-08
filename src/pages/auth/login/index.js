@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import MyButton from "../../../components/Button";
 import FormInputComponent from "../../../components/InputComponent";
-import LogoComponent from "../../../components/LogoComponent";
+// import LogoComponent from "../../../components/LogoComponent";
 import { Link } from "react-router-dom";
 import { Formik } from "formik";
 import * as yup from "yup";
 import login from "../../../redux/actions/auth/login.action";
 import { useDispatch } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
+import Layout from "../../../components/NavigationBar/Layout";
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
@@ -26,8 +27,9 @@ const LoginPage = () => {
   const dispatch = useDispatch();
 
   return (
+    <Layout>
     <StyledHome>
-      <LogoComponent />
+      {/* <LogoComponent /> */}
       <Formik
         validationSchema={loginValidationSchema}
         initialValues={{
@@ -112,6 +114,7 @@ const LoginPage = () => {
         )}
       </Formik>
     </StyledHome>
+    </Layout>
   );
 };
 export default LoginPage;

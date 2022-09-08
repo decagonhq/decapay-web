@@ -1,6 +1,5 @@
 import moment from "moment";
 
-
 export const ANNUAL = "ANNUAL";
 export const MONTHLY = "MONTHLY";
 export const WEEKLY = "WEEKLY";
@@ -57,4 +56,27 @@ export const formatDate = (date) => {
     return joinDateFromBehind;
   }
 };
+
+// get user location
+export const getUserLocation = () => {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        resolve(position);
+      },
+      (error) => {
+        reject(error);
+      }
+    );
+  });
+};
+
+
+export const country = localStorage.getItem("country") || "NG"
+export const currency = localStorage.getItem("currency") || "NGN"
+export const language = localStorage.getItem("language") || "en";
+
+
+
+
 

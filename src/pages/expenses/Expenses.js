@@ -13,9 +13,9 @@ import useDialog from "../../hooks/useDialog";
 import FormInputComponent from "../../components/InputComponent";
 import DatePicker from "react-datepicker";
 import moment from "moment";
-import { stripCommaAndConvertToNumber,disableDateInputFieldBasedOnStartDateToCurrentDate } from "../../utils/utils";
+import { toNumber,disableDateInputFieldBasedOnStartDateToCurrentDate } from "../../utils/utils";
 import "react-datepicker/dist/react-datepicker.css";
-import { dateFormats } from "../../constants";
+import { dateFormats,currency } from "../../constants";
 
 let pageSize = 5;
 const BudgetCategory = () => {
@@ -42,7 +42,7 @@ const BudgetCategory = () => {
     event.preventDefault();
     setLoading(true);
     let payload = {
-      amount: stripCommaAndConvertToNumber(editData.amount),
+      amount: toNumber(editData.amount),
       description: editData.description,
       transactionDate: moment(editData.transactionDate).format(dateFormats),
     };
@@ -233,7 +233,7 @@ const BudgetCategory = () => {
                     label="Projected amount"
                     displayType={"input"}
                     style={{ width: "100%", height: "100%", padding: "10px" }}
-                    prefix={"₦"}
+                    prefix={currency  + " "}
                     name="amount"
                     thousandSeparator={true}
                     onChange={(e) => {

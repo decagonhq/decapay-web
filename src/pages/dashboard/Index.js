@@ -21,14 +21,12 @@ const Index = () => {
     fetchData();
     // eslint-disable-next-line
   }, []);
-  // console.log(budgetState);
   const fetchData = async () => {
     try {
       const response = await request.get(
         `budgets?size=10&page=1&state=current`,
         headers
       );
-      console.log(response.data);
       setCurrentTableData(response.data.data.content);
     } catch (error) {
       console.log(error);
