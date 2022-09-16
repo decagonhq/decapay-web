@@ -31,6 +31,7 @@ import {
 } from "../../utils/utils";
 import { currency } from "../../constants";
 // import Checkbox from "../../components/checkbox";
+import PageTitle from "../../components/PageTitle";
 
 const Index = () => {
   const [data, setData] = useState([]);
@@ -330,7 +331,17 @@ const Index = () => {
             }
           />
         </div>
-        <div className="header-wrapper">
+        <PageTitle title={`Budget Detail`}>
+          <button
+            className="button"
+            onClick={() => {
+              setCreateLineModal(true);
+            }}
+          >
+            Create line item
+          </button>
+        </PageTitle>
+        {/* <div className="header-wrapper">
           <div className="header">
             <p style={{ fontWeight: "bold", fontSize: "20px" }}>
               Budget Detail
@@ -346,7 +357,7 @@ const Index = () => {
               Create line item
             </button>
           </div>
-        </div>
+        </div> */}
 
         <div className="budget-summary">
           <div className="title">
