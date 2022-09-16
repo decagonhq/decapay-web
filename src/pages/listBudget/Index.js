@@ -98,7 +98,7 @@ const Index = () => {
   const stateOptions = [
     { value: "", label: "All Budgets" },
     { value: "current", label: "Current" },
-    { value: "upcomming", label: "Upcoming" },
+    { value: "upcoming", label: "Upcoming" },
     { value: "past", label: "Past" },
   ];
 
