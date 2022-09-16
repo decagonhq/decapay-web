@@ -7,6 +7,7 @@ import CurrencyFormat from "react-currency-format";
 // import FormSelectComponent from "../../components/selectComponent";
 import { NavLink } from "react-router-dom";
 import { currency } from "../../constants";
+import Checkbox from "../../components/checkbox";
 
 const BudgetLineItemResuable = ({
   closeModal,
@@ -22,6 +23,9 @@ const BudgetLineItemResuable = ({
   onChangeCurrency,
   valueCurrency,
   onClick,
+  onChangeCheck,
+  isChecked,
+  budgetType,
 }) => {
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
@@ -46,10 +50,17 @@ const BudgetLineItemResuable = ({
             onChange={onChangeSelect}
             placeholder={placeholderSelect}
           >
-            {options.map((option, index) => (
-                option.value === "" ?  <option key={index} defaultValue value={option.value} >{option.label}</option> : 
-                <option key={index} value={option.value}>{option.label}</option>
-                ))}
+            {options.map((option, index) =>
+              option.value === "" ? (
+                <option key={index} defaultValue value={option.value}>
+                  {option.label}
+                </option>
+              ) : (
+                <option key={index} value={option.value}>
+                  {option.label}
+                </option>
+              )
+            )}
           </select>
         ) : (
           <div className="empty">
@@ -63,12 +74,17 @@ const BudgetLineItemResuable = ({
           label={labelCurrency}
           displayType={"input"}
           style={{ width: "100%", height: "100%", padding: "10px" }}
-          prefix={currency  + " "}
+          prefix={currency + " "}
           name={currencyName}
           thousandSeparator={true}
           value={valueCurrency}
           onChange={onChangeCurrency}
         />
+      </div>
+      <div className="form__wrapper">
+        
+        <Checkbox isChecked={isChecked} onChangeFunction={onChangeCheck} />
+        <span>Remember this line item for budget of this type:{budgetType}</span>
       </div>
       <br />
       <MyButton type="submit" onClick={onClick}>

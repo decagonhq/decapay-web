@@ -54,5 +54,5 @@ export const formatPrice = (number) => {
   export const toNumber = (e) => {
     let regex = /[^0-9]/g;
     let newAmount = e.replace(regex, "");
-    return newAmount
+    return parseInt(newAmount);
   };

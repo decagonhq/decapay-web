@@ -30,6 +30,7 @@ import {
   toNumber,
 } from "../../utils/utils";
 import { currency } from "../../constants";
+// import Checkbox from "../../components/checkbox";
 
 const Index = () => {
   const [data, setData] = useState([]);
@@ -49,6 +50,8 @@ const Index = () => {
   const [loading, setLoading] = useState(false);
   const [getCategordId, setGetCategordId] = useState(-1);
   const [calendar, setCalendar] = useState("");
+  const [rememberTemplate, setRememberTemplate] = useState(false);
+  // const [editRememberTemplate, setEditRememberTemplate] = useState(false);
 
   function handleSelect(date) {
     setCalendar(format(date, dateFormats2));
@@ -170,7 +173,9 @@ const Index = () => {
     let payload = {
       budgetCategoryId: parseInt(collectData.budgetCategoryId),
       amount: toNumber(collectData.amount),
+      setLineItemAsTemplate: rememberTemplate,
     };
+    console.log(payload);
     try {
       const response = await request.post(
         `budgets/${id}/lineItems`,
@@ -182,6 +187,7 @@ const Index = () => {
         autoClose: 3000,
         onClose: dismissToast,
       });
+      setRememberTemplate(false);
       fetchData();
     } catch (error) {
       toast.error(error.response.data.message, {
@@ -215,7 +221,6 @@ const Index = () => {
       let remoteStartDate = response.data.data.startDate;
       let remoteEndDate = response.data.data.endDate;
       let validEndDate = today > remoteEndDate ? remoteEndDate : today;
-      // console.log("Valid Date",validEndDate)
       setStartDate(remoteStartDate);
       setEndDate(validEndDate);
     } catch (error) {
@@ -310,7 +315,6 @@ const Index = () => {
       return today;
     }
   };
-  console.log(data?.totalAmountSpentSoFar);
 
   return (
     <Layout>
@@ -500,6 +504,9 @@ const Index = () => {
               valueCurrency={collectData.amount}
               onClick={submit}
               options={categories}
+              onChangeCheck={() => setRememberTemplate(!rememberTemplate)}
+              isChecked={rememberTemplate}
+              budgetType={data?.budgetPeriod}
             />
           </FormModal>
         )}
@@ -523,6 +530,18 @@ const Index = () => {
                     onChange={(e) => handleOnChange(e)}
                   />
                 </div>
+                {/* <div className="form__wrapper">
+                  <Checkbox
+                    isChecked={editRememberTemplate}
+                    onChangeFunction={() =>
+                      setEditRememberTemplate(!editRememberTemplate)
+                    }
+                  />
+                  <span>
+                    Remember this line item for budget of this type:{" "}
+                    {data?.budgetPeriod}
+                  </span>
+                </div> */}
                 <div className="btn-wrapper">
                   <MyButton
                     type="submit"
