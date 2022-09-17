@@ -49,8 +49,6 @@ const Home = () => {
   const [languageCodeError, setLanguageCodeError] = useState(
     "Language Code is required"
   );
-
-
   useEffect(() => {
     getReferences();
   }, []);
