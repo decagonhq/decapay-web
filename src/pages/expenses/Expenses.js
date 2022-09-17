@@ -13,9 +13,13 @@ import useDialog from "../../hooks/useDialog";
 import FormInputComponent from "../../components/InputComponent";
 import DatePicker from "react-datepicker";
 import moment from "moment";
-import { toNumber,disableDateInputFieldBasedOnStartDateToCurrentDate } from "../../utils/utils";
+import {
+  toNumber,
+  disableDateInputFieldBasedOnStartDateToCurrentDate,
+} from "../../utils/utils";
 import "react-datepicker/dist/react-datepicker.css";
-import { dateFormats,currency } from "../../constants";
+import { dateFormats, currency } from "../../constants";
+import PageTitle from "../../components/PageTitle";
 
 let pageSize = 5;
 const BudgetCategory = () => {
@@ -35,8 +39,6 @@ const BudgetCategory = () => {
       Authorization: "Bearer " + localStorage.getItem("token"),
     },
   };
-
-  
 
   const submitEditData = async (event) => {
     event.preventDefault();
@@ -145,7 +147,6 @@ const BudgetCategory = () => {
     let curr = currentTableData?.find((i) => i.id === item);
     setEditData(curr);
   };
-  
 
   return (
     <Layout>
@@ -154,8 +155,11 @@ const BudgetCategory = () => {
           {" "}
           <Goback />
         </div>
+        <PageTitle title={`Expenses | ${lineItem}`}>
+          <button>Add expenses</button>
+        </PageTitle>
 
-        <div className="header-wrapper">
+        {/* <div className="header-wrapper">
           <div className="">
             <p style={{ fontWeight: "bold", fontSize: "20px" }}>
               Expenses | {lineItem}
@@ -164,7 +168,7 @@ const BudgetCategory = () => {
           <div className="button-container">
             <button>Add expenses</button>
           </div>
-        </div>
+        </div> */}
         <div className="category-container">
           {currentTableData && currentTableData.length > 0 && (
             <div className="category header">
@@ -233,7 +237,7 @@ const BudgetCategory = () => {
                     label="Projected amount"
                     displayType={"input"}
                     style={{ width: "100%", height: "100%", padding: "10px" }}
-                    prefix={currency  + " "}
+                    prefix={currency + " "}
                     name="amount"
                     thousandSeparator={true}
                     onChange={(e) => {
@@ -254,7 +258,7 @@ const BudgetCategory = () => {
                   />
                 </div>
                 <div className="form__wrapper">
-                <h7>Select Date</h7>
+                  <h7>Select Date</h7>
                   <DatePicker
                     selected={moment(editData?.transactionDate).toDate()}
                     onChange={(e) => {
@@ -265,7 +269,8 @@ const BudgetCategory = () => {
                       new Date().toISOString().substring(0, 10)
                     ).toDate()}
                     disabled={disableDateInputFieldBasedOnStartDateToCurrentDate(
-                      moment(editData?.transactionDate).toDate(), startDate
+                      moment(editData?.transactionDate).toDate(),
+                      startDate
                     )}
                   />
                 </div>
@@ -299,19 +304,12 @@ const BudgetCategory = () => {
 export default BudgetCategory;
 
 const ListStyle = styled.div`
-  font-family:"Sofia Pro";
+  font-family: "Sofia Pro";
   width: 100%;
   display: flex;
   flex-direction: column;
   .goback {
     margin-top: 20px;
-  }
-  .header-wrapper {
-    width: 100%;
-    display: flex;
-
-    flex-direction: row;
-    justify-content: space-between;
   }
   .button-container {
     display: flex;

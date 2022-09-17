@@ -8,11 +8,11 @@ const initialState = {
     data: "", errors: "", loading: false, message: ""
 }
 
-const timerBeforeRedirect= () => {
-    setTimeout(() => {
-        window.location.href = `/home`;
-    }, 2000);
-}
+// const timerBeforeRedirect= () => {
+//     setTimeout(() => {
+//         window.location.href = `/home`;
+//     }, 2000);
+// }
 
 const LoginReducer = (state = initialState, action) => {
     const { payload, type } = action;
@@ -38,7 +38,7 @@ const LoginReducer = (state = initialState, action) => {
             localStorage.setItem("currency", payload.data.currency);
             localStorage.setItem("language", payload.data.language);
             localStorage.setItem("country", payload.data.country);
-            timerBeforeRedirect()
+            window.location.href = `/home`;
             return {
                 ...state,
                 data: payload.data.data,

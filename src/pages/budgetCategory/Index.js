@@ -5,6 +5,7 @@ import FormModal from "../../components/modal/FormModal";
 import BudgetCategoryReusable from "./EditBudgetCategory";
 import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
+import PageTitle from "../../components/PageTitle";
 
 // import { useFormik } from "formik";
 // import * as yup from "yup";
@@ -19,10 +20,7 @@ const BudgetCategory = () => {
     id: "",
   });
 
-
   const [data, setData] = useState([]);
-
-  
 
   const ref = useRef(null);
   const handleClickOutside = (event) => {
@@ -116,18 +114,25 @@ const BudgetCategory = () => {
   return (
     <Layout>
       <ListStyle>
-      <div className="header-wrapper">
+        <PageTitle title={`Budget category`}>
+          <button onClick={() => setCreateModal(true)}>
+            Create category
+          </button>
+        </PageTitle>
+
+        {/* <div className="header-wrapper">
           <div className="header">
-            <p style={{ fontWeight: "bold", fontSize: "20px" }}>Budget category</p>
+            <p style={{ fontWeight: "bold", fontSize: "20px" }}>
+              Budget category
+            </p>
           </div>
           <div className="button-container">
             <button onClick={() => setCreateModal(true)}>
               Create budget category
             </button>
           </div>
-        </div>
+        </div> */}
         <div className="category-container">
-          
           {data && data.length > 0 ? (
             data.map((item, index) => (
               <div className="category" key={index}>
@@ -209,7 +214,7 @@ const ListStyle = styled.div`
   .header-wrapper {
     width: 100%;
     display: flex;
-    margin-top:20px;
+    margin-top: 20px;
     flex-direction: row;
     justify-content: space-between;
   }

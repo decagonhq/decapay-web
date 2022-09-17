@@ -5,6 +5,7 @@ import { MdOutlineLogout } from "react-icons/md";
 import { TbLayoutDashboard } from "react-icons/tb";
 import { AiOutlineDollar } from "react-icons/ai";
 import { MdListAlt } from "react-icons/md";
+import {CgProfile} from "react-icons/cg";
 import Logo from "../LogoComponent";
 import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
@@ -13,6 +14,7 @@ const SidebarDemo = () => {
   const [homeActive, setHomeActive] = useState(false);
   const [budgetActive, setBudgetActive] = useState(false);
   const [catActive, setCatActive] = useState(false);
+  const [viewProfileActive, setViewProfileActive] = useState(false);
 
   const logout = async () => {
     let token = localStorage.getItem("token");
@@ -44,6 +46,8 @@ const SidebarDemo = () => {
       setBudgetActive(true);
     } else if (page === "budgetCategory") {
       setCatActive(true);
+    } else if (page === "myProfile") {
+      setViewProfileActive(true);
     }
   }, [page, homeActive, budgetActive, catActive]);
 
@@ -71,6 +75,12 @@ const SidebarDemo = () => {
           Icon={MdListAlt}
           to="/budgetCategory"
           active={catActive}
+        />
+        <MenuItem
+          label="Profile"
+          Icon={CgProfile}
+          to="/myProfile"
+          active={viewProfileActive}
         />
         <div className="logout">
           <MdOutlineLogout />

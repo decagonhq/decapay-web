@@ -15,6 +15,7 @@ import BudgetCategory from "./pages/budgetCategory/Index";
 import Expenses from "./pages/expenses/Expenses";
 import ListBudget from "./pages/dashboard/Index";
 import Homepage from "./pages/homepage/index";
+import UserProfile from "./pages/userProfile/userProfile";
 
 function App() {
   return (
@@ -45,6 +46,14 @@ function App() {
           element={
             <PrivateRoute>
               <Budget />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/myProfile"
+          element={
+            <PrivateRoute>
+              <UserProfile />
             </PrivateRoute>
           }
         />

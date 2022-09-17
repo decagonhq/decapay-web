@@ -11,7 +11,8 @@ import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
 import FormSelectComponent from "../../components/selectComponent";
 // import { Link } from "react-router-dom";
-import {hundredPercent} from "../../constants";
+import { hundredPercent } from "../../constants";
+
 
 let pageSize = 6;
 const Index = () => {
@@ -22,12 +23,12 @@ const Index = () => {
   const [budgetTitle, setBudgetTitle] = useState("");
   const [currentTableData, setCurrentTableData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [budgetState,setBudgetState] = useState("current")
+  const [budgetState, setBudgetState] = useState("current");
   // const [location, setLocation] = useState();
   // eslint-disable-next-line
   const [dataInfo, setDataInfo] = useState([]);
   const ref = useRef(null);
- 
+
   // const getUserLocation = () => {
   //   return new Promise((resolve, reject) => {
   //     navigator.geolocation.getCurrentPosition(
@@ -47,7 +48,6 @@ const Index = () => {
   // }, [currentPage,budgetState]);
   // console.log(location);
 
-
   const headers = {
     headers: {
       "Content-Type": "application/json",
@@ -58,7 +58,7 @@ const Index = () => {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line
-  }, [currentPage,budgetState]);
+  }, [currentPage, budgetState]);
   // console.log(budgetState);
   const fetchData = async () => {
     try {
@@ -98,12 +98,11 @@ const Index = () => {
   const stateOptions = [
     { value: "", label: "All Budgets" },
     { value: "current", label: "Current" },
-    { value: "upcomming", label: "Upcoming" },
+    { value: "upcoming", label: "Upcoming" },
     { value: "past", label: "Past" },
   ];
 
   // get last part of url
-  
 
   return (
     <Layout>
@@ -117,7 +116,7 @@ const Index = () => {
               name="year"
               options={stateOptions}
               value={budgetState}
-              onChange={(e)=>setBudgetState(e.target.value)}
+              onChange={(e) => setBudgetState(e.target.value)}
               placeholder={"Filter by state"}
             />
           </div>
@@ -163,10 +162,22 @@ const Index = () => {
                 </p>
                 <p className="category-title">{item.period}</p>
                 <p className="category-title">{item.displayProjectedAmount}</p>
-                <p className={item.totalAmountSpentSoFar > item.projectedAmount ? "category-title red" : "category-title"}>
+                <p
+                  className={
+                    item.totalAmountSpentSoFar > item.projectedAmount
+                      ? "category-title red"
+                      : "category-title"
+                  }
+                >
                   {item.displayTotalAmountSpentSoFar}
                 </p>
-                <p className={item?.percentageSpentSoFar > hundredPercent ?"category-title red" : "category-title"}>
+                <p
+                  className={
+                    item?.percentageSpentSoFar > hundredPercent
+                      ? "category-title red"
+                      : "category-title"
+                  }
+                >
                   {item.displayPercentageSpentSoFar}
                 </p>
                 <p
@@ -242,13 +253,12 @@ const Index = () => {
 
 export default Index;
 const BudgetSyle = styled.div`
-  font-family:"Sofia Pro" ;
+  font-family: "Sofia Pro";
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
 
   /* background: rgba(0, 156, 244, 0.05); */
   .header {
@@ -383,6 +393,7 @@ const BudgetSyle = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding: 1rem;
   }
   button {
     color: white;
@@ -485,7 +496,7 @@ const BudgetSyle = styled.div`
       font-size: 10px;
     }
   }
-  .red{
-    color:red;
+  .red {
+    color: red;
   }
 `;
