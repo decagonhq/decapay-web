@@ -84,7 +84,7 @@ const BudgetLineItemResuable = ({
       <div className="form__wrapper">
         
         <Checkbox isChecked={isChecked} onChangeFunction={onChangeCheck} />
-        <span>Remember this line item for budget of this type:{budgetType}</span>
+        <span>Do you want to remember this line item for budget of this type:{budgetType}</span>
       </div>
       <br />
       <MyButton type="submit" onClick={onClick}>

@@ -50,7 +50,6 @@ const Home = () => {
     "Language Code is required"
   );
 
-  console.log("country", setCurrencyOptions);
 
   useEffect(() => {
     getReferences();
@@ -60,7 +59,6 @@ const Home = () => {
     try {
       const response = await request.get("references");
       let promisefulfilled = response.data.data;
-      console.log("Promise",promisefulfilled);
       let country = promisefulfilled.countries.map((country) => ({
         value: country.code,
         label: country.name,
