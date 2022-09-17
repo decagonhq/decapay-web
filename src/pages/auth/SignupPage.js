@@ -259,7 +259,7 @@ const Home = () => {
               )}
             </div>
             <div className="form__wrapper padding">
-              <Button disabled onClick={formik.handleSubmit} type="submit">
+              <Button  onClick={formik.handleSubmit} type="submit">
                 {loading ? <ClipLoader color="white" size="40px" /> : "Sign Up"}
               </Button>
             </div>

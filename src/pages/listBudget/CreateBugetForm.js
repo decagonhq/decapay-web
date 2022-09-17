@@ -30,19 +30,13 @@ import {
 
 const CreateBudget = ({ closeModal }) => {
   const [projectedAmount, setProjectedAmount] = useState("");
-  const timerBeforeRedirect = () => {
-    setTimeout(() => {
-      window.location.href = "/budgets";
-    }, 1000);
-  };
   const [calendar, setCalendar] = useState({
     budgetStartDate: "",
     budgetEndDate: "",
   });
-  
+
   const createBudgetValidationSchema = yup.object().shape({
     title: yup.string().required("Title is required"),
-    // amount: yup.number().required("Amount is required"),
     period: yup.string().required("Period is required"),
   });
   const [loading, setLoading] = useState(false);
@@ -71,7 +65,6 @@ const CreateBudget = ({ closeModal }) => {
     } else {
       values.budgetEndDate = "";
     }
-    console.log(values);
     try {
       const response = await request.post(`budgets`, values, {
         headers: {
@@ -80,12 +73,14 @@ const CreateBudget = ({ closeModal }) => {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(response.data);
+      // redirect to budget details page
       toast.success(response.data.message, {
         autoClose: 2000,
         onClose: dismissToast,
       });
       setLoading(false);
-      timerBeforeRedirect();
+      window.location.href = `/budgetDetail/${response.data.data.id}`;
     } catch (error) {
       toast.error(error.response.status, {
         autoClose: 2000,
