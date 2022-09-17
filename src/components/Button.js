@@ -16,6 +16,7 @@ const MyButton = ({
   green,
   onClick,
   loading,
+  disabled,
 }) => {
   return (
     <StyledButton
@@ -28,6 +29,8 @@ const MyButton = ({
       type={type}
       max={max}
       onClick={onClick}
+      disabled={disabled}
+      
     >
       {children}
       {/* <div className="spin-parent"> */}
@@ -53,15 +56,17 @@ const StyledButton = styled.button`
   font-size: 16px;
   border: none;
   text-align: center;
-  color: ${({ white, transparent }) =>
-    white ? "#34A853" : transparent ? "#34A853" : "white"};
+  color: ${({ white, transparent,disabled }) =>
+    white ? "#34A853" : transparent ? "#34A853" : disabled ? "#9e9e9e" : "white"};
   /* background: linear-gradient(96.67deg, #34a853 0%, #b8d344 100%); */
-  background: #14a800;
+  background: ${({disabled}) => disabled ? "#e0e0e0" : "#14a800"};
   white-space: nowrap;
+  cursor: ${({ disabled }) => disabled ? "not-allowed" : "pointer"};
+
   border: ${({ transparent }) => (transparent ? "1px solid #34A853" : "none")};
   :hover {
-    cursor: pointer;
-    background: #14a800;
+    cursor: ${({ disabled }) => disabled ? "not-allowed" : "pointer"};
+    background: ${({ disabled }) => disabled ? "#e0e0e0" : "#14a800"};
   }
 
   .spin-parent {
