@@ -42,7 +42,7 @@ const MyButton = ({
   );
 };
 const StyledButton = styled.button`
-  padding: 5px;
+  padding: 1rem;
   color: white;
   text-decoration: none;
   letter-spacing: 1px;

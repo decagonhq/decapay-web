@@ -116,7 +116,7 @@ const BudgetCategory = () => {
       <ListStyle>
         <PageTitle title={`Budget category`}>
           <button onClick={() => setCreateModal(true)}>
-            Create budget category
+            Create category
           </button>
         </PageTitle>
 
