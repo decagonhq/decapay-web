@@ -106,46 +106,6 @@ const Home = () => {
                   />
                 </div>
               </div>
-
-              {/* <div className="form__wrapper padding">
-                <label>Country</label>
-                <Select
-                  options={countryOptions}
-                  value={country}
-                  onChange={countryChange}
-                  name="countryCode"
-                  className="select"
-                />
-                {country.value === "" && (
-                  <p className="error">{countryCodeError}</p>
-                )}
-              </div>
-              <div className="form__wrapper padding">
-                <label>Language</label>
-                <Select
-                  name="languageCode"
-                  options={languageOptions}
-                  value={language}
-                  onChange={languageChange}
-                  className="select"
-                />
-                {language.value === "" && (
-                  <p className="error">{languageCodeError}</p>
-                )}
-              </div>
-              <div className="form__wrapper padding">
-                <label>Currency</label>
-                <Select
-                  name="currencyCode"
-                  options={currencyOptions}
-                  value={currency}
-                  onChange={currencyChange}
-                  className="select"
-                />
-                {currency.label === "" && (
-                  <p className="error">{currencyCodeError}</p>
-                )}
-              </div> */}
               <div className="form__wrapper padding">
                 <Button disabled={disabled} onClick={formik.handleSubmit} type="submit">
                   {loading ? <ClipLoader color="white" size="40px" /> : "Save"}
