@@ -332,23 +332,6 @@ const Index = () => {
             Create line item
           </button>
         </PageTitle>
-        {/* <div className="header-wrapper">
-          <div className="header">
-            <p style={{ fontWeight: "bold", fontSize: "20px" }}>
-              Budget Detail
-            </p>
-          </div>
-          <div className="button-container">
-            <button
-              className="button"
-              onClick={() => {
-                setCreateLineModal(true);
-              }}
-            >
-              Create line item
-            </button>
-          </div>
-        </div> */}
 
         <div className="budget-summary">
           <div className="title">
@@ -397,7 +380,7 @@ const Index = () => {
               {/* <BudgetItem log amount={item.displayProjectedAmount} soFar={item.displayTotalAmountSpentSoFar} percent={item.percentageSpentSoFar} item={item.category}/> */}
               <div className="list--wrapper">
                 <div className="left_side">
-                  <p>Category: {item.category}</p>
+                  <p>{item.category}</p>
                   <p ref={projectAmountRef}>
                     Projected amount: {item.displayProjectedAmount}
                   </p>

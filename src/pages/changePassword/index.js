@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <Layout>
       <StyledHome>
-        <PageTitle title="Profile" />
+        <PageTitle title="Change password" />
           <div className="form__container">
             <ChangePassword />
           </div>
