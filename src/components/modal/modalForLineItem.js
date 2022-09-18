@@ -81,10 +81,9 @@ const BudgetLineItemResuable = ({
           onChange={onChangeCurrency}
         />
       </div>
-      <div className="form__wrapper">
-        
+      <div className="form__wrapper chekbox-container">
         <Checkbox isChecked={isChecked} onChangeFunction={onChangeCheck} />
-        <span>Do you want to remember this line item for budget of this type:{budgetType}</span>
+        <p>Do you want to remember this line item for budget of this type:{budgetType}</p>
       </div>
       <br />
       <MyButton type="submit" onClick={onClick}>
@@ -99,6 +98,10 @@ const StyledHome = styled.div`
   .form__wrapper {
     width: 100%;
     border-radius: 5px;
+  }
+  .chekbox-container{
+    display: flex;
+    justify-content: space-around;
   }
   select {
     display: inline-block;
