@@ -15,6 +15,7 @@ import DatePicker from "react-datepicker";
 import format from "date-fns/format";
 import CurrencyFormat from "react-currency-format";
 import { dateFormats2,currency } from "../../constants";
+import { useNavigate } from "react-router-dom";
 
 import {
   generateYearsFromCurrentYear,
@@ -40,7 +41,7 @@ const CreateBudget = ({ closeModal }) => {
     period: yup.string().required("Period is required"),
   });
   const [loading, setLoading] = useState(false);
-
+ const navigation = useNavigate();
   
   const dismissToast = () => {
     toast.dismiss();
@@ -71,7 +72,7 @@ const CreateBudget = ({ closeModal }) => {
         onClose: dismissToast,
       });
       setLoading(false);
-      window.location.href = `/budgetDetail/${response.data.data.id}`;
+      navigation(`/budgetDetail/${response.data.data.id}`);
     } catch (error) {
       toast.error(error.response.status, {
         autoClose: 2000,

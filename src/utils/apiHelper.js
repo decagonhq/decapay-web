@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const baseURL = process.env.REACT_APP_API_URL;
 
@@ -27,7 +28,7 @@ axiosInstance.interceptors.response.use(
 
     if (error.response.status === 401) {
       localStorage.removeItem("token");
-      window.location = "/login";
+      useNavigate().push("/login");
     } else {
       return new Promise((resolve, reject) => {
         reject(error);
