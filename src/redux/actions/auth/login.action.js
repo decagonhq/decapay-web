@@ -1,6 +1,6 @@
 import { LOGIN_SUCCESS, LOGIN_FAILED, LOADING } from "../../action.type";
 import { retrieveErrMessage } from "../../../utils/retrieveError";
-import request, { headers } from "../../../utils/apiHelper";
+import request  from "../../../utils/apiHelper";
 import { toast } from "react-toastify";
 
 const loginSuccess = (payload) => ({
@@ -16,7 +16,7 @@ const loginFailed = (payload) => ({
 const login = (payload) => async (dispatch) => {
   dispatch({ type: LOADING });
   try {
-    const res = await request.post("signin", payload, headers);
+    const res = await request.post("signin", payload);
     toast.success("Login Successful");
     return dispatch(loginSuccess(res.data));
   } catch (error) {

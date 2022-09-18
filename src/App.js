@@ -16,6 +16,7 @@ import Expenses from "./pages/expenses/Expenses";
 import ListBudget from "./pages/dashboard/Index";
 import Homepage from "./pages/homepage/index";
 import UserProfile from "./pages/userProfile/userProfile";
+import ChangePassword from "./pages/changePassword/index";
 
 function App() {
   return (
@@ -54,6 +55,14 @@ function App() {
           element={
             <PrivateRoute>
               <UserProfile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/changePassword"
+          element={
+            <PrivateRoute>
+              <ChangePassword />
             </PrivateRoute>
           }
         />

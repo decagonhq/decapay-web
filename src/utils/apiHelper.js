@@ -1,33 +1,39 @@
 import axios from "axios";
 
-export default axios.create({
-  baseURL:process.env.REACT_APP_API_URL
+const baseURL = process.env.REACT_APP_API_URL;
+
+let headers = { DVC_KY_HDR: 2 };
+
+if (localStorage.token) {
+  headers.Authorization = `Bearer ${localStorage.token}`;
+}
+
+const axiosInstance = axios.create({
+  baseURL: baseURL,
+  headers,
 });
 
-export const headers = () => {
-  let token = localStorage.getItem("token");
-  return {
-    headers: {
-      'Authorization': token ? `Bearer ${token}` : "",
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-            // "Authorization": `Bearer ${localStorage.getItem("token")}`,
-      'DVC_KY_HDR': '2',
-     }
+axiosInstance.interceptors.response.use(
+  (response) =>
+    new Promise((resolve, reject) => {
+      resolve(response);
+    }),
+  (error) => {
+    if (!error.response) {
+      return new Promise((resolve, reject) => {
+        reject(error);
+      });
+    }
+
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem("token");
+      window.location = "/login";
+    } else {
+      return new Promise((resolve, reject) => {
+        reject(error);
+      });
+    }
   }
-}
+);
 
-
-export const apiPost = (path, data, { headers, ...conf }, auth = true) => {
-  const Authorization = auth && `Bearer ${localStorage.getItem("token")}`;
-  const DVC_KY_HDR = '2';
-  const config = {
-    ...conf,
-    headers: {
-      Authorization,
-      DVC_KY_HDR,
-      ...(headers ? headers : {}),
-    },
-  };
-  return axios.post(`${process.env.REACT_APP_API_URL}${path}`, data, config);
-}
+export default axiosInstance;

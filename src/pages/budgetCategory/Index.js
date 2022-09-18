@@ -29,12 +29,12 @@ const BudgetCategory = () => {
     }
   };
 
-  const headers = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
-  };
+  // const headers = {
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     Authorization: "Bearer " + localStorage.getItem("token"),
+  //   },
+  // };
   const onSubmit = async () => {
     console.log(category);
     let payload = {
@@ -44,7 +44,7 @@ const BudgetCategory = () => {
       const response = await request.post(
         `budget_categories`,
         payload,
-        headers
+        // headers
       );
       setCreateModal(false);
       toast.success(response.data.message);
@@ -64,7 +64,7 @@ const BudgetCategory = () => {
       const response = await request.put(
         `budget_categories/${editCategory.id}`,
         payload,
-        headers
+        // headers
       );
       setEditModal(false);
       toast.success(response.data.message);
@@ -95,7 +95,7 @@ const BudgetCategory = () => {
 
   const fetchData = async () => {
     try {
-      const response = await request.get(`budget_categories`, headers);
+      const response = await request.get(`budget_categories`);
       setData(response.data.data);
     } catch (error) {
       console.log(error);

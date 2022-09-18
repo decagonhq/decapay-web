@@ -40,7 +40,6 @@ const CreateBudget = ({ closeModal }) => {
     period: yup.string().required("Period is required"),
   });
   const [loading, setLoading] = useState(false);
-  const token = localStorage.getItem("token");
 
   
   const dismissToast = () => {
@@ -66,15 +65,7 @@ const CreateBudget = ({ closeModal }) => {
       values.budgetEndDate = "";
     }
     try {
-      const response = await request.post(`budgets`, values, {
-        headers: {
-          "Content-Type": "application/json",
-          DVC_KY_HDR: 2,
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(response.data);
-      // redirect to budget details page
+      const response = await request.post(`budgets`, values);
       toast.success(response.data.message, {
         autoClose: 2000,
         onClose: dismissToast,
