@@ -10,12 +10,6 @@ const Index = () => {
   const [currentTableData, setCurrentTableData] = useState([]);
   const [idOfBudget, setIdOfBudget] = useState(-1);
 
-  const headers = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
-  };
   const ref = useRef(null);
   useEffect(() => {
     fetchData();
@@ -24,8 +18,7 @@ const Index = () => {
   const fetchData = async () => {
     try {
       const response = await request.get(
-        `budgets?size=10&page=1&state=current`,
-        headers
+        `budgets?size=10&page=1&state=current`
       );
       setCurrentTableData(response.data.data.content);
     } catch (error) {

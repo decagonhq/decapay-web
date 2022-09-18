@@ -16,69 +16,84 @@ import Expenses from "./pages/expenses/Expenses";
 import ListBudget from "./pages/dashboard/Index";
 import Homepage from "./pages/homepage/index";
 import UserProfile from "./pages/userProfile/userProfile";
+import ChangePassword from "./pages/changePassword/index";
+import ErrorPage from "./pages/erroHandler/ErrorPage";
+import ErrorBoundary from "./pages/erroHandler/ErrorBoundary";
+
 
 function App() {
   return (
-    <div className="App">
-      <ToastContainer limit={1} style={{ fontSize: "16px" }} />
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<Homepage />} />
-        <Route
-          path="/budgetDetail/expenses"
-          element={
-            <PrivateRoute>
-              <Expenses />
-            </PrivateRoute>
-          }
-        />
+    <ErrorBoundary>
+      <div className="App">
+        <ToastContainer limit={1} style={{ fontSize: "16px" }} />
+        <Routes>
+        <Route path="*" element={<ErrorPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<Homepage />} />
+          <Route
+            path="/budgetDetail/expenses"
+            element={
+              <PrivateRoute>
+                <Expenses />
+              </PrivateRoute>
+            }
+          />
 
-        <Route
-          path="/home"
-          element={
-            <PrivateRoute>
-              <ListBudget />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/budgets"
-          element={
-            <PrivateRoute>
-              <Budget />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/myProfile"
-          element={
-            <PrivateRoute>
-              <UserProfile />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/budgetDetail/:id"
-          element={
-            <PrivateRoute>
-              <BudgetDetail />
-            </PrivateRoute>
-          }
-        />
+          <Route
+            path="/home"
+            element={
+              <PrivateRoute>
+                <ListBudget />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/budgets"
+            element={
+              <PrivateRoute>
+                <Budget />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/myProfile"
+            element={
+              <PrivateRoute>
+                <UserProfile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/changePassword"
+            element={
+              <PrivateRoute>
+                <ChangePassword />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/budgetDetail/:id"
+            element={
+              <PrivateRoute>
+                <BudgetDetail />
+              </PrivateRoute>
+            }
+          />
 
-        <Route
-          path="/budgetCategory"
-          element={
-            <PrivateRoute>
-              <BudgetCategory />
-            </PrivateRoute>
-          }
-        />
-        <Route path="/register" element={<Signup />} />
-        <Route path="/forgotPassword" element={<ForgotPassword />} />
-        <Route path="/resetPassword" element={<ResetPassword />} />
-      </Routes>
-    </div>
+          <Route
+            path="/budgetCategory"
+            element={
+              <PrivateRoute>
+                <BudgetCategory />
+              </PrivateRoute>
+            }
+          />
+          <Route path="/register" element={<Signup />} />
+          <Route path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="/resetPassword" element={<ResetPassword />} />
+        </Routes>
+      </div>
+    </ErrorBoundary>
   );
 }
 

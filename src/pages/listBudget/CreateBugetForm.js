@@ -15,6 +15,7 @@ import DatePicker from "react-datepicker";
 import format from "date-fns/format";
 import CurrencyFormat from "react-currency-format";
 import { dateFormats2,currency } from "../../constants";
+import { useNavigate } from "react-router-dom";
 
 import {
   generateYearsFromCurrentYear,
@@ -30,24 +31,17 @@ import {
 
 const CreateBudget = ({ closeModal }) => {
   const [projectedAmount, setProjectedAmount] = useState("");
-  const timerBeforeRedirect = () => {
-    setTimeout(() => {
-      window.location.href = "/budgets";
-    }, 1000);
-  };
   const [calendar, setCalendar] = useState({
     budgetStartDate: "",
     budgetEndDate: "",
   });
-  
+
   const createBudgetValidationSchema = yup.object().shape({
     title: yup.string().required("Title is required"),
-    // amount: yup.number().required("Amount is required"),
     period: yup.string().required("Period is required"),
   });
   const [loading, setLoading] = useState(false);
-  const token = localStorage.getItem("token");
-
+ const navigation = useNavigate();
   
   const dismissToast = () => {
     toast.dismiss();
@@ -71,21 +65,14 @@ const CreateBudget = ({ closeModal }) => {
     } else {
       values.budgetEndDate = "";
     }
-    console.log(values);
     try {
-      const response = await request.post(`budgets`, values, {
-        headers: {
-          "Content-Type": "application/json",
-          DVC_KY_HDR: 2,
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await request.post(`budgets`, values);
       toast.success(response.data.message, {
         autoClose: 2000,
         onClose: dismissToast,
       });
       setLoading(false);
-      timerBeforeRedirect();
+      navigation(`/budgetDetail/${response.data.data.id}`);
     } catch (error) {
       toast.error(error.response.status, {
         autoClose: 2000,

@@ -65,15 +65,9 @@ const EditBudget = ({ closeModal, id, title }) => {
   const dismissToast = () => {
     toast.dismiss();
   };
-  const headers = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
-  };
   const fetchData = async () => {
     try {
-      const response = await request.get(`budgets/edit/${id}`, headers);
+      const response = await request.get(`budgets/edit/${id}`);
       setNewId(id);
       setCollectData({
         ...collectData,

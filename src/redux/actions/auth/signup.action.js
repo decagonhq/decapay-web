@@ -1,6 +1,6 @@
 import { SIGNUP_SUCCESS, SIGNUP_FAILED } from "../../action.type";
 import { retrieveErrMessage } from "../../../utils/retrieveError";
-import  request,{headers} from "../../../utils/apiHelper";
+import  request from "../../../utils/apiHelper";
 import {toast} from 'react-toastify';
 
 const signupSuccess = (payload) => ({
@@ -16,7 +16,7 @@ const signupFailed = (payload) => ({
 const signup = (payload) => async (dispatch) => {
 
   try {
-    const res = await request.post("register", payload, headers);
+    const res = await request.post("register", payload);
       toast.success(res.data.message,{
         autoClose: 2000,
       });

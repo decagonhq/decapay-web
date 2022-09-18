@@ -29,32 +29,6 @@ const Index = () => {
   const [dataInfo, setDataInfo] = useState([]);
   const ref = useRef(null);
 
-  // const getUserLocation = () => {
-  //   return new Promise((resolve, reject) => {
-  //     navigator.geolocation.getCurrentPosition(
-  //       (position) => {
-  //         resolve(position);
-  //       },
-  //       (error) => {
-  //         reject(error);
-  //       }
-  //     );
-  //   });
-  // };
-  // useEffect(() => {
-  //   getUserLocation().then((position) => {
-  //     setLocation(position);
-  //   });
-  // }, [currentPage,budgetState]);
-  // console.log(location);
-
-  const headers = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
-  };
-
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line
@@ -63,8 +37,7 @@ const Index = () => {
   const fetchData = async () => {
     try {
       const response = await request.get(
-        `budgets?size=${pageSize}&page=${currentPage}&state=${budgetState}`,
-        headers
+        `budgets?size=${pageSize}&page=${currentPage}&state=${budgetState}`
       );
       setCurrentTableData(response.data.data.content);
       setTotalCount(response.data.data.totalElements);

@@ -33,12 +33,6 @@ const BudgetCategory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [editData, setEditData] = useState({});
 
-  const headers = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
-  };
 
   const submitEditData = async (event) => {
     event.preventDefault();
@@ -51,8 +45,7 @@ const BudgetCategory = () => {
     try {
       const response = await request.put(
         `expenses/${editData.id}`,
-        payload,
-        headers
+        payload
       );
       setLoading(false);
       toast.success(response.data.message, {
@@ -93,8 +86,7 @@ const BudgetCategory = () => {
   const fetchData = async () => {
     try {
       const response = await request.get(
-        `budgets/${budgetId}/lineItems/${catId}/expenses?size=${pageSize}&page=${currentPage}`,
-        headers
+        `budgets/${budgetId}/lineItems/${catId}/expenses?size=${pageSize}&page=${currentPage}`
       );
       setCurrentTableData(response.data.data.content);
       setTotalCount(response.data.data.totalElements);
@@ -120,7 +112,7 @@ const BudgetCategory = () => {
 
   const handleDeleteItem = async (id) => {
     try {
-      const response = await request.delete(`expenses/${id}`, headers);
+      const response = await request.delete(`expenses/${id}`);
       fetchData();
       toast.success(response.data.message, {
         autoClose: 3000,

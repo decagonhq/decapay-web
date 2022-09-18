@@ -57,12 +57,7 @@ const Index = () => {
   function handleSelect(date) {
     setCalendar(format(date, dateFormats2));
   }
-  const headers = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
-  };
+ 
   // const [editLineItemPayload, setEditLineItemPayload] = useState({});
   const [collectData, setCollectData] = useState({
     budgetCategoryId: "",
@@ -106,8 +101,7 @@ const Index = () => {
     try {
       const response = await request.post(
         `budgets/${id}/lineItems/${getCategordId}/expenses`,
-        payload,
-        headers
+        payload
       );
       setLoading(false);
       setCreateLogExpense(initLogData());
@@ -131,7 +125,7 @@ const Index = () => {
 
   const fetchCategory = async () => {
     try {
-      const response = await request.get(`budget_categories`, headers);
+      const response = await request.get(`budget_categories`);
       let res = response?.data?.data;
       if (res.length > 0) {
         let options = res?.map((category) => {
@@ -180,8 +174,7 @@ const Index = () => {
     try {
       const response = await request.post(
         `budgets/${id}/lineItems`,
-        payload,
-        headers
+        payload
       );
       setCreateLineModal(false);
       toast.success(response.data.message, {
@@ -217,7 +210,7 @@ const Index = () => {
 
   const fetchData = async () => {
     try {
-      const response = await request.get(`budgets/${id}`, headers);
+      const response = await request.get(`budgets/${id}`);
       setData(response.data.data);
       let remoteStartDate = response.data.data.startDate;
       let remoteEndDate = response.data.data.endDate;
@@ -269,8 +262,7 @@ const Index = () => {
     try {
       const response = await request.put(
         `budgets/${id}/lineItems/${categoryId}`,
-        newPayload,
-        headers
+        newPayload
       );
       fetchData();
       toast.success(response.data.message, {
@@ -290,8 +282,7 @@ const Index = () => {
   const handleDeleteItem = async () => {
     try {
       const response = await request.delete(
-        `budgets/${id}/lineItems/${categoryId}`,
-        headers
+        `budgets/${id}/lineItems/${categoryId}`
       );
       fetchData();
       toast.success(response.data.message, {
@@ -341,23 +332,6 @@ const Index = () => {
             Create line item
           </button>
         </PageTitle>
-        {/* <div className="header-wrapper">
-          <div className="header">
-            <p style={{ fontWeight: "bold", fontSize: "20px" }}>
-              Budget Detail
-            </p>
-          </div>
-          <div className="button-container">
-            <button
-              className="button"
-              onClick={() => {
-                setCreateLineModal(true);
-              }}
-            >
-              Create line item
-            </button>
-          </div>
-        </div> */}
 
         <div className="budget-summary">
           <div className="title">
@@ -406,7 +380,7 @@ const Index = () => {
               {/* <BudgetItem log amount={item.displayProjectedAmount} soFar={item.displayTotalAmountSpentSoFar} percent={item.percentageSpentSoFar} item={item.category}/> */}
               <div className="list--wrapper">
                 <div className="left_side">
-                  <p>Category: {item.category}</p>
+                  <p>{item.category}</p>
                   <p ref={projectAmountRef}>
                     Projected amount: {item.displayProjectedAmount}
                   </p>
