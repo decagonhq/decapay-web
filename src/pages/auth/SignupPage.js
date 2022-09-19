@@ -282,6 +282,7 @@ const StyledHome = styled.div`
   font-family: "Sofia Pro";
   display: flex;
   flex-direction: column;
+  background: rgba(20, 168, 0, 0.03);
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
@@ -289,6 +290,7 @@ const StyledHome = styled.div`
   .form__container {
     display: flex;
     flex-direction: column;
+    margin-top: 20px;
     align-items: center;
     justify-content: center;
     width: 600px;
