@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import styled from "styled-components";
 import Button from "../../components/Button";
 import FormInputComponent from "../../components/InputComponent";
@@ -7,6 +7,8 @@ import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import registerUser from "../../redux/actions/auth/signup.action";
 import ClipLoader from "react-spinners/ClipLoader";
+import request from "../../utils/apiHelper";
+import { toast } from "react-toastify";
 // Validation for profile update
 
 const phoneRegExp = /^\d*(\+\d+)?$/;
@@ -34,11 +36,38 @@ const Home = () => {
 // console.log(countryOptions);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    // eslint-disable-next-line
+    getUser();
+    // eslint-disable-next-line
+  }, []);
   const initialValues = {
     email: "",
     lastName: "",
     firstName: "",
     phoneNumber: "",
+  };
+  const dismissToast = () => {
+    toast.dismiss();
+  };
+  const getUser = async () => {
+    try {
+      const response = await request.get(`user`);
+      let promisefulfilled = response.data.data;
+      console.log(promisefulfilled);
+      console.log(promisefulfilled);
+      formik.setFieldValue("firstName", promisefulfilled.firstName);
+      formik.setFieldValue("lastName", promisefulfilled.lastName);
+      formik.setFieldValue("email", promisefulfilled.email);
+      formik.setFieldValue("phoneNumber", promisefulfilled.phoneNumber);
+      
+    } catch (error) {
+      toast.error(error, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
+    }
   };
   const onSubmit = (values) => {
     setLoading(true);
