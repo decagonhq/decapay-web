@@ -138,6 +138,8 @@ const StyledHome = styled.div`
     @media (max-width: 768px) {
       width: 100%;
       padding: 20px;
+      /* border:none; */
+      margin-top: 70px;
     }
   }
   .header {

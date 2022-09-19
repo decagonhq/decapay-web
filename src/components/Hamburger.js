@@ -44,9 +44,9 @@ const StyledBurger = styled.button`
   }
 `
 
-export const Burger = ({ open, setOpen, offset }) => {
+export const Burger = ({ open, setOpen, offset, ref }) => {
   return (
-    <StyledBurger open={open} onClick={() => setOpen(!open)} offset={offset} className={'hamburger'}>
+    <StyledBurger ref={ref} open={open} onClick={() => setOpen(!open)} offset={offset} className={'hamburger'}>
       <div />
       <div />
       <div />

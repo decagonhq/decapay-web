@@ -5,7 +5,7 @@ export default function PageTitle({children, title}) {
   return (
       <HeaderStyle>
         <div className="">
-          <p style={{ fontWeight: "bold", fontSize: "20px" }}>
+          <p className="title">
             {title}
           </p>
         </div>
@@ -22,9 +22,20 @@ const HeaderStyle = styled.div`
    padding:1rem;
     flex-direction: row;
     justify-content: space-between;
+    .title{
+      font-weight:bold; 
+      font-size:20px;
+    }
     .children-container{
       display: flex;
       justify-content:space-between;
       /* align-items:flex-end; */
     }
+    @media only screen and (max-width: 411px) {
+      flex-direction: column;
+      .title{
+      font-weight:400; 
+      font-size: 12px;
+    }
+  }
 `;

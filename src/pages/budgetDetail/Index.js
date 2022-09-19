@@ -57,7 +57,7 @@ const Index = () => {
   function handleSelect(date) {
     setCalendar(format(date, dateFormats2));
   }
- 
+
   // const [editLineItemPayload, setEditLineItemPayload] = useState({});
   const [collectData, setCollectData] = useState({
     budgetCategoryId: "",
@@ -172,10 +172,7 @@ const Index = () => {
     };
     console.log(payload);
     try {
-      const response = await request.post(
-        `budgets/${id}/lineItems`,
-        payload
-      );
+      const response = await request.post(`budgets/${id}/lineItems`, payload);
       setCreateLineModal(false);
       toast.success(response.data.message, {
         autoClose: 3000,
@@ -374,100 +371,101 @@ const Index = () => {
             </div>
           ) : null}
         </div>
-        {data.lineItems && data?.lineItems.length > 0 ? (
-          data?.lineItems.map((item, index) => (
-            <div className="line-item-container mb-2">
-              {/* <BudgetItem log amount={item.displayProjectedAmount} soFar={item.displayTotalAmountSpentSoFar} percent={item.percentageSpentSoFar} item={item.category}/> */}
-              <div className="list--wrapper">
-                <div className="left_side">
-                  <p>{item.category}</p>
-                  <p ref={projectAmountRef}>
-                    Projected amount: {item.displayProjectedAmount}
-                  </p>
-                  <p
-                    className={
-                      item.projectedAmount < item.totalAmountSpentSoFar
-                        ? "red"
-                        : ""
-                    }
+        <div className="line-items">
+          {data.lineItems && data?.lineItems.length > 0 ? (
+            data?.lineItems.map((item, index) => (
+              <div className="line-item-container mb-2">
+                {/* <BudgetItem log amount={item.displayProjectedAmount} soFar={item.displayTotalAmountSpentSoFar} percent={item.percentageSpentSoFar} item={item.category}/> */}
+                <div className="list--wrapper">
+                  <div className="left_side">
+                    <p>{item.category}</p>
+                    <p ref={projectAmountRef}>
+                      Projected amount: {item.displayProjectedAmount}
+                    </p>
+                    <p
+                      className={
+                        item.projectedAmount < item.totalAmountSpentSoFar
+                          ? "red"
+                          : ""
+                      }
+                    >
+                      Amount spent so far: {item.displayTotalAmountSpentSoFar}
+                    </p>
+                    <Link
+                      className="link"
+                      to={`/budgetDetail/expenses/?budgetId=${id}&catId=${item.categoryId}&item=${item.category}`}
+                    >
+                      View expenses
+                    </Link>
+                  </div>
+                  <div
+                    className="right_side"
+                    onClick={() => {
+                      setLogExpenseModal(true);
+                      setGetCategordId(item.categoryId);
+                    }}
                   >
-                    Amount spent so far: {item.displayTotalAmountSpentSoFar}
-                  </p>
-                  <Link
-                    className="link"
-                    to={`/budgetDetail/expenses/?budgetId=${id}&catId=${item.categoryId}&item=${item.category}`}
-                  >
-                    View expenses
-                  </Link>
-                </div>
-                <div
-                  className="right_side"
-                  onClick={() => {
-                    setLogExpenseModal(true);
-                    setGetCategordId(item.categoryId);
-                  }}
-                >
-                  <p className="log">
-                    Log{" "}
-                    <span>
-                      <FiArrowUpRight className="icon" />
-                    </span>
-                  </p>
-                  <p
-                    className={
-                      item.percentageSpentSoFar > hundredPercent
-                        ? "red"
-                        : "link"
-                    }
-                  >
-                    {item.displayPercentageSpentSoFar}
-                  </p>
-                </div>
-                <p
-                  onClick={() => openPopup(index, item.categoryId)}
-                  style={{
-                    cursor: "pointer",
-                    fontSize: "30px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  ...
-                  {idOfLineItem === index ? (
-                    <Fragment>
-                      <span ref={ref} className="popup">
-                        <p
-                          onClick={() => {
-                            setEditModal(true);
-                          }}
-                        >
-                          Edit item
-                        </p>
-                        <p
-                          onClick={() =>
-                            deleteItem(handleDeleteItem, categoryName)
-                          }
-                          style={{ color: "red" }}
-                        >
-                          Remove item
-                        </p>
+                    <p className="log">
+                      Log{" "}
+                      <span>
+                        <FiArrowUpRight className="icon" />
                       </span>
-                    </Fragment>
-                  ) : null}
-                </p>
+                    </p>
+                    <p
+                      className={
+                        item.percentageSpentSoFar > hundredPercent
+                          ? "red"
+                          : "link"
+                      }
+                    >
+                      {item.displayPercentageSpentSoFar}
+                    </p>
+                  </div>
+                  <p
+                    onClick={() => openPopup(index, item.categoryId)}
+                    style={{
+                      cursor: "pointer",
+                      fontSize: "30px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    ...
+                    {idOfLineItem === index ? (
+                      <Fragment>
+                        <span ref={ref} className="popup">
+                          <p
+                            onClick={() => {
+                              setEditModal(true);
+                            }}
+                          >
+                            Edit item
+                          </p>
+                          <p
+                            onClick={() =>
+                              deleteItem(handleDeleteItem, categoryName)
+                            }
+                            style={{ color: "red" }}
+                          >
+                            Remove item
+                          </p>
+                        </span>
+                      </Fragment>
+                    ) : null}
+                  </p>
+                </div>
               </div>
+            ))
+          ) : (
+            <div className="empty">
+              <img
+                className="empty-img"
+                src="/images/empty-img.svg"
+                alt="empty"
+              />
+              <p>No line item found in the budget</p>
             </div>
-          ))
-        ) : (
-          <div className="empty">
-            <img
-              className="empty-img"
-              src="/images/empty-img.svg"
-              alt="empty"
-            />
-            <p>No line item found in the budget</p>
-          </div>
-        )}
-
+          )}
+        </div>
         {/* <Button>+ Create Budget</Button> */}
         {createLineModal && (
           <FormModal>
@@ -680,6 +678,11 @@ const DetailStyle = styled.div`
       background: #14a800;
     }
   }
+  @media only screen and (max-width: 379px) {
+    .line-items {
+      margin-top: 100px;
+    }
+  }
   .line-item-container {
     font-family: "Sofia Pro";
     padding: 5px;
@@ -687,10 +690,10 @@ const DetailStyle = styled.div`
     height: 108px;
     background: rgba(0, 156, 244, 0.05);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.04);
-
-    @media only screen and (max-width: 379px) {
+    @media only screen and (max-width: 360px) {
       height: 180px;
     }
+
     @media only screen and (max-width: 299px) {
       height: 200px;
     }
