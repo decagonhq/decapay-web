@@ -77,7 +77,6 @@ const Wrapper = styled.div`
     align-items: center;
   }
   .midWrapper {
-    background: rgba(20, 168, 0, 0.03);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -120,7 +119,7 @@ const Wrapper = styled.div`
     }
   }
   .bottomWrap {
-    margin-top: 70px;
+    margin-top: 120px;
   }
   .subWrap {
     display: flex;
