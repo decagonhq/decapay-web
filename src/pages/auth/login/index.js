@@ -122,6 +122,7 @@ export default LoginPage;
 const StyledHome = styled.div`
   font-family: "Inter";
   display: flex;
+  background: rgba(20, 168, 0, 0.03);
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -131,6 +132,7 @@ const StyledHome = styled.div`
   .form__container {
     display: flex;
     flex-direction: column;
+    margin-top: 20px;
     align-items: center;
     justify-content: center;
     width: 500px;
