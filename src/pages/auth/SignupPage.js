@@ -289,6 +289,7 @@ const StyledHome = styled.div`
   .form__container {
     display: flex;
     flex-direction: column;
+    margin-top: 20px;
     align-items: center;
     justify-content: center;
     width: 600px;
