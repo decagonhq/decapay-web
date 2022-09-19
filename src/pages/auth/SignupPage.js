@@ -259,7 +259,7 @@ const Home = () => {
               )}
             </div>
             <div className="form__wrapper padding">
-              <Button disabled onClick={formik.handleSubmit} type="submit">
+              <Button  onClick={formik.handleSubmit} type="submit">
                 {loading ? <ClipLoader color="white" size="40px" /> : "Sign Up"}
               </Button>
             </div>
@@ -289,6 +289,7 @@ const StyledHome = styled.div`
   .form__container {
     display: flex;
     flex-direction: column;
+    margin-top: 20px;
     align-items: center;
     justify-content: center;
     width: 600px;

@@ -33,12 +33,6 @@ const BudgetCategory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [editData, setEditData] = useState({});
 
-  const headers = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
-  };
 
   const submitEditData = async (event) => {
     event.preventDefault();
@@ -51,8 +45,7 @@ const BudgetCategory = () => {
     try {
       const response = await request.put(
         `expenses/${editData.id}`,
-        payload,
-        headers
+        payload
       );
       setLoading(false);
       toast.success(response.data.message, {
@@ -93,8 +86,7 @@ const BudgetCategory = () => {
   const fetchData = async () => {
     try {
       const response = await request.get(
-        `budgets/${budgetId}/lineItems/${catId}/expenses?size=${pageSize}&page=${currentPage}`,
-        headers
+        `budgets/${budgetId}/lineItems/${catId}/expenses?size=${pageSize}&page=${currentPage}`
       );
       setCurrentTableData(response.data.data.content);
       setTotalCount(response.data.data.totalElements);
@@ -120,7 +112,7 @@ const BudgetCategory = () => {
 
   const handleDeleteItem = async (id) => {
     try {
-      const response = await request.delete(`expenses/${id}`, headers);
+      const response = await request.delete(`expenses/${id}`);
       fetchData();
       toast.success(response.data.message, {
         autoClose: 3000,
@@ -158,34 +150,23 @@ const BudgetCategory = () => {
         <PageTitle title={`Expenses | ${lineItem}`}>
           <button>Add expenses</button>
         </PageTitle>
-
-        {/* <div className="header-wrapper">
-          <div className="">
-            <p style={{ fontWeight: "bold", fontSize: "20px" }}>
-              Expenses | {lineItem}
-            </p>
-          </div>
-          <div className="button-container">
-            <button>Add expenses</button>
-          </div>
-        </div> */}
         <div className="category-container">
           {currentTableData && currentTableData.length > 0 && (
             <div className="category header">
-              <p className="category-title">Amount</p>
-              <p className="category-title">Description</p>
-              <p className="category-title">Date</p>
-              {/* <p className="category-title">Time</p> */}
-              <p className="category-title">Action</p>
+              <p className="category-text">Amount</p>
+              <p className="category-text">Description</p>
+              <p className="category-text">Date</p>
+              {/* <p className="category-text">Time</p> */}
+              <p className="category-text">Action</p>
             </div>
           )}
           {currentTableData && currentTableData.length > 0 ? (
             currentTableData.map((item, index) => (
               <div className="category body" key={index}>
-                <p className="category-title">{item.displayAmount}</p>
-                <p className="category-title">{item.description}</p>
-                <p className="category-title">{item.displayTransactionDate}</p>
-                {/* <p className="category-title">{item.time}</p> */}
+                <p className="category-text">{item.displayAmount}</p>
+                <p className="category-text">{item.description}</p>
+                <p className="category-text">{item.displayTransactionDate}</p>
+                {/* <p className="category-text">{item.time}</p> */}
                 <p onClick={() => setIdOfBudget(index)} className="dots">
                   ...
                   {idOfBudget === index ? (
@@ -339,15 +320,6 @@ const ListStyle = styled.div`
       background: #14a800;
     }
   }
-  /* .form__wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    margin-bottom: 10px;
-  } */
   .form__wrapper {
     .react-datepicker-wrapper,
     .react-datepicker__input-container,
@@ -424,46 +396,21 @@ const ListStyle = styled.div`
     cursor: pointer;
     font-weight: "bold";
   }
+  @media only screen and (max-width: 1280px) {
+    .category {
+      margin-bottom: 10px;
+    }
+    .category-text {
+      font-size: 12px;
+    }
+  }
   @media only screen and (max-width: 990px) {
     .category {
       padding: 5px 8px;
       height: 100px;
     }
   }
-  @media only screen and (max-width: 487px) {
-    .category {
-      padding: 4px;
-      height: 150px;
-      font-size: 1rem;
-    }
-    .dots {
-      font-size: 25px;
-    }
-    .header {
-      font-size: 12px;
-    }
-    .body {
-      font-size: 12px;
-    }
-  }
-  @media only screen and (max-width: 377px) {
-    .category {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      padding: 0px;
-      font-size: 12px;
-    }
-  }
-  @media only screen and (max-width: 290px) {
-    .category {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      padding: 0px;
-      font-size: 10px;
-    }
-  }
+ 
   .form__wrapper {
     width: 100%;
     border-radius: 5px;
@@ -494,5 +441,72 @@ const ListStyle = styled.div`
     display: flex;
     justify-content: space-between;
     width: 300px;
+  }
+  @media only screen and (max-width: 1280px) {
+    .category {
+      margin-bottom: 10px;
+    }
+    .category-text {
+      font-size: 12px;
+    }
+  }
+  @media only screen and (max-width: 990px) {
+    .category {
+      padding: 5px 8px;
+      height: 100px;
+    }
+  }
+  @media only screen and (max-width: 768px) {
+    .category {
+      height: 75px;
+    }
+  }
+  @media only screen and (max-width: 540px) {
+    .category {
+      height: 70px;
+    }
+    .category-text {
+      font-size: 10px;
+    }
+  }
+
+  @media only screen and (max-width: 411px) {
+    .category {
+      height: 40px;
+    }
+  }
+  @media only screen and (max-width: 487px) {
+    .category {
+      padding: 4px;
+      height: 50px;
+      font-size: 1rem;
+    }
+    .dots {
+      font-size: 25px;
+    }
+    .header {
+      font-size: 12px;
+    }
+    .body {
+      font-size: 12px;
+    }
+  }
+  @media only screen and (max-width: 377px) {
+    .category {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0px;
+      font-size: 12px;
+    }
+  }
+  @media only screen and (max-width: 290px) {
+    .category {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0px;
+      font-size: 10px;
+    }
   }
 `;

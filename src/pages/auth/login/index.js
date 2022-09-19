@@ -10,9 +10,11 @@ import login from "../../../redux/actions/auth/login.action";
 import { useDispatch } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
 import Layout from "../../../components/NavigationBar/Layout";
+import Checkbox from "../../../components/checkbox";
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
   const loginValidationSchema = yup.object().shape({
     email: yup
       .string()
@@ -23,97 +25,100 @@ const LoginPage = () => {
       .min(8, ({ min }) => `Password must be at least ${min} characters`)
       .required("Password is required"),
   });
- 
+  const onChangeCheckbox = () => {
+    setIsChecked(!isChecked);
+  };
   const dispatch = useDispatch();
 
   return (
     <Layout>
-    <StyledHome>
-      {/* <LogoComponent /> */}
-      <Formik
-        validationSchema={loginValidationSchema}
-        initialValues={{
-          email: "",
-          password: "",
-        }}
-        onSubmit={(values) => {
-          setLoading(true);
-          dispatch(login(values));
-          setLoading(false);
-        }}
-      >
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          values,
-          errors,
-          isValid,
-        }) => (
-          <div className="form__container">
-            <p className="header">Login</p>
+      <StyledHome>
+        {/* <LogoComponent /> */}
+        <Formik
+          validationSchema={loginValidationSchema}
+          initialValues={{
+            email: "",
+            password: "",
+          }}
+          onSubmit={(values) => {
+            setLoading(true);
+            dispatch(login(values));
+            setLoading(false);
+          }}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            isValid,
+          }) => (
+            <div className="form__container">
+              <p className="header">Login</p>
 
-            <div className="form__wrapper">
-              <FormInputComponent
-                placeholder="Enter your email"
-                label="Email"
-                type="email"
-                name="email"
-                value={values.email}
-                onChange={handleChange}
-                error={errors.email}
-              />
-            </div>
-            <div className="form__wrapper">
-              <FormInputComponent
-                placeholder="Enter your Password"
-                label="Password"
-                type="password"
-                name="password"
-                value={values.password}
-                onChange={handleChange}
-                error={errors.password}
-              />
-            </div>
-            <div className="remember-me">
-              <input clasName="checkbox" type="checkbox" />
-              <span>Remember Login</span>
-            </div>
-            <div className="form__wrapper padding">
-            <MyButton
+              <div className="form__wrapper">
+                <FormInputComponent
+                  placeholder="Enter your email"
+                  label="Email"
+                  type="email"
+                  name="email"
+                  value={values.email}
+                  onChange={handleChange}
+                  error={errors.email}
+                />
+              </div>
+              <div className="form__wrapper">
+                <FormInputComponent
+                  placeholder="Enter your Password"
+                  label="Password"
+                  type="password"
+                  name="password"
+                  value={values.password}
+                  onChange={handleChange}
+                  error={errors.password}
+                />
+              </div>
+              <div className="form__wrapper">
+                <Checkbox
+                  isChecked={isChecked}
+                  onChangeFunction={onChangeCheckbox}
+                />
+                <span className="span_text">
+                  Do you want to remember me?
+                </span>
+              </div>
+              <div className="form__wrapper padding">
+                <MyButton
                   type="submit"
                   value="Create Budget"
                   className="form__button"
                   disabled={!isValid}
                   onClick={handleSubmit}
                 >
-                  {loading ? (
-                    <ClipLoader color="white" size="40px" />
-                  ) : (
-                    "Login"
-                  )}
+                  {loading ? <ClipLoader color="white" size="40px" /> : "Login"}
                 </MyButton>
+              </div>
+              <div>
+                <Link to="/forgotPassword">
+                  <p className="text-center"> Forgot Password</p>
+                </Link>
+              </div>
+              <div>
+                <p className="bottom__text">
+                  Don't have an account ?
+                  <span>
+                    <Link to="/register" className="to-register">
+                      {" "}
+                      Create An Account
+                    </Link>{" "}
+                  </span>
+                </p>
+              </div>
             </div>
-            <div>
-              <Link to="/forgotPassword">
-                <p className="text-center"> Forgot Password</p>
-              </Link>
-            </div>
-            <div>
-              <p className="bottom__text">
-                Don't have an account ?
-                <span>
-                  <Link to="/register" className="to-register">
-                    {" "}
-                    Create An Account
-                  </Link>{" "}
-                </span>
-              </p>
-            </div>
-          </div>
-        )}
-      </Formik>
-    </StyledHome>
+          )}
+        </Formik>
+      </StyledHome>
     </Layout>
   );
 };
@@ -131,15 +136,20 @@ const StyledHome = styled.div`
   .form__container {
     display: flex;
     flex-direction: column;
+    margin-top: 20px;
     align-items: center;
     justify-content: center;
     width: 500px;
     border: 1px solid #e6e6e6;
+    
     @media (max-width: 768px) {
       width: 100%;
       padding: 20px;
+      /* border:none; */
+      margin-top: 70px;
     }
   }
+  
   .header {
     font-style: normal;
     font-weight: 700;
@@ -170,14 +180,13 @@ const StyledHome = styled.div`
     text-align: center;
     color: rgba(0, 156, 244, 1);
   }
-  
-  
-  .remember-me{
+
+  .remember-me {
     margin-left: 0px;
-    gap:15px;
+    gap: 15px;
     padding: 10px;
-    align-self:baseline;
-    margin-left:30px;
+    align-self: baseline;
+    margin-left: 30px;
     @media (max-width: 768px) {
       margin-left: 0px;
       justify-content: center;
@@ -185,5 +194,4 @@ const StyledHome = styled.div`
       align-self: center;
     }
   }
-
 `;

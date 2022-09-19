@@ -2,15 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import Layout from "../../components/dashboardSidebar/Layout";
 import PageTitle from "../../components/PageTitle";
-import User from "./index";
+import ChangePassword from "./changePassword";
 
 const Home = () => {
   return (
     <Layout>
       <StyledHome>
-        <PageTitle title="Profile" />
+        <PageTitle title="Change password" />
           <div className="form__container">
-            <User />
+            <ChangePassword />
           </div>
       </StyledHome>
     </Layout>

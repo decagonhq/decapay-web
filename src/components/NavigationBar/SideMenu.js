@@ -1,9 +1,9 @@
 import React from "react";
-import styled from "styled-components";
 import MenuItem from "./MenuItem";
 import Logo from "../LogoComponent";
 import GetStarted from "./GetStarted";
 
+import styled from 'styled-components';
 const SidebarDemo = () => {
 
   return (
@@ -36,6 +36,7 @@ const SidebarDemo = () => {
 
 export default SidebarDemo;
 
+
 const MenuStyle = styled.div`
   /* width: 15rem ; */
   font-family: "Sofia Pro";
@@ -45,7 +46,7 @@ const MenuStyle = styled.div`
   background: #FFFFFF;
   /* background: #B2BEB5; */
   display: flex;
-  /* box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); */
+
   ::-webkit-scrollbar {
     display: none;
   }

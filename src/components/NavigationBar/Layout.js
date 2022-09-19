@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import SideMenu from "./SideMenu";
 import SideNav from "./SideNav";
@@ -12,6 +12,21 @@ const Layout = ({ children, hasBackground }) => {
   const handleShow = (group) => {
     setGroup(group);
   };
+
+  const ref = useRef(null);
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside, true);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  });
 
   return (
     <Wrapper
@@ -27,7 +42,7 @@ const Layout = ({ children, hasBackground }) => {
         <div className="burger">
           <SideNav handleShow={handleShow} open={open} setOpen={setOpen} />
           <div className="content">{children}</div>
-          <Burger open={open} setOpen={setOpen} />
+          <Burger  open={open} setOpen={setOpen} />
         </div>
       )}
 
@@ -50,20 +65,20 @@ const Wrapper = styled.div`
   }
 
   .content {
-    margin-top: 20px;
+    position:absolute;
+    width:100%;
   }
   @media only screen and (max-width: 768px) {
     .burger {
       display: flex;
       justify-content: space-between;
       padding: 5px 25px;
-      opacity: 1;
+      margin-left: -25px;
+      /* make it stay topmost */
+      z-index: 100000;
     }
     .large {
       display: none;
-    }
-    .content {
-      margin-top: 0;
     }
   }
 `;

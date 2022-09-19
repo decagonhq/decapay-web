@@ -10,12 +10,6 @@ const Index = () => {
   const [currentTableData, setCurrentTableData] = useState([]);
   const [idOfBudget, setIdOfBudget] = useState(-1);
 
-  const headers = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
-  };
   const ref = useRef(null);
   useEffect(() => {
     fetchData();
@@ -24,8 +18,7 @@ const Index = () => {
   const fetchData = async () => {
     try {
       const response = await request.get(
-        `budgets?size=10&page=1&state=current`,
-        headers
+        `budgets?size=10&page=1&state=current`
       );
       setCurrentTableData(response.data.data.content);
     } catch (error) {
@@ -75,12 +68,12 @@ const Index = () => {
         {/* Custom table starts here */}
         <div className="category-container">
           <div className="category ">
-            <p className="category-title">Budget title</p>
-            <p className="category-title">Period</p>
-            <p className="category-title">Amount</p>
-            <p className="category-title">Amount spent</p>
-            <p className="category-title">Percentage spent</p>
-            <p className="category-title">Action</p>
+            <p className="category-text">Budget title</p>
+            <p className="category-text">Period</p>
+            <p className="category-text">Amount</p>
+            <p className="category-text">Amount spent</p>
+            <p className="category-text">Percentage spent</p>
+            <p className="category-text">Action</p>
           </div>
           {currentTableData !== null && currentTableData?.length > 0 ? (
             currentTableData.map((item, index) => (
@@ -91,19 +84,19 @@ const Index = () => {
                       replace: true,
                     })
                   }
-                  className="category-title"
+                  className="category-text"
                   style={{
                     cursor: "pointer",
                   }}
                 >
                   {item.title}
                 </p>
-                <p className="category-title">{item.period}</p>
-                <p className="category-title">{item.displayProjectedAmount}</p>
-                <p className="category-title">
+                <p className="category-text">{item.period}</p>
+                <p className="category-text">{item.displayProjectedAmount}</p>
+                <p className="category-text">
                   {item.displayTotalAmountSpentSoFar}
                 </p>
-                <p className="category-title">
+                <p className="category-text">
                   {item.displayPercentageSpentSoFar}
                 </p>
                 <p
@@ -370,16 +363,43 @@ const BudgetSyle = styled.div`
     cursor: "pointer";
     font-weight: "bold";
   }
+  @media only screen and (max-width: 1280px) {
+    .category {
+      margin-bottom: 10px;
+    }
+    .category-text {
+      font-size: 12px;
+    }
+  }
   @media only screen and (max-width: 990px) {
     .category {
       padding: 5px 8px;
       height: 100px;
     }
   }
+  @media only screen and (max-width: 768px) {
+    .category {
+      height: 75px;
+    }
+  }
+  @media only screen and (max-width: 540px) {
+    .category {
+      height: 70px;
+    }
+    .category-text {
+      font-size: 10px;
+    }
+  }
+
+  @media only screen and (max-width: 411px) {
+    .category {
+      height: 40px;
+    }
+  }
   @media only screen and (max-width: 487px) {
     .category {
       padding: 4px;
-      height: 150px;
+      height: 50px;
       font-size: 1rem;
     }
     .dots {

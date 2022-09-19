@@ -57,12 +57,7 @@ const Index = () => {
   function handleSelect(date) {
     setCalendar(format(date, dateFormats2));
   }
-  const headers = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
-  };
+
   // const [editLineItemPayload, setEditLineItemPayload] = useState({});
   const [collectData, setCollectData] = useState({
     budgetCategoryId: "",
@@ -106,8 +101,7 @@ const Index = () => {
     try {
       const response = await request.post(
         `budgets/${id}/lineItems/${getCategordId}/expenses`,
-        payload,
-        headers
+        payload
       );
       setLoading(false);
       setCreateLogExpense(initLogData());
@@ -131,7 +125,7 @@ const Index = () => {
 
   const fetchCategory = async () => {
     try {
-      const response = await request.get(`budget_categories`, headers);
+      const response = await request.get(`budget_categories`);
       let res = response?.data?.data;
       if (res.length > 0) {
         let options = res?.map((category) => {
@@ -178,11 +172,7 @@ const Index = () => {
     };
     console.log(payload);
     try {
-      const response = await request.post(
-        `budgets/${id}/lineItems`,
-        payload,
-        headers
-      );
+      const response = await request.post(`budgets/${id}/lineItems`, payload);
       setCreateLineModal(false);
       toast.success(response.data.message, {
         autoClose: 3000,
@@ -217,7 +207,7 @@ const Index = () => {
 
   const fetchData = async () => {
     try {
-      const response = await request.get(`budgets/${id}`, headers);
+      const response = await request.get(`budgets/${id}`);
       setData(response.data.data);
       let remoteStartDate = response.data.data.startDate;
       let remoteEndDate = response.data.data.endDate;
@@ -269,8 +259,7 @@ const Index = () => {
     try {
       const response = await request.put(
         `budgets/${id}/lineItems/${categoryId}`,
-        newPayload,
-        headers
+        newPayload
       );
       fetchData();
       toast.success(response.data.message, {
@@ -290,8 +279,7 @@ const Index = () => {
   const handleDeleteItem = async () => {
     try {
       const response = await request.delete(
-        `budgets/${id}/lineItems/${categoryId}`,
-        headers
+        `budgets/${id}/lineItems/${categoryId}`
       );
       fetchData();
       toast.success(response.data.message, {
@@ -341,23 +329,6 @@ const Index = () => {
             Create line item
           </button>
         </PageTitle>
-        {/* <div className="header-wrapper">
-          <div className="header">
-            <p style={{ fontWeight: "bold", fontSize: "20px" }}>
-              Budget Detail
-            </p>
-          </div>
-          <div className="button-container">
-            <button
-              className="button"
-              onClick={() => {
-                setCreateLineModal(true);
-              }}
-            >
-              Create line item
-            </button>
-          </div>
-        </div> */}
 
         <div className="budget-summary">
           <div className="title">
@@ -400,100 +371,101 @@ const Index = () => {
             </div>
           ) : null}
         </div>
-        {data.lineItems && data?.lineItems.length > 0 ? (
-          data?.lineItems.map((item, index) => (
-            <div className="line-item-container mb-2">
-              {/* <BudgetItem log amount={item.displayProjectedAmount} soFar={item.displayTotalAmountSpentSoFar} percent={item.percentageSpentSoFar} item={item.category}/> */}
-              <div className="list--wrapper">
-                <div className="left_side">
-                  <p>Category: {item.category}</p>
-                  <p ref={projectAmountRef}>
-                    Projected amount: {item.displayProjectedAmount}
-                  </p>
-                  <p
-                    className={
-                      item.projectedAmount < item.totalAmountSpentSoFar
-                        ? "red"
-                        : ""
-                    }
+        <div className="line-items">
+          {data.lineItems && data?.lineItems.length > 0 ? (
+            data?.lineItems.map((item, index) => (
+              <div className="line-item-container mb-2">
+                {/* <BudgetItem log amount={item.displayProjectedAmount} soFar={item.displayTotalAmountSpentSoFar} percent={item.percentageSpentSoFar} item={item.category}/> */}
+                <div className="list--wrapper">
+                  <div className="left_side">
+                    <p>{item.category}</p>
+                    <p ref={projectAmountRef}>
+                      Projected amount: {item.displayProjectedAmount}
+                    </p>
+                    <p
+                      className={
+                        item.projectedAmount < item.totalAmountSpentSoFar
+                          ? "red"
+                          : ""
+                      }
+                    >
+                      Amount spent so far: {item.displayTotalAmountSpentSoFar}
+                    </p>
+                    <Link
+                      className="link"
+                      to={`/budgetDetail/expenses/?budgetId=${id}&catId=${item.categoryId}&item=${item.category}`}
+                    >
+                      View expenses
+                    </Link>
+                  </div>
+                  <div
+                    className="right_side"
+                    onClick={() => {
+                      setLogExpenseModal(true);
+                      setGetCategordId(item.categoryId);
+                    }}
                   >
-                    Amount spent so far: {item.displayTotalAmountSpentSoFar}
-                  </p>
-                  <Link
-                    className="link"
-                    to={`/budgetDetail/expenses/?budgetId=${id}&catId=${item.categoryId}&item=${item.category}`}
-                  >
-                    View expenses
-                  </Link>
-                </div>
-                <div
-                  className="right_side"
-                  onClick={() => {
-                    setLogExpenseModal(true);
-                    setGetCategordId(item.categoryId);
-                  }}
-                >
-                  <p className="log">
-                    Log{" "}
-                    <span>
-                      <FiArrowUpRight className="icon" />
-                    </span>
-                  </p>
-                  <p
-                    className={
-                      item.percentageSpentSoFar > hundredPercent
-                        ? "red"
-                        : "link"
-                    }
-                  >
-                    {item.displayPercentageSpentSoFar}
-                  </p>
-                </div>
-                <p
-                  onClick={() => openPopup(index, item.categoryId)}
-                  style={{
-                    cursor: "pointer",
-                    fontSize: "30px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  ...
-                  {idOfLineItem === index ? (
-                    <Fragment>
-                      <span ref={ref} className="popup">
-                        <p
-                          onClick={() => {
-                            setEditModal(true);
-                          }}
-                        >
-                          Edit item
-                        </p>
-                        <p
-                          onClick={() =>
-                            deleteItem(handleDeleteItem, categoryName)
-                          }
-                          style={{ color: "red" }}
-                        >
-                          Remove item
-                        </p>
+                    <p className="log">
+                      Log{" "}
+                      <span>
+                        <FiArrowUpRight className="icon" />
                       </span>
-                    </Fragment>
-                  ) : null}
-                </p>
+                    </p>
+                    <p
+                      className={
+                        item.percentageSpentSoFar > hundredPercent
+                          ? "red"
+                          : "link"
+                      }
+                    >
+                      {item.displayPercentageSpentSoFar}
+                    </p>
+                  </div>
+                  <p
+                    onClick={() => openPopup(index, item.categoryId)}
+                    style={{
+                      cursor: "pointer",
+                      fontSize: "30px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    ...
+                    {idOfLineItem === index ? (
+                      <Fragment>
+                        <span ref={ref} className="popup">
+                          <p
+                            onClick={() => {
+                              setEditModal(true);
+                            }}
+                          >
+                            Edit item
+                          </p>
+                          <p
+                            onClick={() =>
+                              deleteItem(handleDeleteItem, categoryName)
+                            }
+                            style={{ color: "red" }}
+                          >
+                            Remove item
+                          </p>
+                        </span>
+                      </Fragment>
+                    ) : null}
+                  </p>
+                </div>
               </div>
+            ))
+          ) : (
+            <div className="empty">
+              <img
+                className="empty-img"
+                src="/images/empty-img.svg"
+                alt="empty"
+              />
+              <p>No line item found in the budget</p>
             </div>
-          ))
-        ) : (
-          <div className="empty">
-            <img
-              className="empty-img"
-              src="/images/empty-img.svg"
-              alt="empty"
-            />
-            <p>No line item found in the budget</p>
-          </div>
-        )}
-
+          )}
+        </div>
         {/* <Button>+ Create Budget</Button> */}
         {createLineModal && (
           <FormModal>
@@ -706,6 +678,11 @@ const DetailStyle = styled.div`
       background: #14a800;
     }
   }
+  @media only screen and (max-width: 379px) {
+    .line-items {
+      margin-top: 100px;
+    }
+  }
   .line-item-container {
     font-family: "Sofia Pro";
     padding: 5px;
@@ -713,10 +690,10 @@ const DetailStyle = styled.div`
     height: 108px;
     background: rgba(0, 156, 244, 0.05);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.04);
-
-    @media only screen and (max-width: 379px) {
+    @media only screen and (max-width: 360px) {
       height: 180px;
     }
+
     @media only screen and (max-width: 299px) {
       height: 200px;
     }

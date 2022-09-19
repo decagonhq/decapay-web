@@ -7,8 +7,6 @@ import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
 import PageTitle from "../../components/PageTitle";
 
-// import { useFormik } from "formik";
-// import * as yup from "yup";
 
 const BudgetCategory = () => {
   const [idOfBudget, setIdOfBudget] = useState(-1);
@@ -29,12 +27,6 @@ const BudgetCategory = () => {
     }
   };
 
-  const headers = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + localStorage.getItem("token"),
-    },
-  };
   const onSubmit = async () => {
     console.log(category);
     let payload = {
@@ -44,7 +36,6 @@ const BudgetCategory = () => {
       const response = await request.post(
         `budget_categories`,
         payload,
-        headers
       );
       setCreateModal(false);
       toast.success(response.data.message);
@@ -64,7 +55,7 @@ const BudgetCategory = () => {
       const response = await request.put(
         `budget_categories/${editCategory.id}`,
         payload,
-        headers
+        // headers
       );
       setEditModal(false);
       toast.success(response.data.message);
@@ -95,7 +86,7 @@ const BudgetCategory = () => {
 
   const fetchData = async () => {
     try {
-      const response = await request.get(`budget_categories`, headers);
+      const response = await request.get(`budget_categories`);
       setData(response.data.data);
     } catch (error) {
       console.log(error);
@@ -119,19 +110,6 @@ const BudgetCategory = () => {
             Create category
           </button>
         </PageTitle>
-
-        {/* <div className="header-wrapper">
-          <div className="header">
-            <p style={{ fontWeight: "bold", fontSize: "20px" }}>
-              Budget category
-            </p>
-          </div>
-          <div className="button-container">
-            <button onClick={() => setCreateModal(true)}>
-              Create budget category
-            </button>
-          </div>
-        </div> */}
         <div className="category-container">
           {data && data.length > 0 ? (
             data.map((item, index) => (
@@ -252,6 +230,14 @@ const ListStyle = styled.div`
     display: flex;
     justify-content: space-between;
     font-size: 16px;
+  }
+  @media only screen and (max-width: 1280px) {
+    .category {
+      margin-bottom: 10px;
+    }
+    .category-text {
+      font-size: 12px;
+    }
   }
   button {
     color: white;

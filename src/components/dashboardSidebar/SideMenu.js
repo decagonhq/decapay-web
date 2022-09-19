@@ -5,6 +5,7 @@ import { MdOutlineLogout } from "react-icons/md";
 import { TbLayoutDashboard } from "react-icons/tb";
 import { AiOutlineDollar } from "react-icons/ai";
 import { MdListAlt } from "react-icons/md";
+import {RiLockPasswordLine} from "react-icons/ri";
 import {CgProfile} from "react-icons/cg";
 import Logo from "../LogoComponent";
 import request from "../../utils/apiHelper";
@@ -15,6 +16,7 @@ const SidebarDemo = () => {
   const [budgetActive, setBudgetActive] = useState(false);
   const [catActive, setCatActive] = useState(false);
   const [viewProfileActive, setViewProfileActive] = useState(false);
+  const [changePasswordActive, setChangePasswordActive] = useState(false);
 
   const logout = async () => {
     let token = localStorage.getItem("token");
@@ -22,12 +24,7 @@ const SidebarDemo = () => {
       token: token,
     };
     try {
-      await request.post("signout", payload, {
-        headers: {
-          DVC_KY_HDR: 2,
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await request.post("signout", payload);
       localStorage.clear();
       window.location.href = `/login`;
       toast.success("Logout successful");
@@ -48,6 +45,8 @@ const SidebarDemo = () => {
       setCatActive(true);
     } else if (page === "myProfile") {
       setViewProfileActive(true);
+    } else if (page === "changePassword") {
+      setChangePasswordActive(true);
     }
   }, [page, homeActive, budgetActive, catActive]);
 
@@ -81,6 +80,12 @@ const SidebarDemo = () => {
           Icon={CgProfile}
           to="/myProfile"
           active={viewProfileActive}
+        />
+         <MenuItem
+          label="Change Password"
+          Icon={RiLockPasswordLine}
+          to="/changePassword"
+          active={changePasswordActive}
         />
         <div className="logout">
           <MdOutlineLogout />
