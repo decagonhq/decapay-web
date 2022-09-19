@@ -9,10 +9,13 @@ const TitleCard = ({ title, amount, startDate, endDate, period }) => {
           <p className="bg-title-amount">{title}</p>
           <p className="bg-title-amount">{amount}</p>
         </div>
-        <div>
+        <div className="detail-wrapper">
           <p className="bg-title transform">Budget Period: {period}</p>
           <p className="bg-title">Start Date: {startDate}</p>
           <p className="bg-title">End Date: {endDate}</p>
+        </div>
+        <div className="detail-wrapper__mobile">
+          <p className="bg-title">{startDate}-{endDate}</p>
         </div>
       </div>
     </ListStyle>
@@ -35,8 +38,9 @@ const ListStyle = styled.div`
     align-items: center;
     margin-bottom: -20px;
   }
-  
-  
+  .detail-wrapper__mobile{
+    display:none;
+  }
   @media only screen and (max-width: 991px) {
     padding: 20px;
 
@@ -52,9 +56,31 @@ const ListStyle = styled.div`
       line-height: 0.6;
     }
   }
+ 
   @media only screen and (max-width: 299px) {
   }
+  @media only screen and (max-width: 459px) {
+    .title-wrapper {
+      display: flex;
+      flex-direction: column;
 
+    }
+    .period{
+      display:none;
+    }
+    .bg-title {
+      line-height: 1;
+    }
+    .bg-title-amount {
+      line-height: 1;
+    }
+    .detail-wrapper{
+      display:none;
+    }
+    .detail-wrapper__mobile{
+      display:block;
+    }
+  }
   .bg-title {
     font-family: "Sofia Pro";
     font-style: normal;

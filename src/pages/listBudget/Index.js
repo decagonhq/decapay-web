@@ -13,7 +13,6 @@ import FormSelectComponent from "../../components/selectComponent";
 // import { Link } from "react-router-dom";
 import { hundredPercent } from "../../constants";
 
-
 let pageSize = 6;
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -82,9 +81,9 @@ const Index = () => {
       <BudgetSyle>
         <div className="header-wrapper">
           <div className="">
-            <p style={{ fontWeight: "bold", fontSize: "20px" }}>Budget List</p>
+            <p className="title">Budget List</p>
           </div>
-          <div style={{ width: "20%" }}>
+          <div className="search">
             <FormSelectComponent
               name="year"
               options={stateOptions}
@@ -109,13 +108,13 @@ const Index = () => {
 
         {/* Custom table starts here */}
         <div className="category-container">
-          <div className="category ">
-            <p className="category-title">Budget title</p>
-            <p className="category-title">Period</p>
-            <p className="category-title">Amount</p>
-            <p className="category-title">Amount spent</p>
-            <p className="category-title">Percentage spent</p>
-            <p className="category-title">Action</p>
+          <div className="category category-text">
+            <p className="category-text">Budget title</p>
+            <p className="category-text">Period</p>
+            <p className="category-text">Amount</p>
+            <p className="category-text">Amount spent</p>
+            <p className="category-text">Percentage spent</p>
+            <p className="category-text">Action</p>
           </div>
           {currentTableData !== null && currentTableData?.length > 0 ? (
             currentTableData.map((item, index) => (
@@ -126,20 +125,20 @@ const Index = () => {
                       replace: true,
                     })
                   }
-                  className="category-title"
+                  className="category-text"
                   style={{
                     cursor: "pointer",
                   }}
                 >
                   {item.title}
                 </p>
-                <p className="category-title">{item.period}</p>
-                <p className="category-title">{item.displayProjectedAmount}</p>
+                <p className="category-text">{item.period}</p>
+                <p className="category-text">{item.displayProjectedAmount}</p>
                 <p
                   className={
                     item.totalAmountSpentSoFar > item.projectedAmount
-                      ? "category-title red"
-                      : "category-title"
+                      ? "category-text red"
+                      : "category-text"
                   }
                 >
                   {item.displayTotalAmountSpentSoFar}
@@ -147,8 +146,8 @@ const Index = () => {
                 <p
                   className={
                     item?.percentageSpentSoFar > hundredPercent
-                      ? "category-title red"
-                      : "category-title"
+                      ? "category-text red"
+                      : "category-text"
                   }
                 >
                   {item.displayPercentageSpentSoFar}
@@ -368,6 +367,21 @@ const BudgetSyle = styled.div`
     justify-content: space-between;
     padding: 1rem;
   }
+  .title {
+    font-weight: bold;
+    font-size: 20px;
+  }
+  @media only screen and (max-width: 412px) {
+    .header-wrapper {
+      flex-direction: column;
+    }
+    .button-container {
+      width: 100%;
+      button {
+        width: 100%;
+      }
+    }
+  }
   button {
     color: white;
     text-decoration: none;
@@ -429,16 +443,43 @@ const BudgetSyle = styled.div`
     cursor: "pointer";
     font-weight: "bold";
   }
+  @media only screen and (max-width: 1280px) {
+    .category {
+      margin-bottom: 10px;
+    }
+    .category-text {
+      font-size: 12px;
+    }
+  }
   @media only screen and (max-width: 990px) {
     .category {
       padding: 5px 8px;
       height: 100px;
     }
   }
+  @media only screen and (max-width: 768px) {
+    .category {
+      height: 75px;
+    }
+  }
+  @media only screen and (max-width: 540px) {
+    .category {
+      height: 70px;
+    }
+    .category-text {
+      font-size: 10px;
+    }
+  }
+
+  @media only screen and (max-width: 411px) {
+    .category {
+      height: 40px;
+    }
+  }
   @media only screen and (max-width: 487px) {
     .category {
       padding: 4px;
-      height: 150px;
+      height: 50px;
       font-size: 1rem;
     }
     .dots {

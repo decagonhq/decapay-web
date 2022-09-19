@@ -1,8 +1,9 @@
 import React from "react";
-import styled from "styled-components";
+import styled,{keyframes} from "styled-components";
 import MenuItem from "./MenuItem";
 import Logo from "../LogoComponent";
 import GetStarted from "./GetStarted";
+import {slideInLeft} from 'react-animations';
 
 const SidebarDemo = () => {
 
@@ -11,7 +12,7 @@ const SidebarDemo = () => {
     <MenuStyle>
         <div className="menu--wrapper">
           <Logo />
-          <MenuItem label="Home" to="/home"  />
+          <MenuItem label="Home" to="/"  />
           <MenuItem
             // key={index}
             label={"How it works"}
@@ -32,20 +33,24 @@ const SidebarDemo = () => {
 
 export default SidebarDemo;
 
+const slideInLeftAnimation = keyframes`${slideInLeft}`;
 const MenuStyle = styled.div`
+opacity:10000;
   /* width: 15rem ; */
   font-family: "Sofia Pro";
   height: 100vh;
   padding: 5px;
   width: 150px;
-  /* background: #B2BEB5; */
   background: #FFFFFF;
   display: flex;
   justify-content:center;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  z-index: 100000;
+  animation: 1s ${slideInLeftAnimation};
   ::-webkit-scrollbar {
     display: none;
   }
+
   .menu--wrapper {
     margin-top: 20px;
     box-sizing: border-box;
@@ -54,6 +59,7 @@ const MenuStyle = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 50px;
+    
   }
   .get-started{
     background:#14A800;
