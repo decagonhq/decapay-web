@@ -54,13 +54,11 @@ const Home = () => {
   const getUser = async () => {
     try {
       const response = await request.get(`user`);
-      let promisefulfilled = response.data.data;
-      console.log(promisefulfilled);
-      console.log(promisefulfilled);
-      formik.setFieldValue("firstName", promisefulfilled.firstName);
-      formik.setFieldValue("lastName", promisefulfilled.lastName);
-      formik.setFieldValue("email", promisefulfilled.email);
-      formik.setFieldValue("phoneNumber", promisefulfilled.phoneNumber);
+      let promiseFulfilled = response.data.data;
+      formik.setFieldValue("firstName", promiseFulfilled.firstName);
+      formik.setFieldValue("lastName", promiseFulfilled.lastName);
+      formik.setFieldValue("email", promiseFulfilled.email);
+      formik.setFieldValue("phoneNumber", promiseFulfilled.phoneNumber);
       
     } catch (error) {
       toast.error(error, {
