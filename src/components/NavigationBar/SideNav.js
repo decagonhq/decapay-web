@@ -12,7 +12,7 @@ const SidebarDemo = () => {
     <MenuStyle>
         <div className="menu--wrapper">
           <Logo />
-          <MenuItem label="Home" to="/home"  />
+          <MenuItem label="Home" to="/"  />
           <MenuItem
             // key={index}
             label={"How it works"}

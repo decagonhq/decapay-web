@@ -66,7 +66,7 @@ font-family:"Sofia Pro";
     color: white;
   }
   .text-inactive {
-    color: #8e919c;
+    color: #202020;
   }
 `;
 
