@@ -19,6 +19,7 @@ import UserProfile from "./pages/userProfile/userProfile";
 import ChangePassword from "./pages/changePassword/index";
 import ErrorPage from "./pages/erroHandler/ErrorPage";
 import ErrorBoundary from "./pages/erroHandler/ErrorBoundary";
+import "./App.css";
 
 
 function App() {

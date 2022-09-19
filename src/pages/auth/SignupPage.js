@@ -282,7 +282,6 @@ const StyledHome = styled.div`
   font-family: "Sofia Pro";
   display: flex;
   flex-direction: column;
-  background: rgba(20, 168, 0, 0.03);
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
