@@ -4,8 +4,6 @@ import Button from "../../components/Button";
 import FormInputComponent from "../../components/InputComponent";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useDispatch } from "react-redux";
-import registerUser from "../../redux/actions/auth/signup.action";
 import ClipLoader from "react-spinners/ClipLoader";
 import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
@@ -34,8 +32,6 @@ const Home = () => {
   // eslint-disable-next-line
   const [disabled, setDisabled] = useState(true);
 // console.log(countryOptions);
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     // eslint-disable-next-line
@@ -67,10 +63,25 @@ const Home = () => {
       });
     }
   };
+  const updatePofile = async (values) => {
+    try {
+      const response = await request.put(`profile`, values);
+      let promiseFulfilled = response.data;
+      toast.success(promiseFulfilled.message, {
+        autoClose: 2000,
+        onClose: dismissToast,
+      });
+    } catch (error) {
+      toast.error(error, {
+        autoClose: 2000,
+        onClose: dismissToast,
+      });
+    }
+  };
   const onSubmit = (values) => {
     setLoading(true);
+    updatePofile(values);
     delete values.confirmPassword;
-    dispatch(registerUser(values));
     setLoading(false);
   };
 
@@ -78,6 +89,7 @@ const Home = () => {
     initialValues,
     validationSchema,
     onSubmit,
+    
   });
 
   return (
@@ -134,7 +146,12 @@ const Home = () => {
                 </div>
               </div>
               <div className="form__wrapper padding">
-                <Button disabled={disabled} onClick={formik.handleSubmit} type="submit">
+                <Button disabled={
+                  formik.errors.firstName ||
+                  formik.errors.lastName ||
+                  formik.errors.email ||
+                  formik.errors.phoneNumber
+                    ? true: false}  onClick={formik.handleSubmit} type="submit">
                   {loading ? <ClipLoader color="white" size="40px" /> : "Save"}
                 </Button>
               </div>
