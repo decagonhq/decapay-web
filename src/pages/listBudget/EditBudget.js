@@ -233,7 +233,7 @@ const EditBudget = ({ closeModal, id, title }) => {
             onChange={(e) => {
               handleSelect(e, "period");
             }}
-            placeholder={"Select Frequency"}
+            placeholder={"Select Period"}
           />
         </div>
         {collectData.period === ANNUAL && (
