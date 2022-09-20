@@ -57,7 +57,7 @@ const Home = () => {
       formik.setFieldValue("phoneNumber", promiseFulfilled.phoneNumber);
       
     } catch (error) {
-      toast.error(error, {
+      toast.error(error.response.data.message, {
         autoClose: 3000,
         onClose: dismissToast,
       });
@@ -81,7 +81,6 @@ const Home = () => {
   const onSubmit = (values) => {
     setLoading(true);
     updatePofile(values);
-    delete values.confirmPassword;
     setLoading(false);
   };
 
