@@ -1,20 +1,21 @@
 # Getting Started with Project Decapay
 this git repo contains the web version of the Decapay app. The app is built using React and is hosted on Netlify. The app is currently live in  production at: [https://decapay.netlify.app/](https://decapay.netlify.app/).
 
-### libraries Used
-Redux 
-React-Router
-Styled-Components
-axios
-formik
-yup
-React-Icons
-React-Toastify
-currency-formatter
-react-datepicker
-moments
-date-fns
-react-spinners
+### Libraries Used
+- Redux for state management
+- React-Router for routing
+- Styled-Components for styling
+- axios
+- formik
+- yup
+- React-Icons
+- React-Toastify
+- currency-formatter
+- react-datepicker
+- moments
+- date-fns
+- react-spinners
+
 
 
 ## Available Scripts
@@ -23,7 +24,7 @@ In the project directory, you can run:
 ### `npm install`
 to install all the dependencies
 
-#### create a .env file in the root directory and add the following
+#### create an .env file in the root directory and add the following
 REACT_APP_API_URL=https://decapay.net/api/v1/
 
 ### `npm start`
