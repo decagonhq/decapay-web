@@ -228,7 +228,7 @@ const CreateBudget = ({ closeModal }) => {
                   options={Options}
                   name="period"
                   className="select"
-                  placeholder="Select Frequency"
+                  placeholder="Select Period"
                   error={errors.period}
                   value={values.period}
                   onChange={(e) => {
