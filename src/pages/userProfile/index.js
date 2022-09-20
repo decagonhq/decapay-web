@@ -53,7 +53,7 @@ const Home = () => {
   };
   const getUser = async () => {
     try {
-      const response = await request.get(`user`);
+      const response = await request.get(`profile`);
       let promiseFulfilled = response.data.data;
       formik.setFieldValue("firstName", promiseFulfilled.firstName);
       formik.setFieldValue("lastName", promiseFulfilled.lastName);
