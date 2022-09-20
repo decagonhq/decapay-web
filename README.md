@@ -23,6 +23,9 @@ In the project directory, you can run:
 ### `npm install`
 to install all the dependencies
 
+#### create a .env file in the root directory and add the following
+REACT_APP_API_URL=https://decapay.net/api/v1/
+
 ### `npm start`
 
 Runs the app in the development mode.\
