@@ -2,19 +2,20 @@
 this git repo contains the web version of the Decapay app. The app is built using React and is hosted on Netlify. The app is currently live in  production at: [https://decapay.netlify.app/](https://decapay.netlify.app/).
 
 ### Libraries Used
-Redux 
-React-Router
-Styled-Components
-axios
-formik
-yup
-React-Icons
-React-Toastify
-currency-formatter
-react-datepicker
-moments
-date-fns
-react-spinners
+- Redux for state management
+- React-Router for routing
+- Styled-Components for styling
+- axios
+- formik
+- yup
+- React-Icons
+- React-Toastify
+- currency-formatter
+- react-datepicker
+- moments
+- date-fns
+- react-spinners
+
 
 
 ## Available Scripts
