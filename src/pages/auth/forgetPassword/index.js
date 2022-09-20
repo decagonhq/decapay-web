@@ -7,6 +7,7 @@ import LogoComponent from "../../../components/LogoComponent";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import forgotPassword from "../../../redux/actions/auth/forgotPassword.action";
 
 function ForgotPassword() {
@@ -64,7 +65,11 @@ function ForgotPassword() {
                 onClick={handleSubmit}
               >Reset Password</Button>
             </div>
-            <div></div>
+            <div>
+              <p className="text">Already have an account?   
+                <Link to="/login" className="link"> Login</Link>
+              </p>  
+            </div>
           </div>
         )}
       </Formik>
