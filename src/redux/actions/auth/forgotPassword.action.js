@@ -37,7 +37,7 @@ const forgotPassword = (payload) => async (dispatch) => {
           });
         return dispatch(forgotPasswordSuccess(res.data));
     } catch (error) {
-        toast.error(error.response.data.message, {
+        toast.error(error.message, {
             autoClose: 3000,
             onClose: dismissToast,
           });

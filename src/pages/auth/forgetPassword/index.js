@@ -9,70 +9,87 @@ import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import forgotPassword from "../../../redux/actions/auth/forgotPassword.action";
+import SubmitSuccess from "../../../components/SubmitSuccess";
 
 function ForgotPassword() {
+  
   const forgotPasswordValidationSchema = yup.object().shape({
     email: yup
       .string()
       .email("Please enter valid email")
       .required("Email Address is Required"),
   });
-  const { loading } = useSelector((state) => state.forgotPassword);
-  const dispatch = useDispatch();
+
+  const { loading, isSubmitSuccessful } = useSelector((state) => state.forgotPassword);
   
+  const dispatch = useDispatch();
+
   return (
     <StyledHome>
       <LogoComponent />
-      <Formik
-        validationSchema={forgotPasswordValidationSchema}
-        initialValues={{
-          email: "",
-        }}
-        onSubmit={
-          (values) => {
-            console.log(values);
+      {!isSubmitSuccessful ? (
+        <Formik
+          validationSchema={forgotPasswordValidationSchema}
+          initialValues={{
+            email: "",
+          }}
+          onSubmit={(values) => {
+            // console.log(values);
             dispatch(forgotPassword(values));
-          }   
-        }
-      >
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          values,
-          errors,
-          isValid,
-        }) => (
-          <div className="form__container">
-            <p className="header">Forgot Password</p>
+          }}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            isValid,
+          }) => (
+            <div className="form__container">
+              <p className="header">Forgot Password</p>
 
-            <div className="form__wrapper">
-              <FormInputComponent
-                placeholder="Enter your email"
-                label="Email"
-                type="email"
-                name="email"
-                value={values.email}
-                onChange={handleChange}
-                error={errors.email}
-              />
-            </div>
+              <div className="form__wrapper">
+                <FormInputComponent
+                  placeholder="Enter your email"
+                  label="Email"
+                  type="email"
+                  name="email"
+                  value={values.email}
+                  onChange={handleChange}
+                  error={errors.email}
+                />
+              </div>
 
-            <div className="form__wrapper padding">
-              <Button type="submit"
-                disabled={!isValid}
-                loading={loading}
-                onClick={handleSubmit}
-              >Reset Password</Button>
+              <div className="form__wrapper padding">
+                <Button
+                  type="submit"
+                  disabled={!isValid}
+                  loading={loading}
+                  onClick={handleSubmit}
+                >
+                  Reset Password
+                </Button>
+              </div>
+              <div>
+                <p className="text">
+                  Already have an account?
+                  <Link to="/login" className="link">
+                    {" "}
+                    Login
+                  </Link>
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text">Already have an account?   
-                <Link to="/login" className="link"> Login</Link>
-              </p>  
-            </div>
-          </div>
-        )}
-      </Formik>
+          )}
+        </Formik>
+      ) : (
+        <div className="success-div">
+          <SubmitSuccess message={
+            "An email with a link to reset your password has been sent to your email."
+          } />
+        </div>
+      )}
     </StyledHome>
   );
 }
@@ -150,5 +167,12 @@ const StyledHome = styled.div`
   .remember-me input {
     width: 30px;
     height: 50px;
+  }
+  .success-div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 70vh;
   }
 `;
