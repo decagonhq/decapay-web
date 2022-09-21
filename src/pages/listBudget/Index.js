@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import FormSelectComponent from "../../components/selectComponent";
 // import { Link } from "react-router-dom";
 import { hundredPercent } from "../../constants";
+import DynamicTitle from "../../components/DynamicTitle";
 
 let pageSize = 6;
 const Index = () => {
@@ -79,6 +80,7 @@ const Index = () => {
   return (
     <Layout>
       <BudgetSyle>
+        <DynamicTitle title="Budgets" />
         <div className="header-wrapper">
           <div className="">
             <p className="title">Budget List</p>

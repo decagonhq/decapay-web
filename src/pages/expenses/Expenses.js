@@ -12,6 +12,8 @@ import Goback from "../../components/Goback";
 import useDialog from "../../hooks/useDialog";
 import FormInputComponent from "../../components/InputComponent";
 import DatePicker from "react-datepicker";
+import DynamicTitle from "../../components/DynamicTitle";
+
 import moment from "moment";
 import {
   toNumber,
@@ -33,20 +35,19 @@ const BudgetCategory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [editData, setEditData] = useState({});
 
-
   const submitEditData = async (event) => {
     event.preventDefault();
     setLoading(true);
     let payload = {
-      amount: toNumber(editData.amount),
+      amount:
+        typeof editData.amount === "number"
+          ? editData.amount
+          : toNumber(editData.amount),
       description: editData.description,
       transactionDate: moment(editData.transactionDate).format(dateFormats),
     };
     try {
-      const response = await request.put(
-        `expenses/${editData.id}`,
-        payload
-      );
+      const response = await request.put(`expenses/${editData.id}`, payload);
       setLoading(false);
       toast.success(response.data.message, {
         autoClose: 3000,
@@ -142,6 +143,7 @@ const BudgetCategory = () => {
 
   return (
     <Layout>
+      <DynamicTitle title="Expenses" />
       <ListStyle>
         <div className="goback">
           {" "}
@@ -410,7 +412,7 @@ const ListStyle = styled.div`
       height: 100px;
     }
   }
- 
+
   .form__wrapper {
     width: 100%;
     border-radius: 5px;

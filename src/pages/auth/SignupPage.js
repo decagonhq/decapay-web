@@ -259,7 +259,7 @@ const Home = () => {
               )}
             </div>
             <div className="form__wrapper padding">
-              <Button  onClick={formik.handleSubmit} type="submit">
+              <Button className="form__button"  onClick={formik.handleSubmit} type="submit">
                 {loading ? <ClipLoader color="white" size="40px" /> : "Sign Up"}
               </Button>
             </div>
@@ -279,23 +279,28 @@ const Home = () => {
 };
 export default Home;
 const StyledHome = styled.div`
-  font-family: "Sofia Pro";
+  font-family: "Inter";
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
   overflow: auto;
+  padding: 20px;
   .form__container {
     display: flex;
     flex-direction: column;
     margin-top: 20px;
     align-items: center;
     justify-content: center;
-    width: 600px;
+    width: 500px;
     border: 1px solid #e6e6e6;
+    
     @media (max-width: 768px) {
       width: 100%;
+      padding: 20px;
+      /* border:none; */
+      margin-top: 70px;
     }
   }
   .header {
@@ -330,7 +335,9 @@ const StyledHome = styled.div`
     }
   }
   .padding {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    align-self: center;
+    align-items: center;
   }
   form {
     width: 100%;
@@ -354,9 +361,13 @@ const StyledHome = styled.div`
   @media only screen and (max-width: 600px) {
     .two-column {
       flex-direction: column;
+      width: 100%;
     }
     .select {
-      width: 90%;
+      width: 100%;
     }
+    .form__wrapper {
+    width: 100% !important;
+  }
   }
 `;

@@ -25,6 +25,8 @@ import moment from "moment";
 // import { dateFormats } from "../../constants";
 import { dateFormats2, dateFormats3, hundredPercent } from "../../constants";
 import format from "date-fns/format";
+import DynamicTitle from "../../components/DynamicTitle";
+
 import {
   disableDateInputFieldBasedOnStartDateToCurrentDate,
   toNumber,
@@ -307,6 +309,7 @@ const Index = () => {
 
   return (
     <Layout>
+      <DynamicTitle title={"budget detail"} />
       <DetailStyle>
         <div className="goback">
           {" "}

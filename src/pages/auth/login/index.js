@@ -159,9 +159,9 @@ const StyledHome = styled.div`
   }
 
   .form__wrapper {
-    width: 85%;
+    width: 90%;
     /* margin-bottom: -30px; */
-    border-radius: 5px;
+    /* border-radius: 5px; */
   }
   .bottom__text {
     font-family: "Inter";

@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import Button from "../../../components/Button";
 import FormInputComponent from "../../../components/InputComponent";
-import LogoComponent from "../../../components/LogoComponent";
 // import { Link } from "react-router-dom";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -10,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import forgotPassword from "../../../redux/actions/auth/forgotPassword.action";
 import SubmitSuccess from "../../../components/SubmitSuccess";
+import Layout from "../../../components/NavigationBar/Layout";
+
 
 function ForgotPassword() {
   
@@ -25,6 +26,7 @@ function ForgotPassword() {
   const dispatch = useDispatch();
 
   return (
+    <Layout>
     <StyledHome>
       <LogoComponent />
       {!isSubmitSuccessful ? (
@@ -91,13 +93,14 @@ function ForgotPassword() {
         </div>
       )}
     </StyledHome>
+    </Layout>
   );
 }
 
 export default ForgotPassword;
 
 const StyledHome = styled.div`
-  font-family: "Sofia Pro";
+  font-family: "Inter";
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -109,29 +112,30 @@ const StyledHome = styled.div`
   .form__container {
     display: flex;
     flex-direction: column;
+    margin-top: 20px;
     align-items: center;
     justify-content: center;
-    align-self: center;
-    margin-top: 70px;
-    width: 600px;
+    width: 500px;
     border: 1px solid #e6e6e6;
+    
     @media (max-width: 768px) {
       width: 100%;
       padding: 20px;
+      /* border:none; */
+      margin-top: 70px;
     }
   }
+  
   .header {
     font-style: normal;
     font-weight: 700;
-    font-size: 32px;
+    font-size: 25px;
     line-height: 39px;
     color: #21334f;
   }
 
   .form__wrapper {
-    width: 70%;
-    margin-bottom: -30px;
-    border-radius: 5px;
+    width: 90%;
   }
   .bottom__text {
     font-family: "Sofia Pro";
