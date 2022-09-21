@@ -1,11 +1,11 @@
 import React, { useRef, useState, Fragment, useEffect } from "react";
 import styled from "styled-components";
-import Layout from "../../components/dashboardSidebar/Layout";
-import FormModal from "../../components/modal/FormModal";
+import Layout from "../../../components/dashboardSidebar/Layout";
+import FormModal from "../../../components/modal/FormModal";
 import BudgetCategoryReusable from "./EditBudgetCategory";
-import request from "../../utils/apiHelper";
+import request from "../../../utils/apiHelper";
 import { toast } from "react-toastify";
-import PageTitle from "../../components/PageTitle";
+import PageTitle from "../../../components/PageTitle";
 
 
 const BudgetCategory = () => {

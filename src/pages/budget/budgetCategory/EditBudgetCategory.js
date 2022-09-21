@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import MyButton from "../../components/Button";
-import FormInputComponent from "../../components/InputComponent";
+import MyButton from "../../../components/Button";
+import FormInputComponent from "../../../components/InputComponent";
 import ClipLoader from "react-spinners/ClipLoader";
-import FormTitleSection from "../../components/modal/FormTitleSection";
+import FormTitleSection from "../../../components/modal/FormTitleSection";
 
 const BudgetCategoryReusable = ({
   closeModal,

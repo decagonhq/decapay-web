@@ -1,13 +1,13 @@
 import React, { useState} from "react";
 import styled from "styled-components";
-import Button from "../../components/Button";
-import FormInputComponent from "../../components/InputComponent";
+import Button from "../../../components/Button";
+import FormInputComponent from "../../../components/InputComponent";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ClipLoader from "react-spinners/ClipLoader";
-import request from "../../utils/apiHelper";
+import request from "../../../utils/apiHelper";
 import { toast } from "react-toastify";
-import DynamicTitle from "../../components/DynamicTitle";
+import DynamicTitle from "../../../components/DynamicTitle";
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { hundredPercent } from "../../constants";
+import { hundredPercent } from "../../../constants";
 
 const SubTitleCard = ({
   title,
