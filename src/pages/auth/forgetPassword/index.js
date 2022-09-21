@@ -28,7 +28,7 @@ function ForgotPassword() {
   return (
     <Layout>
     <StyledHome>
-      <LogoComponent />
+      {/* <LogoComponent /> */}
       {!isSubmitSuccessful ? (
         <Formik
           validationSchema={forgotPasswordValidationSchema}
