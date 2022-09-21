@@ -1,12 +1,13 @@
 import React, { useState, useEffect} from "react";
 import styled from "styled-components";
-import Button from "../../components/Button";
-import FormInputComponent from "../../components/InputComponent";
+import Button from "../../../components/Button";
+import FormInputComponent from "../../../components/InputComponent";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ClipLoader from "react-spinners/ClipLoader";
-import request from "../../utils/apiHelper";
+import request from "../../../utils/apiHelper";
 import { toast } from "react-toastify";
+import DynamicTitle from "../../../components/DynamicTitle";
 // Validation for profile update
 
 const phoneRegExp = /^\d*(\+\d+)?$/;
@@ -93,6 +94,7 @@ const Home = () => {
 
   return (
       <StyledHome>
+        <DynamicTitle title="Profile" />
           <p>Edit profile</p>
             <form onSubmit={formik.handleSubmit}>
               <div className="two-column">

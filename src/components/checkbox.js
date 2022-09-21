@@ -46,14 +46,14 @@ export const CustomCheckboxWrapper = styled.label`
         width: 24px;
         padding: 2px;
         background: #fff;
-        border: 1px #DFE8FC solid;
+        border: 1.5px #14a800 solid;
         border-radius: 5px;
         margin-right: 4px;
     }
 
     .checkbox--active {
-        border-color: #DFE8FC;
-        background: #2254D3;
+        border-color: #14a800;
+        background: #14a800;
     }
 `
 

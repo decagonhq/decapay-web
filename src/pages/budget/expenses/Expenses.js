@@ -1,25 +1,27 @@
 import React, { useRef, useState, Fragment, useEffect } from "react";
 import styled from "styled-components";
-import Layout from "../../components/dashboardSidebar/Layout";
-import request from "../../utils/apiHelper";
+import Layout from "../../../components/dashboardSidebar/Layout";
+import request from "../../../utils/apiHelper";
 import { toast } from "react-toastify";
 import ClipLoader from "react-spinners/ClipLoader";
-import FormTitleSection from "../../components/modal/FormTitleSection";
+import FormTitleSection from "../../../components/modal/FormTitleSection";
 import CurrencyFormat from "react-currency-format";
-import Pagination from "../../utils/pagination";
-import FormModal from "../../components/modal/FormModal";
-import Goback from "../../components/Goback";
-import useDialog from "../../hooks/useDialog";
-import FormInputComponent from "../../components/InputComponent";
+import Pagination from "../../../utils/pagination";
+import FormModal from "../../../components/modal/FormModal";
+import Goback from "../../../components/Goback";
+import useDialog from "../../../hooks/useDialog";
+import FormInputComponent from "../../../components/InputComponent";
 import DatePicker from "react-datepicker";
+import DynamicTitle from "../../../components/DynamicTitle";
+
 import moment from "moment";
 import {
   toNumber,
   disableDateInputFieldBasedOnStartDateToCurrentDate,
-} from "../../utils/utils";
+} from "../../../utils/utils";
 import "react-datepicker/dist/react-datepicker.css";
-import { dateFormats, currency } from "../../constants";
-import PageTitle from "../../components/PageTitle";
+import { dateFormats, currency } from "../../../constants";
+import PageTitle from "../../../components/PageTitle";
 
 let pageSize = 5;
 const BudgetCategory = () => {
@@ -33,20 +35,19 @@ const BudgetCategory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [editData, setEditData] = useState({});
 
-
   const submitEditData = async (event) => {
     event.preventDefault();
     setLoading(true);
     let payload = {
-      amount: toNumber(editData.amount),
+      amount:
+        typeof editData.amount === "number"
+          ? editData.amount
+          : toNumber(editData.amount),
       description: editData.description,
       transactionDate: moment(editData.transactionDate).format(dateFormats),
     };
     try {
-      const response = await request.put(
-        `expenses/${editData.id}`,
-        payload
-      );
+      const response = await request.put(`expenses/${editData.id}`, payload);
       setLoading(false);
       toast.success(response.data.message, {
         autoClose: 3000,
@@ -142,6 +143,7 @@ const BudgetCategory = () => {
 
   return (
     <Layout>
+      <DynamicTitle title="Expenses" />
       <ListStyle>
         <div className="goback">
           {" "}
@@ -410,7 +412,7 @@ const ListStyle = styled.div`
       height: 100px;
     }
   }
- 
+
   .form__wrapper {
     width: 100%;
     border-radius: 5px;

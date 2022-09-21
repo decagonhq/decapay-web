@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Layout from "../../components/NavigationBar/Layout";
 import { Link } from "react-router-dom";
 
+
 const HomePage = () => {
   return (
     <Layout>

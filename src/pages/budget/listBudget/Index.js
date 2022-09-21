@@ -3,15 +3,16 @@ import styled from "styled-components";
 import CreateBudget from "./CreateBugetForm";
 import EditBudget from "./EditBudget";
 // import GoBack from "../../components/Goback";
-import FormModal from "../../components/modal/FormModal";
-import Layout from "../../components/dashboardSidebar/Layout";
-import Pagination from "../../utils/pagination";
+import FormModal from "../../../components/modal/FormModal";
+import Layout from "../../../components/dashboardSidebar/Layout";
+import Pagination from "../../../utils/pagination";
 import { useNavigate } from "react-router-dom";
-import request from "../../utils/apiHelper";
+import request from "../../../utils/apiHelper";
 import { toast } from "react-toastify";
-import FormSelectComponent from "../../components/selectComponent";
+import FormSelectComponent from "../../../components/selectComponent";
 // import { Link } from "react-router-dom";
-import { hundredPercent } from "../../constants";
+import { hundredPercent } from "../../../constants";
+import DynamicTitle from "../../../components/DynamicTitle";
 
 let pageSize = 6;
 const Index = () => {
@@ -79,6 +80,7 @@ const Index = () => {
   return (
     <Layout>
       <BudgetSyle>
+        <DynamicTitle title="Budgets" />
         <div className="header-wrapper">
           <div className="">
             <p className="title">Budget List</p>

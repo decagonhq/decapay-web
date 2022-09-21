@@ -2,10 +2,12 @@ import React from "react";
 import MyButton from "../../components/Button";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import DynamicTitle from "../../components/DynamicTitle";
 
 const ErrorPage = () => {
   return (
     <ErrorPageWrapper>
+      <DynamicTitle title="Error" />
       <Error404Wrapper>
         <div className="wrapper">
           <h1 className="error-404-title">Oops!</h1>

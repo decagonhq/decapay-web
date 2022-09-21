@@ -5,6 +5,7 @@ import Layout from "../../components/dashboardSidebar/Layout";
 import { useNavigate } from "react-router-dom";
 import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
+import DynamicTitle from "../../components/DynamicTitle";
 
 const Index = () => {
   const [currentTableData, setCurrentTableData] = useState([]);
@@ -32,21 +33,7 @@ const Index = () => {
   return (
     <Layout>
       <BudgetSyle>
-        {/* <div className="">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <p style={{ fontWeight: "bold", fontSize: "20px" }}>
-              {" "}
-              TO BE COMPLETED
-            </p>
-          </div>
-        </div> */}
-
+        <DynamicTitle title="Dashboard" />
         <div className="header page">
           <div className="">
             <p style={{ fontWeight: "bold", fontSize: "20px" }}>
