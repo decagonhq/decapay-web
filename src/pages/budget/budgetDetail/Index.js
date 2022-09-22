@@ -393,7 +393,13 @@ const Index = () => {
                     </p>
                     <Link
                       className="link"
-                      to={`/budgetDetail/expenses/?budgetId=${id}&catId=${item.categoryId}&item=${item.category}&startDate=${moment(startDate).toDate()}&endDate=${moment(checkIfEndDateIsLessThanToday()).toDate()}`}
+                      to={`/budgetDetail/expenses/?budgetId=${id}&catId=${
+                        item.categoryId
+                      }&item=${item.category}&startDate=${moment(
+                        startDate
+                      ).toDate()}&endDate=${moment(
+                        checkIfEndDateIsLessThanToday()
+                      ).toDate()}`}
                     >
                       View expenses
                     </Link>
@@ -401,6 +407,7 @@ const Index = () => {
                   <div
                     className="right_side"
                     onClick={() => {
+                      setCategoryName(item.category);
                       setLogExpenseModal(true);
                       setGetCategordId(item.categoryId);
                     }}
@@ -534,7 +541,7 @@ const Index = () => {
           <FormModal>
             <LogExpenseResuable
               closeModal={() => setLogExpenseModal(false)}
-              formTitle="Log expense for "
+              formTitle={categoryName}
               placeholderCurrency="enter amount"
               placeholderInputDate="Enter date"
               placeholderInput="Enter description"
