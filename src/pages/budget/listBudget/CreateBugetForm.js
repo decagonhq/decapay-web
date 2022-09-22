@@ -39,6 +39,7 @@ const CreateBudget = ({ closeModal }) => {
   const createBudgetValidationSchema = yup.object().shape({
     title: yup.string().required("Title is required"),
     period: yup.string().required("Period is required"),
+    amount: yup.string().required("Amount is required"),
   });
   const [loading, setLoading] = useState(false);
  const navigation = useNavigate();
@@ -190,9 +191,9 @@ const CreateBudget = ({ closeModal }) => {
           }) => (
             <div className="form_wrap">
               <div className="form__wrapper">
+              <label>Title<span className="required_sign">*</span></label>
                 <FormInputComponent
                   placeholder="Enter Title"
-                  label="Title"
                   type="text"
                   name="title"
                   value={values.title}
@@ -210,6 +211,7 @@ const CreateBudget = ({ closeModal }) => {
                   onChange={handleChange}
                   error={errors.amount}
                 /> */}
+                <label className="form__label">Amount<span className="required_sign">*</span></label>
                 <CurrencyFormat
                   placeholder="Enter Amount"
                   label="Amount"
@@ -221,9 +223,13 @@ const CreateBudget = ({ closeModal }) => {
                   value={projectedAmount}
                   onChange={(e) => handleOnChange(e)}
                 />
+                {errors.amount && (
+                <div className="error">{errors.amount}</div>
+              )}
               </div>
+              
               <div className="period">
-                <label>Period</label>
+                <label>Period<span className="required_sign">*</span></label>
                 <Select
                   options={Options}
                   name="period"
@@ -238,6 +244,11 @@ const CreateBudget = ({ closeModal }) => {
 
                   
                 />
+                {
+                  errors.period && (
+                    <div className="error">{errors.period}</div>
+                  )
+                }
               </div>
               {period.annual && (
                 <div className="mt-2">
@@ -321,7 +332,7 @@ const CreateBudget = ({ closeModal }) => {
                     />
                   </div>
                   <div className="form_wrapper3">
-                    <h7>End Date</h7>
+                    <h7>End Date <span className="required_sign">*</span></h7>
                     <DatePicker
                       onChange={(e) => {
                         handleOnChangeDate(e, "budgetEndDate");
@@ -401,6 +412,13 @@ const StyledHome = styled.div`
   .container {
     width: 100%;
   }
+  .required_sign{
+    color: red;
+    margin-top: 6px;
+  }
+  .period{
+    margin-top: 20px;
+  }
   .form_wrap {
     width: 100%;
     /* margin-top: 50px; */
@@ -412,6 +430,10 @@ const StyledHome = styled.div`
     display: flex;
     padding: 4px;
     border-radius: 10px;
+  }
+  .error {
+    color: red;
+    font-size: 0.7rem;
   }
   .select {
     height: 2.5rem;
