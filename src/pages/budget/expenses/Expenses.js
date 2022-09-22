@@ -13,7 +13,9 @@ import useDialog from "../../../hooks/useDialog";
 import FormInputComponent from "../../../components/InputComponent";
 import DatePicker from "react-datepicker";
 import DynamicTitle from "../../../components/DynamicTitle";
-
+import CreateExpenses from "../../../components/modal/formModalForLog";
+import { dateFormats2 } from "../../../constants";
+import format from "date-fns/format";
 import moment from "moment";
 import {
   toNumber,
@@ -34,6 +36,7 @@ const BudgetCategory = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [editData, setEditData] = useState({});
+  const [createExpense, setCreateExpense] = useState(false);
 
   const submitEditData = async (event) => {
     event.preventDefault();
@@ -141,6 +144,61 @@ const BudgetCategory = () => {
     setEditData(curr);
   };
 
+
+  const postLogExpense = async () => {
+    let payload = {
+      amount: toNumber(createLogExpense.amount),
+      transactionDate: calendar,
+      description: createLogExpense.description,
+    };
+    setLoading(true);
+    try {
+      const response = await request.post(
+        `budgets/${budgetId}/lineItems/${catId}/expenses`,
+        payload
+      );
+      setLoading(false);
+      setCreateLogExpense(initLogData());
+
+      if (response) {
+        toast.success(response.data.message, {
+          autoClose: 3000,
+          onClose: dismissToast,
+        });
+        fetchData();
+        setCreateExpense(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.error(error.response.data.message, {
+        autoClose: 3000,
+        onClose: dismissToast,
+      });
+    }
+  };
+
+
+  const [calendar, setCalendar] = useState("");
+
+  const initLogData = () => {
+    return {
+      amount: "",
+      description: "",
+      transactionDate: calendar,
+    };
+  };
+  const [createLogExpense, setCreateLogExpense] = useState(initLogData());
+
+  const handleOnChangeCreatLog = (e, value) => {
+    setCreateLogExpense({
+      ...createLogExpense,
+      [value]: e.target.value,
+    });
+  };
+  const handleOnChangeDate2 = (value) => {
+    setCalendar(format(value, dateFormats2));
+  };
+
   return (
     <Layout>
       <DynamicTitle title="Expenses" />
@@ -150,7 +208,9 @@ const BudgetCategory = () => {
           <Goback />
         </div>
         <PageTitle title={`Expenses | ${lineItem}`}>
-          <button>Add expenses</button>
+          <button type="submit" onClick={() => setCreateExpense(true)}>
+            Add expenses
+          </button>
         </PageTitle>
         <div className="category-container">
           {currentTableData && currentTableData.length > 0 && (
@@ -255,6 +315,7 @@ const BudgetCategory = () => {
                       moment(editData?.transactionDate).toDate(),
                       startDate
                     )}
+                    defaultValue="2021/01/01"
                   />
                 </div>
                 <div className="btn-wrapper">
@@ -268,6 +329,33 @@ const BudgetCategory = () => {
                 </div>
               </form>
             </div>
+          </FormModal>
+        )}
+        {createExpense && (
+          <FormModal>
+            <CreateExpenses
+              formTitle={`${lineItem}`}
+              minDate={moment(startDate).toDate()}
+              maxDate={moment(
+                new Date().toISOString().substring(0, 10)
+              ).toDate()}
+              closeModal={() => setCreateExpense(false)}
+
+              onChangeCurrency={(e) => {
+                handleOnChangeCreatLog(e, "amount");
+              }}
+              onChangeInput={(e) => {
+                handleOnChangeCreatLog(e, "description");
+              }}
+              handleChangeDate={(e) => {
+                handleOnChangeDate2(e);
+              }}
+              inputDateValue={createLogExpense.transactionDate}
+              inputValue={createLogExpense.description}
+              defaultValue={calendar}
+              onClick={postLogExpense}
+            />
+            
           </FormModal>
         )}
         <div className="pagination-container">
