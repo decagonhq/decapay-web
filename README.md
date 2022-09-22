@@ -1,6 +1,7 @@
 # Getting Started with Project Decapay
 this git repo contains the web version of the Decapay app. The app is built using React and is hosted on Netlify. The app is currently live in  production at: [https://decapay.netlify.app/](https://decapay.netlify.app/).
 
+
 ### Libraries Used
 - Redux for state management
 - React-Router for routing
@@ -15,8 +16,6 @@ this git repo contains the web version of the Decapay app. The app is built usin
 - moments
 - date-fns
 - react-spinners
-
-
 
 ## Available Scripts
 

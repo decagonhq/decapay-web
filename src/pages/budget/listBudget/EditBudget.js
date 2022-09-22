@@ -199,9 +199,9 @@ const EditBudget = ({ closeModal, id, title }) => {
         <input type="hidden" name="newId" value={newId} />
 
         <div className="form__wrapper">
+        <label>Title<span className="required_sign">*</span></label>
           <FormInputComponent
             placeholder="Enter Title"
-            label="Title"
             type="text"
             name="title"
             value={collectData.title}
@@ -210,6 +210,7 @@ const EditBudget = ({ closeModal, id, title }) => {
           />
         </div>
         <div className="form__wrapper4">
+          <label>Amount<span className="required_sign">*</span></label>
           <CurrencyFormat
             placeholder="Enter Amount"
             label="Amount"
@@ -223,8 +224,8 @@ const EditBudget = ({ closeModal, id, title }) => {
             error={formik.errors.amount}
           />
         </div>
-        <div>
-          <label>Period</label>
+        <div className="form4">
+          <label>Period<span className="required_sign">*</span></label>
 
           <FormSelectComponent
             name="period"
@@ -378,10 +379,17 @@ const StyledHome = styled.div`
   .form__wrapper2 {
     width: 100%;
   }
+  .form4{
+    margin-top: 30px;
+  }
   .form_wrap {
     width: 100%;
     /* margin-top: 50px; */
     border-radius: 5px;
+  }
+  .required_sign{
+    color: red;
+    margin-top: 6px;
   }
   .btn_wrapper {
     align-items: center;
@@ -433,6 +441,7 @@ const StyledHome = styled.div`
     height: 2.5rem;
     margin-bottom: 20px;
   }
+  
   label {
     margin-bottom: -5px;
     font-size: 1rem;
