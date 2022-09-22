@@ -30,7 +30,7 @@ const LogExpenseResuable = ({
   return (
     <StyledHome>
       <ToastContainer />
-      <FormTitleSection title={`Expenses for ${formTitle}`} onClick={closeModal} />
+      <FormTitleSection title={`Log expense for ${formTitle}`} onClick={closeModal} />
       <div className="form__wrapper">
         <CurrencyFormat
           placeholder="Enter amount"
