@@ -222,10 +222,7 @@ const CreateBudget = ({ closeModal }) => {
                   thousandSeparator={true}
                   value={projectedAmount}
                   onChange={(e) => handleOnChange(e)}
-                />
-                {errors.amount && (
-                <div className="error">{errors.amount}</div>
-              )}
+                /> 
               </div>
               
               <div className="period">
@@ -244,11 +241,6 @@ const CreateBudget = ({ closeModal }) => {
 
                   
                 />
-                {
-                  errors.period && (
-                    <div className="error">{errors.period}</div>
-                  )
-                }
               </div>
               {period.annual && (
                 <div className="mt-2">
