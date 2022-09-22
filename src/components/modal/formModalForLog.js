@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import MyButton from "../../components/Button";
+import MyButton from "../Button";
 import ClipLoader from "react-spinners/ClipLoader";
-import FormTitleSection from "../../components/modal/FormTitleSection";
+import FormTitleSection from "./FormTitleSection";
 import CurrencyFormat from "react-currency-format";
 import FormInputComponent from "../InputComponent";
 import { ToastContainer } from "react-toastify";
@@ -12,31 +12,17 @@ import {currency} from "../../constants";
 const LogExpenseResuable = ({
   closeModal,
   inputName,
-  options,
   formTitle,
   inputValue,
-  inputDateValue,
-  onChangeInputDate,
-  inputDateType,
-  inputLabelDate,
-  inputNameDate,
-  placeholderInputDate,
-  inputType,
   onChangeInput,
-  placeholderInput,
-  placeholderCurrency,
-  labelCurrency,
   currencyName,
   onChangeCurrency,
   valueCurrency,
   onClick,
-  onClickCancel,
-  selectedDate,
   handleChangeDate,
   minDate,
   maxDate,
   disabled,
-  inputLabel,
   defaultValue,
 }) => {
   // eslint-disable-next-line
@@ -44,11 +30,11 @@ const LogExpenseResuable = ({
   return (
     <StyledHome>
       <ToastContainer />
-      <FormTitleSection title={formTitle} onClick={closeModal} />
+      <FormTitleSection title={`Expenses for ${formTitle}`} onClick={closeModal} />
       <div className="form__wrapper">
         <CurrencyFormat
-          placeholder={placeholderCurrency}
-          label={labelCurrency}
+          placeholder="Enter amount"
+          label={"Amount"}
           displayType={"input"}
           style={{ width: "100%", height: "100%", padding: "10px" }}
           prefix={currency  + " "}
@@ -60,9 +46,9 @@ const LogExpenseResuable = ({
       </div>
       <div className="form__wrapper">
         <FormInputComponent
-          placeholder={placeholderInput}
-          label={inputLabel}
-          type={inputType}
+          placeholder={"Enter description"}
+          label={"Description"}
+          type={"text"}
           value={inputValue}
           name={inputName}
           onChange={onChangeInput}

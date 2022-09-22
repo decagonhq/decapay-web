@@ -5,7 +5,7 @@ import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { Calendar } from "react-date-range";
 // import format from "date-fns/format";
-import "../../../styles/styles.css";
+import "../styles/styles.css";
 import styled from "styled-components"
 
 // custom styles for the calendar

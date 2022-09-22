@@ -3,7 +3,7 @@ import styled from "styled-components";
 import TitleCard from "./TitleCard";
 import SubTitleCard from "./SubTitleCard";
 // import BudgetItem from "./BudgetItem";
-import Calendar from "./DateComponent";
+import Calendar from "../../../components/DateComponent";
 import Layout from "../../../components/dashboardSidebar/Layout";
 import request from "../../../utils/apiHelper";
 import { useParams } from "react-router-dom";
@@ -94,9 +94,6 @@ const Index = () => {
     let payload = {
       amount: toNumber(createLogExpense.amount),
       transactionDate: calendar,
-      //  (createLogExpense.transactionDate).format(
-      //   dateFormatmoments
-      // ),
       description: createLogExpense.description,
     };
     setLoading(true);
@@ -396,7 +393,7 @@ const Index = () => {
                     </p>
                     <Link
                       className="link"
-                      to={`/budgetDetail/expenses/?budgetId=${id}&catId=${item.categoryId}&item=${item.category}`}
+                      to={`/budgetDetail/expenses/?budgetId=${id}&catId=${item.categoryId}&item=${item.category}&startDate=${moment(startDate).toDate()}&endDate=${moment(checkIfEndDateIsLessThanToday()).toDate()}`}
                     >
                       View expenses
                     </Link>
@@ -516,18 +513,6 @@ const Index = () => {
                     onChange={(e) => handleOnChange(e)}
                   />
                 </div>
-                {/* <div className="form__wrapper">
-                  <Checkbox
-                    isChecked={editRememberTemplate}
-                    onChangeFunction={() =>
-                      setEditRememberTemplate(!editRememberTemplate)
-                    }
-                  />
-                  <span>
-                    Remember this line item for budget of this type:{" "}
-                    {data?.budgetPeriod}
-                  </span>
-                </div> */}
                 <div className="btn-wrapper">
                   <MyButton
                     type="submit"
