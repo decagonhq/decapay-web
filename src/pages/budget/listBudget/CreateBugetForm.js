@@ -38,8 +38,6 @@ const CreateBudget = ({ closeModal }) => {
 
   const createBudgetValidationSchema = yup.object().shape({
     title: yup.string().required("Title is required"),
-    period: yup.string().required("Period is required"),
-    amount: yup.string().required("Amount is required"),
   });
   const [loading, setLoading] = useState(false);
  const navigation = useNavigate();
