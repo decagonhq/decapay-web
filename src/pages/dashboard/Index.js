@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import request from "../../utils/apiHelper";
 import { toast } from "react-toastify";
 import DynamicTitle from "../../components/DynamicTitle";
+import "../../styles/table.style.css"
 
 const Index = () => {
   const [currentTableData, setCurrentTableData] = useState([]);
@@ -54,18 +55,19 @@ const Index = () => {
 
         {/* Custom table starts here */}
         <div className="category-container">
-          <div className="category ">
-            <p className="category-text">Budget title</p>
-            <p className="category-text">Period</p>
-            <p className="category-text">Amount</p>
-            <p className="category-text">Amount spent</p>
-            <p className="category-text">Percentage spent</p>
-            <p className="category-text">Action</p>
-          </div>
+          <table>
+          <tr className="category ">
+            <th className="category-text">Budget title</th>
+            <th className="category-text">Period</th>
+            <th className="category-text">Amount</th>
+            <th className="category-text">Amount spent</th>
+            <th className="category-text">Percentage spent</th>
+            <th className="category-text">Action</th>
+          </tr>
           {currentTableData !== null && currentTableData?.length > 0 ? (
             currentTableData.map((item, index) => (
-              <div className="category body" key={index}>
-                <p
+              <tr className="category body" key={index}>
+                <td
                   onClick={() =>
                     navigate(`../budgetDetail/${item.id}`, {
                       replace: true,
@@ -77,16 +79,16 @@ const Index = () => {
                   }}
                 >
                   {item.title}
-                </p>
-                <p className="category-text">{item.period}</p>
-                <p className="category-text">{item.displayProjectedAmount}</p>
-                <p className="category-text">
+                </td>
+                <td className="category-text">{item.period}</td>
+                <td className="category-text">{item.displayProjectedAmount}</td>
+                <td className="category-text">
                   {item.displayTotalAmountSpentSoFar}
-                </p>
-                <p className="category-text">
+                </td>
+                <td className="category-text">
                   {item.displayPercentageSpentSoFar}
-                </p>
-                <p
+                </td>
+                <td
                   style={{
                     cursor: "pointer",
                     fontSize: "30px",
@@ -112,8 +114,8 @@ const Index = () => {
                       </span>
                     </Fragment>
                   ) : null}
-                </p>
-              </div>
+                </td>
+              </tr>
             ))
           ) : (
             <div className="empty">
@@ -129,6 +131,7 @@ const Index = () => {
               </p>
             </div>
           )}
+          </table>
         </div>
       </BudgetSyle>
     </Layout>
@@ -188,6 +191,7 @@ const BudgetSyle = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 0 auto;
   }
   .empty-img {
     width: 221px;
@@ -326,25 +330,7 @@ const BudgetSyle = styled.div`
     gap: 10px;
   }
 
-  .category {
-    font-family: "Sofia Pro";
-    font-style: normal;
-
-    width: 100%;
-    align-items: center;
-    padding: 10px 14px;
-    height: 57px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-    gap: 20px;
-    /* border-radius: 5px; */
-  }
-  .body {
-    background: rgba(0, 156, 244, 0.05);
-    font-weight: 500;
-    font-size: 14px;
-  }
-
+  
   .dots {
     font-size: 30px;
     cursor: "pointer";

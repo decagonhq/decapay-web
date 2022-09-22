@@ -24,6 +24,8 @@ import {
 import "react-datepicker/dist/react-datepicker.css";
 import { dateFormats, currency } from "../../../constants";
 import PageTitle from "../../../components/PageTitle";
+import "../../../styles/table.style.css";
+import {serialNumber, pageSummary} from "../../../utils/pageSummary"
 
 let pageSize = 5;
 const BudgetCategory = () => {
@@ -144,7 +146,6 @@ const BudgetCategory = () => {
     setEditData(curr);
   };
 
-
   const postLogExpense = async () => {
     let payload = {
       amount: toNumber(createLogExpense.amount),
@@ -176,7 +177,6 @@ const BudgetCategory = () => {
       });
     }
   };
-
 
   const [calendar, setCalendar] = useState("");
 
@@ -212,60 +212,67 @@ const BudgetCategory = () => {
             Add expenses
           </button>
         </PageTitle>
+        <div className="header page">
+          <p>
+            {pageSummary(currentPage, pageSize, totalCount, currentTableData)}
+          </p>
+        </div>
         <div className="category-container">
-          {currentTableData && currentTableData.length > 0 && (
-            <div className="category header">
-              <p className="category-text">Amount</p>
-              <p className="category-text">Description</p>
-              <p className="category-text">Date</p>
-              {/* <p className="category-text">Time</p> */}
-              <p className="category-text">Action</p>
-            </div>
-          )}
-          {currentTableData && currentTableData.length > 0 ? (
-            currentTableData.map((item, index) => (
-              <div className="category body" key={index}>
-                <p className="category-text">{item.displayAmount}</p>
-                <p className="category-text">{item.description}</p>
-                <p className="category-text">{item.displayTransactionDate}</p>
-                {/* <p className="category-text">{item.time}</p> */}
-                <p onClick={() => setIdOfBudget(index)} className="dots">
-                  ...
-                  {idOfBudget === index ? (
-                    <Fragment>
-                      <span ref={ref} className="popup">
-                        <p
-                          className="pop-item"
-                          onClick={() => {
-                            editHandler(item.id);
-                          }}
-                        >
-                          Edit
-                        </p>
-                        <p
-                          onClick={() =>
-                            deleteItemId(handleDeleteItem, item.id)
-                          }
-                          className="pop-item delete"
-                        >
-                          Delete
-                        </p>
-                      </span>
-                    </Fragment>
-                  ) : null}
-                </p>
+          <table>
+            {currentTableData && currentTableData.length > 0 && (
+              <tr className="category">
+                <th>S/No</th>
+                <th className="category-text">Amount</th>
+                <th className="category-text">Description</th>
+                <th className="category-text">Date</th>
+                <th className="category-text">Action</th>
+              </tr>
+            )}
+            {currentTableData && currentTableData.length > 0 ? (
+              currentTableData.map((item, index) => (
+                <tr className="category body" key={index}>
+                  <td>{serialNumber(index,currentPage,pageSize)}</td>
+                  <td className="category-text">{item.displayAmount}</td>
+                  <td className="category-text">{item.description}</td>
+                  <td className="category-text">{item.displayTransactionDate}</td>
+                  <td onClick={() => setIdOfBudget(index)} className="dots">
+                    ...
+                    {idOfBudget === index ? (
+                      <Fragment>
+                        <span ref={ref} className="popup">
+                          <p
+                            className="pop-item"
+                            onClick={() => {
+                              editHandler(item.id);
+                            }}
+                          >
+                            Edit
+                          </p>
+                          <p
+                            onClick={() =>
+                              deleteItemId(handleDeleteItem, item.id)
+                            }
+                            className="pop-item delete"
+                          >
+                            Delete
+                          </p>
+                        </span>
+                      </Fragment>
+                    ) : null}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <div className="empty">
+                <img
+                  className="empty-img"
+                  src="/images/empty-img.svg"
+                  alt="empty"
+                />
+                <p>No expenses to display yet</p>
               </div>
-            ))
-          ) : (
-            <div className="empty">
-              <img
-                className="empty-img"
-                src="/images/empty-img.svg"
-                alt="empty"
-              />
-              <p>No expenses to display yet</p>
-            </div>
-          )}
+            )}
+          </table>
         </div>
         {editModal && (
           <FormModal>
@@ -340,7 +347,6 @@ const BudgetCategory = () => {
                 new Date().toISOString().substring(0, 10)
               ).toDate()}
               closeModal={() => setCreateExpense(false)}
-
               onChangeCurrency={(e) => {
                 handleOnChangeCreatLog(e, "amount");
               }}
@@ -355,7 +361,6 @@ const BudgetCategory = () => {
               defaultValue={calendar}
               onClick={postLogExpense}
             />
-            
           </FormModal>
         )}
         <div className="pagination-container">
@@ -381,6 +386,24 @@ const ListStyle = styled.div`
   flex-direction: column;
   .goback {
     margin-top: 20px;
+  }
+  .header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    font-weight: 600;
+    margin-bottom: -20px;
+    font-size: 16px;
+  }
+  .page {
+    font-family: "Sofia Pro";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+
+    color: #a5b1b7;
   }
   .button-container {
     display: flex;
@@ -429,32 +452,7 @@ const ListStyle = styled.div`
     padding: 10px;
     gap: 10px;
   }
-  .category {
-    font-family: "Inter";
-    font-style: normal;
-
-    width: 100%;
-    align-items: center;
-    padding: 10px 14px;
-    height: 57px;
-    display: flex;
-    justify-content: space-between;
-    /* grid-template-columns: 1fr 2fr 1fr 1fr 1fr; */
-    gap: 50px;
-    /* border-radius:5px; */
-  }
-  .header {
-    font-weight: 600;
-    margin-bottom: -20px;
-    font-size: 16px;
-  }
-  .body {
-    background: rgba(0, 156, 244, 0.05);
-    font-weight: 500;
-    font-size: 16px;
-  }
-
-  .popup {
+.popup {
     position: absolute;
     min-width: 150px;
     display: flex;

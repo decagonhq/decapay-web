@@ -13,8 +13,11 @@ import FormSelectComponent from "../../../components/selectComponent";
 // import { Link } from "react-router-dom";
 import { hundredPercent } from "../../../constants";
 import DynamicTitle from "../../../components/DynamicTitle";
+import "../../../styles/table.style.css"
+import {serialNumber, pageSummary} from "../../../utils/pageSummary"
 
-let pageSize = 6;
+let pageSize = 5;
+
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [idOfBudget, setIdOfBudget] = useState(-1);
@@ -48,6 +51,7 @@ const Index = () => {
     }
   };
 
+  console.log(totalCount);
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
       setIdOfBudget(-1);
@@ -75,8 +79,6 @@ const Index = () => {
     { value: "past", label: "Past" },
   ];
 
-  // get last part of url
-
   return (
     <Layout>
       <BudgetSyle>
@@ -102,26 +104,29 @@ const Index = () => {
         </div>
 
         <div className="header page">
-          {/* <p>Most recent</p> */}
           <p>
-            Showing {currentPage} of {Math.ceil(totalCount / pageSize)}
+            {/* Showing {currentPage} of {Math.ceil(totalCount / pageSize)} */}
+            {pageSummary(currentPage, pageSize, totalCount, currentTableData)}
           </p>
         </div>
 
         {/* Custom table starts here */}
         <div className="category-container">
-          <div className="category category-text">
-            <p className="category-text">Budget title</p>
-            <p className="category-text">Period</p>
-            <p className="category-text">Amount</p>
-            <p className="category-text">Amount spent</p>
-            <p className="category-text">Percentage spent</p>
-            <p className="category-text">Action</p>
-          </div>
+          <table>
+          <tr className="category category-text">
+            <th>S/No</th>
+            <th className="category-text">Budget title</th>
+            <th className="category-text">Period</th>
+            <th className="category-text">Amount</th>
+            <th className="category-text">Amount spent</th>
+            <th className="category-text">Percentage spent</th>
+            <th className="category-text">Action</th>
+          </tr>
           {currentTableData !== null && currentTableData?.length > 0 ? (
             currentTableData.map((item, index) => (
-              <div className="category body" key={index}>
-                <p
+              <tr className="category body" key={index}>
+                <td>{serialNumber(index,currentPage, pageSize)}</td>
+                <td
                   onClick={() =>
                     navigate(`../budgetDetail/${item.id}`, {
                       replace: true,
@@ -133,10 +138,10 @@ const Index = () => {
                   }}
                 >
                   {item.title}
-                </p>
-                <p className="category-text">{item.period}</p>
-                <p className="category-text">{item.displayProjectedAmount}</p>
-                <p
+                </td>
+                <td className="category-text">{item.period}</td>
+                <td className="category-text">{item.displayProjectedAmount}</td>
+                <td
                   className={
                     item.totalAmountSpentSoFar > item.projectedAmount
                       ? "category-text red"
@@ -144,8 +149,8 @@ const Index = () => {
                   }
                 >
                   {item.displayTotalAmountSpentSoFar}
-                </p>
-                <p
+                </td>
+                <td
                   className={
                     item?.percentageSpentSoFar > hundredPercent
                       ? "category-text red"
@@ -153,8 +158,8 @@ const Index = () => {
                   }
                 >
                   {item.displayPercentageSpentSoFar}
-                </p>
-                <p
+                </td>
+                <td
                   style={{
                     cursor: "pointer",
                     fontSize: "30px",
@@ -190,12 +195,13 @@ const Index = () => {
                       </span>
                     </Fragment>
                   ) : null}
-                </p>
-              </div>
+                </td>
+              </tr>
             ))
           ) : (
-            <p>There are no budget category</p>
+            <p>You dont have any budget </p>
           )}
+        </table>
         </div>
         <div className="pagination-container">
           <Pagination
@@ -418,28 +424,10 @@ const BudgetSyle = styled.div`
     width: 100%;
     margin-top: 20px;
     padding: 10px;
-    gap: 10px;
+    gap: 2px;
   }
 
-  .category {
-    font-family: "Sofia Pro";
-    font-style: normal;
-
-    width: 100%;
-    align-items: center;
-    padding: 10px 14px;
-    height: 57px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-    gap: 10px;
-    /* border-radius: 5px; */
-  }
-  .body {
-    background: rgba(0, 156, 244, 0.05);
-    font-weight: 500;
-    font-size: 14px;
-  }
-
+  
   .dots {
     font-size: 30px;
     cursor: "pointer";
@@ -450,7 +438,7 @@ const BudgetSyle = styled.div`
       margin-bottom: 10px;
     }
     .category-text {
-      font-size: 12px;
+      font-size: 14px;
     }
   }
   @media only screen and (max-width: 990px) {
