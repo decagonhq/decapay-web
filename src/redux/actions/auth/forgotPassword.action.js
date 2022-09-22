@@ -24,12 +24,7 @@ const forgotPassword = (payload) => async (dispatch) => {
     dispatch({ type: LOADING });
 
     try {
-        const res = await request.post("forgot-password", payload,{ headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            // "Authorization": `Bearer ${localStorage.getItem("token")}`,
-            'DVC_KY_HDR': '2',
-        }});
+        const res = await request.post("forgot-password", payload);
         
         toast.success(res.data.message, {
             autoClose: 3000,
@@ -37,7 +32,7 @@ const forgotPassword = (payload) => async (dispatch) => {
           });
         return dispatch(forgotPasswordSuccess(res.data));
     } catch (error) {
-        toast.error(error.response.data.message, {
+        toast.error(error.message, {
             autoClose: 3000,
             onClose: dismissToast,
           });

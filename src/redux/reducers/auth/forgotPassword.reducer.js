@@ -4,7 +4,7 @@ import {toast} from "react-toastify";
 
 const initialState = {
     token : localStorage.getItem('token') || null,
-    data: "", errors: "", loading: false, message: ""
+    data: "", errors: "", loading: false, message: "", isSubmitSuccessful: false
 }
 
 
@@ -22,6 +22,7 @@ const ForgotPasswordReducer = (state = initialState, action) => {
                 ...state,
                 errors: payload.error,
                 data: null,
+                isSubmitSuccessful: false,
                 message: payload.message,
                 loading: false,
             }
@@ -29,9 +30,9 @@ const ForgotPasswordReducer = (state = initialState, action) => {
             toast.success(payload?.success || "Password reset link sent to your email")
             return {
                 ...state,
-                data: payload.data.data,
                 loading: false,
-                message:payload.data.message
+                isSubmitSuccessful: true,
+                message:payload.message
             }
         default:
             return state

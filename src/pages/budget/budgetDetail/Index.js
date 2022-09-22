@@ -4,34 +4,36 @@ import TitleCard from "./TitleCard";
 import SubTitleCard from "./SubTitleCard";
 // import BudgetItem from "./BudgetItem";
 import Calendar from "./DateComponent";
-import Layout from "../../components/dashboardSidebar/Layout";
-import request from "../../utils/apiHelper";
+import Layout from "../../../components/dashboardSidebar/Layout";
+import request from "../../../utils/apiHelper";
 import { useParams } from "react-router-dom";
-import FormModal from "../../components/modal/FormModal";
-import BudgetLineItemResuable from "../../components/modal/modalForLineItem";
+import FormModal from "../../../components/modal/FormModal";
+import BudgetLineItemResuable from "../../../components/modal/modalForLineItem";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { FiArrowUpRight } from "react-icons/fi";
 // import EditLineItem from "./EditLineItem";
-import MyButton from "../../components/Button";
+import MyButton from "../../../components/Button";
 import ClipLoader from "react-spinners/ClipLoader";
-import FormTitleSection from "../../components/modal/FormTitleSection";
+import FormTitleSection from "../../../components/modal/FormTitleSection";
 import CurrencyFormat from "react-currency-format";
-import useDialog from "../../hooks/useDialog";
-import LogExpenseResuable from "../../components/modal/formModalForLog";
-import Goback from "../../components/Goback";
+import useDialog from "../../../hooks/useDialog";
+import LogExpenseResuable from "../../../components/modal/formModalForLog";
+import Goback from "../../../components/Goback";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 // import { dateFormats } from "../../constants";
-import { dateFormats2, dateFormats3, hundredPercent } from "../../constants";
+import { dateFormats2, dateFormats3, hundredPercent } from "../../../constants";
 import format from "date-fns/format";
+import DynamicTitle from "../../../components/DynamicTitle";
+
 import {
   disableDateInputFieldBasedOnStartDateToCurrentDate,
   toNumber,
-} from "../../utils/utils";
-import { currency } from "../../constants";
+} from "../../../utils/utils";
+import { currency } from "../../../constants";
 // import Checkbox from "../../components/checkbox";
-import PageTitle from "../../components/PageTitle";
+import PageTitle from "../../../components/PageTitle";
 
 const Index = () => {
   const [data, setData] = useState([]);
@@ -307,6 +309,7 @@ const Index = () => {
 
   return (
     <Layout>
+      <DynamicTitle title={"budget detail"} />
       <DetailStyle>
         <div className="goback">
           {" "}

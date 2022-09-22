@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 // import Layout from "../../components/dashboardSidebar/Layout";
-import FormInputComponent from "../../components/InputComponent";
+import FormInputComponent from "../../../components/InputComponent";
 // import GoBack from "../../components/Goback";
 import * as yup from "yup";
-import MyButton from "../../components/Button";
+import MyButton from "../../../components/Button";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
-import request from "../../utils/apiHelper";
+import request from "../../../utils/apiHelper";
 // import { useParams } from "react-router-dom";
 import CurrencyFormat from "react-currency-format";
-import FormTitleSection from "../../components/modal/FormTitleSection";
+import FormTitleSection from "../../../components/modal/FormTitleSection";
 import { useFormik } from "formik";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import format from "date-fns/format";
-import { dateFormats2, currency } from "../../constants";
-import { toNumber } from "../../utils/utils";
+import { dateFormats2, currency } from "../../../constants";
+import { toNumber } from "../../../utils/utils";
 import {
   ANNUAL,
   MONTHLY,
@@ -27,8 +27,8 @@ import {
   Months,
   changeDateFormat,
   formatDate,
-} from "../../constants";
-import FormSelectComponent from "../../components/selectComponent";
+} from "../../../constants";
+import FormSelectComponent from "../../../components/selectComponent";
 
 const EditBudget = ({ closeModal, id, title }) => {
   const [collectData, setCollectData] = React.useState({
@@ -233,7 +233,7 @@ const EditBudget = ({ closeModal, id, title }) => {
             onChange={(e) => {
               handleSelect(e, "period");
             }}
-            placeholder={"Select Frequency"}
+            placeholder={"Select Period"}
           />
         </div>
         {collectData.period === ANNUAL && (

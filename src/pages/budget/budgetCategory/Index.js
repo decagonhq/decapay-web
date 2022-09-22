@@ -1,11 +1,11 @@
 import React, { useRef, useState, Fragment, useEffect } from "react";
 import styled from "styled-components";
-import Layout from "../../components/dashboardSidebar/Layout";
-import FormModal from "../../components/modal/FormModal";
+import Layout from "../../../components/dashboardSidebar/Layout";
+import FormModal from "../../../components/modal/FormModal";
 import BudgetCategoryReusable from "./EditBudgetCategory";
-import request from "../../utils/apiHelper";
+import request from "../../../utils/apiHelper";
 import { toast } from "react-toastify";
-import PageTitle from "../../components/PageTitle";
+import PageTitle from "../../../components/PageTitle";
 
 
 const BudgetCategory = () => {
@@ -111,9 +111,13 @@ const BudgetCategory = () => {
           </button>
         </PageTitle>
         <div className="category-container">
+        <div className="category category-text">
+            <p className="category-text">Category name</p>
+            <p className="category-text">Action</p>
+          </div>
           {data && data.length > 0 ? (
             data.map((item, index) => (
-              <div className="category" key={index}>
+              <div className="category body" key={index}>
                 <p className="category-title">{item.title}</p>
                 <p
                   onClick={() => setIdOfBudget(index)}
@@ -223,13 +227,17 @@ const ListStyle = styled.div`
 
     width: 100%;
     align-items: center;
-    padding: 10px 14px 10px 14px;
+    padding: 10px 40px;
     height: 57px;
-    background: rgba(0, 156, 244, 0.05);
     /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.04); */
     display: flex;
     justify-content: space-between;
     font-size: 16px;
+  }
+  .body {
+    background: rgba(0, 156, 244, 0.05);
+    font-weight: 500;
+    font-size: 14px;
   }
   @media only screen and (max-width: 1280px) {
     .category {
