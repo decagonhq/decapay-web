@@ -14,9 +14,9 @@ import FormSelectComponent from "../../../components/selectComponent";
 import { hundredPercent } from "../../../constants";
 import DynamicTitle from "../../../components/DynamicTitle";
 import "../../../styles/table.style.css"
-import {serialNumber, pageSummary} from "../../../utils/pageSummary"
+import {serialNum, pageSummaryEnhanced} from "../../../utils/pageSummary"
 
-let pageSize = 5;
+let pageSize = 4;
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,7 +51,9 @@ const Index = () => {
     }
   };
 
-  console.log(totalCount);
+let startSeriaNum=serialNum(currentPage, pageSize);
+
+  // console.log(totalCount);
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
       setIdOfBudget(-1);
@@ -106,7 +108,7 @@ const Index = () => {
         <div className="header page">
           <p>
             {/* Showing {currentPage} of {Math.ceil(totalCount / pageSize)} */}
-            {pageSummary(currentPage, pageSize, totalCount, currentTableData)}
+            {pageSummaryEnhanced(startSeriaNum, totalCount, currentTableData)}
           </p>
         </div>
 
@@ -125,7 +127,7 @@ const Index = () => {
           {currentTableData !== null && currentTableData?.length > 0 ? (
             currentTableData.map((item, index) => (
               <tr className="category body" key={index}>
-                <td>{serialNumber(index,currentPage, pageSize)}</td>
+                <td>{startSeriaNum++}</td>
                 <td
                   onClick={() =>
                     navigate(`../budgetDetail/${item.id}`, {

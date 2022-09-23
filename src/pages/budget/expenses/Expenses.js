@@ -25,7 +25,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { dateFormats, currency } from "../../../constants";
 import PageTitle from "../../../components/PageTitle";
 import "../../../styles/table.style.css";
-import {serialNumber, pageSummary} from "../../../utils/pageSummary"
+import {serialNum, pageSummary} from "../../../utils/pageSummary"
 
 let pageSize = 5;
 const BudgetCategory = () => {
@@ -199,6 +199,8 @@ const BudgetCategory = () => {
     setCalendar(format(value, dateFormats2));
   };
 
+  let startSeriaNum=serialNum(currentPage, pageSize);
+
   return (
     <Layout>
       <DynamicTitle title="Expenses" />
@@ -231,7 +233,7 @@ const BudgetCategory = () => {
             {currentTableData && currentTableData.length > 0 ? (
               currentTableData.map((item, index) => (
                 <tr className="category body" key={index}>
-                  <td>{serialNumber(index,currentPage,pageSize)}</td>
+                  <td>{startSeriaNum++}</td>
                   <td className="category-text">{item.displayAmount}</td>
                   <td className="category-text">{item.description}</td>
                   <td className="category-text">{item.displayTransactionDate}</td>
