@@ -6,7 +6,7 @@ import BudgetCategoryReusable from "./EditBudgetCategory";
 import request from "../../../utils/apiHelper";
 import { toast } from "react-toastify";
 import PageTitle from "../../../components/PageTitle";
-
+import "../../../styles/table.style.css"
 
 const BudgetCategory = () => {
   const [idOfBudget, setIdOfBudget] = useState(-1);
@@ -111,15 +111,16 @@ const BudgetCategory = () => {
           </button>
         </PageTitle>
         <div className="category-container">
-        <div className="category category-text">
-            <p className="category-text">Category name</p>
-            <p className="category-text">Action</p>
-          </div>
+          <table>
+        <tr className="category category-text">
+            <th className="category-text">Category name</th>
+            <th className="category-text">Action</th>
+          </tr>
           {data && data.length > 0 ? (
             data.map((item, index) => (
-              <div className="category body" key={index}>
-                <p className="category-title">{item.title}</p>
-                <p
+              <tr className="category body" key={index}>
+                <td className="category-title">{item.title}</td>
+                <td
                   onClick={() => setIdOfBudget(index)}
                   style={{ fontSize: "30px", cursor: "pointer" }}
                 >
@@ -142,12 +143,13 @@ const BudgetCategory = () => {
                       </span>
                     </Fragment>
                   ) : null}
-                </p>
-              </div>
+                </td>
+              </tr>
             ))
           ) : (
             <p>There are no budget category</p>
           )}
+          </table>
         </div>
         {editModal && (
           <FormModal>
@@ -219,26 +221,6 @@ const ListStyle = styled.div`
     padding: 10px;
     gap: 10px;
   }
-  .category {
-    font-family: "Sofia Pro";
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-
-    width: 100%;
-    align-items: center;
-    padding: 10px 40px;
-    height: 57px;
-    /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.04); */
-    display: flex;
-    justify-content: space-between;
-    font-size: 16px;
-  }
-  .body {
-    background: rgba(0, 156, 244, 0.05);
-    font-weight: 500;
-    font-size: 14px;
-  }
   @media only screen and (max-width: 1280px) {
     .category {
       margin-bottom: 10px;
@@ -273,7 +255,7 @@ const ListStyle = styled.div`
   .popup {
     position: absolute;
     min-width: 150px;
-    right: 20px;
+    /* right: 20px; */
     /* top: 40px; */
     display: flex;
     flex-direction: column;
